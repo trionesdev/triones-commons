@@ -8,7 +8,7 @@ import com.github.pagehelper.PageInfo;
 
 public class PageUtils {
 
-    public static <T> MSPageInfo<T> page(PageInfo<T> pageInfo) {
+    public static <T> MSPageInfo<T> of(PageInfo<T> pageInfo) {
         MSPageInfo<T> page = new MSPageInfo<>();
         page.setPageNum(pageInfo.getPageNum());
         page.setPageSize(pageInfo.getPageSize());
@@ -18,7 +18,7 @@ public class PageUtils {
         return page;
     }
 
-    public static <T, E> MSPageInfo<E> page(PageInfo<T> pageInfo, List<E> data) {
+    public static <T, E> MSPageInfo<E> of(PageInfo<T> pageInfo, List<E> data) {
         MSPageInfo<E> page = new MSPageInfo<>();
         page.setPageNum(pageInfo.getPageNum());
         page.setPageSize(pageInfo.getPageSize());
@@ -28,7 +28,7 @@ public class PageUtils {
         return page;
     }
 
-    public static <T> MSPageInfo<T> page(IPage<T> pageInfo) {
+    public static <T> MSPageInfo<T> of(IPage<T> pageInfo) {
         MSPageInfo<T> page = new MSPageInfo<>();
         page.setPageNum((int) pageInfo.getCurrent());
         page.setPageSize((int) pageInfo.getSize());
@@ -38,7 +38,7 @@ public class PageUtils {
         return page;
     }
 
-    public static <T> MSPageInfo<T> page(Page<T> pageInfo) {
+    public static <T> MSPageInfo<T> of(Page<T> pageInfo) {
         MSPageInfo<T> page = new MSPageInfo<>();
         page.setPageNum(pageInfo.getNumber());
         page.setPageSize( pageInfo.getSize());
@@ -48,7 +48,7 @@ public class PageUtils {
         return page;
     }
 
-    public static <T, E> MSPageInfo<E> page(MSPageInfo<T> pageInfo, List<E> data) {
+    public static <T, E> MSPageInfo<E> of(MSPageInfo<T> pageInfo, List<E> data) {
         MSPageInfo<E> page = new MSPageInfo<>();
         page.setPageNum(pageInfo.getPageNum());
         page.setPageSize(pageInfo.getPageSize());
@@ -57,4 +57,15 @@ public class PageUtils {
         page.setRows(data);
         return page;
     }
+
+    public static <E> MSPageInfo<E> of(List<E> data){
+        MSPageInfo<E> page = new MSPageInfo<>();
+        page.setRows(data);
+        return page;
+    }
+
+    public static <E> MSPageInfo<E> empty(){
+        return new MSPageInfo<>();
+    }
+
 }
