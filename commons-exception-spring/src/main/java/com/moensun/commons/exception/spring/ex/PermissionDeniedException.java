@@ -1,6 +1,10 @@
 package com.moensun.commons.exception.spring.ex;
 
 public class PermissionDeniedException extends ResourceException{
+    public PermissionDeniedException(){
+        super("permission denied");
+    }
+
     public PermissionDeniedException(String code, Object... params) {
         super(code, params);
     }

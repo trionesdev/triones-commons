@@ -1,11 +1,12 @@
 package com.moensun.commons.exception;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 public class ResourceProperties {
     private ResourceProperties() {
     }
 
-    public static final Map<String, String> codeMap = new HashMap<>();
+    public static final Map<Locale, Map<String,String>> codeMap = new HashMap<>();
 }

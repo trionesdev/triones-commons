@@ -1,78 +1,74 @@
 package com.moensun.commons.exception.spring.resource;
 
-import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.List;
-import java.util.Locale;
-import java.util.Objects;
-import java.util.ResourceBundle;
-
+import com.moensun.commons.core.spring.context.SpringContextHolder;
+import com.moensun.commons.exception.ResourceProperties;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
-import org.springframework.context.MessageSource;
-import org.springframework.util.StringUtils;
+import org.springframework.context.i18n.LocaleContextHolder;
 
-import com.moensun.commons.core.spring.context.SpringContextHolder;
-import com.moensun.commons.exception.ResourceProperties;
+import java.text.MessageFormat;
+import java.util.*;
 
 public class ExceptionMessageHandler implements ApplicationContextAware {
-    private Locale local = Locale.getDefault();
-    private ResourceBundle resourceBundle;
-    private ResourceBundle[] resourceBundles;
 
-    @Override public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+    private String[] resourcePaths;
+
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         ApplicationContext applicationContextSnap = SpringContextHolder.getApplicationContext();
-        if(Objects.isNull(applicationContextSnap)){
+        if (Objects.isNull(applicationContextSnap)) {
             SpringContextHolder.setApplicationContext(applicationContext);
         }
     }
 
-    public void setMessageSource(MessageSource messageScore) {
-        resourceBundle = new MessageSourceResourceBundle(messageScore, this.local);
-    }
-
-    public void setResourceBundle(String resourcePath) {
-        if (Objects.nonNull(resourcePath)) {
-            String resourcePathFormat = resourcePath.replace("classpath:", "");
-            resourceBundle = ResourceBundle.getBundle(resourcePathFormat, this.local);
-            setPropertiesMap(resourceBundle);
-        }
-    }
-
-    public void setResourceBundles(String[] resourcePaths) {
-        if (Objects.nonNull(resourcePaths) && resourcePaths.length > 0) {
-            List<ResourceBundle> resourceBundleList = new ArrayList<>();
-            for (String resourcePath : resourcePaths) {
-                String resourcePathFormat = resourcePath.replace("classpath:", "");
-                ResourceBundle resourceBundleItem = ResourceBundle.getBundle(resourcePathFormat, this.local);
-                setPropertiesMap(resourceBundleItem);
-                resourceBundleList.add(resourceBundleItem);
-            }
-            resourceBundles = resourceBundleList.toArray(new ResourceBundle[resourceBundleList.size()]);
-        }
-    }
-
-    public void setLocal(Locale local) {
-        this.local = local;
+    public void setResourcePaths(String[] resourcePaths) {
+        this.resourcePaths = resourcePaths;
     }
 
     public String text(String code, Object... params) {
-        String text = ResourceProperties.codeMap.get(code);
-        if (StringUtils.hasText(text)) {
+        Locale locale = LocaleContextHolder.getLocale();
+        Map<String, String> localeCodeMap = ResourceProperties.codeMap.get(locale);
+        if (Objects.isNull(localeCodeMap)) {
+            Map<String, String> codeMap = getCodeMap(locale);
+            if (Objects.nonNull(codeMap)) {
+                ResourceProperties.codeMap.put(locale, codeMap);
+                localeCodeMap = codeMap;
+            }
+        }
+        if (Objects.isNull(localeCodeMap)) {
             return null;
+        }
+        String text = localeCodeMap.get(code);
+        if (StringUtils.isBlank(text)) {
+            return null;
+        }
+        if (Objects.isNull(params)) {
+            return text;
         }
         return MessageFormat.format(text, params);
     }
 
-    public void setPropertiesMap(ResourceBundle resourceBundle) {
-        Enumeration<String> keys = resourceBundle.getKeys();
-        while (keys.hasMoreElements()) {
-            String key = keys.nextElement();
-            ResourceProperties.codeMap.put(key, resourceBundle.getString(key));
-        }
-    }
 
+    public Map<String, String> getCodeMap(Locale locale) {
+        if (Objects.nonNull(resourcePaths) && resourcePaths.length > 0) {
+            Map<String, String> map = new HashMap<>();
+            for (String resourcePath : resourcePaths) {
+                String resourcePathFormat = resourcePath.replace("classpath:", "");
+                ResourceBundle resourceBundleItem = ResourceBundle.getBundle(resourcePathFormat, locale);
+                if (Objects.nonNull(resourceBundleItem)) {
+                    Enumeration<String> keys = resourceBundleItem.getKeys();
+                    while (keys.hasMoreElements()) {
+                        String key = keys.nextElement();
+                        map.put(key, resourceBundleItem.getString(key));
+                    }
+                }
+
+            }
+            return map;
+        }
+        return null;
+    }
 
 }

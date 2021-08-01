@@ -13,6 +13,10 @@ public class MSException extends RuntimeException{
         return message;
     }
 
+    public MSException(){
+        super("");
+    }
+
     public MSException(String message) {
         super(message);
         this.message = message;

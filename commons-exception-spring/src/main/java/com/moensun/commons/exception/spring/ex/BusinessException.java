@@ -1,6 +1,11 @@
 package com.moensun.commons.exception.spring.ex;
 
 public class BusinessException extends ResourceException{
+
+    public BusinessException(){
+        super("business exception");
+    }
+
     public BusinessException(String code, Object... params) {
         super(code, params);
     }
