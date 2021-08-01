@@ -45,7 +45,7 @@ public class FilePathUtils {
                 .get(Calendar.DATE);
     }
 
-    public static String removeDomain(String path, String prefix) {
+    public static String removePrefix(String path, String prefix) {
         if (StringUtils.isEmpty(path)) {
             return "";
         }
@@ -61,7 +61,7 @@ public class FilePathUtils {
         return path;
     }
 
-    public static String joinDomain(String path, String domain) {
+    public static String joinPrefix(String path, String domain) {
         if (StringUtils.isEmpty(path)) {
             return "";
         }
