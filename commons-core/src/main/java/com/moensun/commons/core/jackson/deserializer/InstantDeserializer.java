@@ -14,7 +14,7 @@ public class InstantDeserializer extends JsonDeserializer<Instant> {
     @Override
     public Instant deserialize(JsonParser p, DeserializationContext ctx) throws IOException, JsonProcessingException {
         if (StringUtils.isNoneBlank(p.getText()) && p.getLongValue() > 0) {
-            return Instant.ofEpochSecond(p.getLongValue());
+            return Instant.ofEpochMilli(p.getLongValue());
         } else {
             return null;
         }

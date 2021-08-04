@@ -1,6 +1,7 @@
 package com.moensun.commons.core.page;
 
 import java.io.Serializable;
+import java.util.Collections;
 import java.util.List;
 
 import lombok.AllArgsConstructor;
@@ -17,5 +18,5 @@ public class MSPageInfo<T> implements Serializable {
     private int pageSize;
     private long total;
     private int pages;
-    private List<T> rows;
+    private List<T> rows = Collections.emptyList();
 }
