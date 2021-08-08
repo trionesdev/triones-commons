@@ -1,7 +1,10 @@
 package com.moensun.commons.core.util;
 
+import java.util.Arrays;
 import java.util.Calendar;
 
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -19,7 +22,7 @@ public class FilePathUtils {
             } else {
                 int lineIndex = filename.lastIndexOf('/');
                 if (lineIndex > -1) {
-                    return "."+filename.substring(lineIndex + 1);
+                    return "." + filename.substring(lineIndex + 1);
                 } else {
                     return "";
                 }
@@ -78,5 +81,25 @@ public class FilePathUtils {
             }
         }
         return path;
+    }
+
+    public static String pathResolve(String... paths) {
+        if (ArrayUtils.isEmpty(paths)) {
+            return "";
+        }
+        StringBuilder sb = new StringBuilder();
+        Arrays.asList(paths).forEach(t -> {
+            if (StringUtils.isNotBlank(t)) {
+                if(StringUtils.isNotBlank(sb.toString())){
+                    boolean beforeEnd = StringUtils.endsWith(sb.toString(), "/");
+                    boolean pathStart = StringUtils.startsWith(t, "/");
+                    if (!beforeEnd && !pathStart) {
+                        sb.append("/");
+                    }
+                }
+                sb.append(t);
+            }
+        });
+        return sb.toString();
     }
 }
