@@ -11,6 +11,7 @@
         <module>commons-exception-spring</module>
         <module>commons-exception</module>
         <module>commons-mybatis-plus</module>
+        <module>commons-context</module>
     </modules>
     <groupId>com.moensun.commons</groupId>
     <artifactId>moensun-commons</artifactId>
@@ -84,6 +85,11 @@
             <dependency>
                 <groupId>com.moensun.commons</groupId>
                 <artifactId>commons-core-spring</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.moensun.commons</groupId>
+                <artifactId>commons-context</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

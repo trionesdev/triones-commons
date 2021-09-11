@@ -1,4 +1,4 @@
-package com.moensun.commons.core.operator;
+package com.moensun.commons.context.operator;
 
 
 import java.time.Instant;
@@ -9,7 +9,7 @@ public class OperateContext {
         return OperateContextHolder.getOperator();
     }
 
-    public <T extends Operator> void  setOperator(T operate){
+    public  void  setOperator(Operator operate){
         OperateContextHolder.setOperator(operate);
     }
 

@@ -1,6 +1,6 @@
-package com.moensun.commons.core.operator;
+package com.moensun.commons.context.operator;
 
-import com.google.common.base.Strings;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Objects;
 
@@ -10,7 +10,7 @@ public enum OperatorRoleEnum {
     BOSS_USER;
 
     public static OperatorRoleEnum getByName(String val) {
-        if (!Strings.isNullOrEmpty(val)) {
+        if (StringUtils.isNotBlank(val)) {
             for (OperatorRoleEnum item : OperatorRoleEnum.values()) {
                 if (Objects.equals(val, item.name())) {
                     return item;
