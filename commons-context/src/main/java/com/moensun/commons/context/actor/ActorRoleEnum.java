@@ -1,17 +1,17 @@
-package com.moensun.commons.context.operator;
+package com.moensun.commons.context.actor;
 
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Objects;
 
-public enum OperatorRoleEnum {
+public enum ActorRoleEnum {
     USER,
     TENANT_USER,
     BOSS_USER;
 
-    public static OperatorRoleEnum getByName(String val) {
+    public static ActorRoleEnum getByName(String val) {
         if (StringUtils.isNotBlank(val)) {
-            for (OperatorRoleEnum item : OperatorRoleEnum.values()) {
+            for (ActorRoleEnum item : ActorRoleEnum.values()) {
                 if (Objects.equals(val, item.name())) {
                     return item;
                 }

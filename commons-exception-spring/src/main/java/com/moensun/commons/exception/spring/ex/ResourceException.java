@@ -1,6 +1,7 @@
 package com.moensun.commons.exception.spring.ex;
 
 import com.moensun.commons.core.spring.context.SpringContextHolder;
+import com.moensun.commons.exception.MSError;
 import com.moensun.commons.exception.MSException;
 import com.moensun.commons.exception.spring.resource.ExceptionMessageHandler;
 import org.springframework.context.ApplicationContext;
@@ -43,5 +44,11 @@ public abstract class ResourceException extends MSException {
 
             this.message = code;
         }
+    }
+
+    public ResourceException(MSError error){
+        super(error);
+        this.code = error.getCode();
+        this.message = error.getMessage();
     }
 }

@@ -12,6 +12,7 @@
         <module>commons-exception</module>
         <module>commons-mybatis-plus</module>
         <module>commons-context</module>
+        <module>commons-i18n</module>
     </modules>
     <groupId>com.moensun.commons</groupId>
     <artifactId>moensun-commons</artifactId>
@@ -90,6 +91,11 @@
             <dependency>
                 <groupId>com.moensun.commons</groupId>
                 <artifactId>commons-context</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.moensun.commons</groupId>
+                <artifactId>commons-i18n</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

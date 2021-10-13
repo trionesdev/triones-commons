@@ -40,18 +40,6 @@ public class MSException extends RuntimeException{
         this.message = message;
     }
 
-    public MSException(String message, String code, String message1) {
-        super(message);
-        this.code = code;
-        this.message = message1;
-    }
-
-    public MSException(String message, Throwable cause, String code, String message1) {
-        super(message, cause);
-        this.code = code;
-        this.message = message1;
-    }
-
     public MSException(Throwable cause, String code, String message) {
         super(cause);
         this.code = code;
@@ -62,5 +50,11 @@ public class MSException extends RuntimeException{
         super(message, cause, enableSuppression, writableStackTrace);
         this.code = code;
         this.message = message1;
+    }
+
+    public MSException(MSError error){
+        super(error.getMessage());
+        this.code = error.getCode();
+        this.message = error.getMessage();
     }
 }

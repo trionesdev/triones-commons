@@ -1,5 +1,7 @@
 package com.moensun.commons.exception.spring.ex;
 
+import com.moensun.commons.exception.MSError;
+
 public class ValidationException extends ResourceException{
 
     public ValidationException(){
@@ -12,5 +14,9 @@ public class ValidationException extends ResourceException{
 
     public ValidationException(Throwable cause, String code, Object... params) {
         super(cause, code, params);
+    }
+
+    public ValidationException(MSError error) {
+        super(error);
     }
 }
