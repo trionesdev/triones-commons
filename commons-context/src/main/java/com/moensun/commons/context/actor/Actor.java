@@ -6,8 +6,8 @@ import java.time.Instant;
 
 @Data
 public class Actor {
-    private ActorRoleEnum role;
-    private Object actorId;
-    private Object tenantId;
+    private String role;
+    private String actorId;
+    private String tenantId;
     private Instant time;
 }

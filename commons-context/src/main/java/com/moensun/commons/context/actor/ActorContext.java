@@ -13,7 +13,7 @@ public class ActorContext {
         ActorContextHolder.setActor(operate);
     }
 
-    public ActorRoleEnum getRole(){
+    public String getRole(){
         Actor actor = getActor();
         if(Objects.isNull(actor)){
             return null;
@@ -22,7 +22,7 @@ public class ActorContext {
         }
     }
 
-    public Object getActorId(){
+    public String getActorId(){
         Actor actor = getActor();
         if(Objects.isNull(actor)){
             return null;
@@ -40,7 +40,7 @@ public class ActorContext {
         }
     }
 
-    public Object getTenantId(){
+    public String getTenantId(){
         Actor actor = getActor();
         if(Objects.isNull(actor)){
             return null;
@@ -58,28 +58,9 @@ public class ActorContext {
         }
     }
 
-    public String getRoleName(){
-        Actor actor = getActor();
-        if(Objects.isNull(actor) || Objects.isNull(actor.getRole())){
-            return null;
-        }else {
-            return actor.getRole().name();
-        }
-    }
-
-    public Long getActorIdAsLong(){
-        Object operatorId = getActorId();
-        return Objects.isNull(operatorId)? null : Long.valueOf(String.valueOf(operatorId));
-    }
-
-    public Long getTenantIdAsLong(){
-        Object tenantId = getTenantId();
-        return Objects.isNull(tenantId)? null : Long.valueOf(String.valueOf(tenantId));
-    }
-
     public String getTimeAsString(){
         Instant date = getTime();
-        return Objects.nonNull(date)? String.valueOf(date.getEpochSecond()) : null;
+        return Objects.nonNull(date)? String.valueOf(date.toEpochMilli()) : null;
     }
 
     public boolean oneself(Object userId){
