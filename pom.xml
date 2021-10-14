@@ -13,6 +13,7 @@
         <module>commons-mybatis-plus</module>
         <module>commons-context</module>
         <module>commons-i18n</module>
+        <module>commons-feign</module>
     </modules>
     <groupId>com.moensun.commons</groupId>
     <artifactId>moensun-commons</artifactId>

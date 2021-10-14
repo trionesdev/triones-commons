@@ -30,6 +30,7 @@ public class TimeZoneUtils {
         });
         return timeZoneInfos.stream().map(timeZoneInfo -> {
             TimeZone timeZone = TimeZone.getTimeZone(timeZoneInfo.getCode());
+            timeZoneInfo.setTimeZoneName(timeZone.getDisplayName(uLocale));
             if(timeZoneInfo.getCode().startsWith("Etc/")){
                 timeZoneInfo.setDisplayName(timeZone.getDisplayName(uLocale));
                 return timeZoneInfo;
