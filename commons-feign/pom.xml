@@ -22,6 +22,19 @@
             <artifactId>feign-core</artifactId>
             <version>11.5</version>
         </dependency>
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>1.2.78</version>
+        </dependency>
+        <dependency>
+            <groupId>com.moensun.commons</groupId>
+            <artifactId>commons-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.moensun.commons</groupId>
+            <artifactId>commons-exception</artifactId>
+        </dependency>
     </dependencies>
 
 </project>
