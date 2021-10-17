@@ -4,10 +4,10 @@ import com.alibaba.fastjson.JSON;
 import com.moensun.commons.core.error.ErrorResponse;
 import com.moensun.commons.exception.InternalRequestException;
 import com.moensun.commons.feign.FeignUtils;
-import com.sun.org.slf4j.internal.Logger;
-import com.sun.org.slf4j.internal.LoggerFactory;
 import feign.Response;
 import feign.codec.ErrorDecoder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static com.moensun.commons.feign.FeignUtils.requestBody;
 
