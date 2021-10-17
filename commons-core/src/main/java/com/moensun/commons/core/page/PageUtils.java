@@ -38,6 +38,16 @@ public class PageUtils {
         return page;
     }
 
+    public static <T,E> MSPageInfo<E> of(IPage<T> pageInfo, List<E> data) {
+        MSPageInfo<E> page = new MSPageInfo<>();
+        page.setPageNum((int) pageInfo.getCurrent());
+        page.setPageSize((int) pageInfo.getSize());
+        page.setPages((int) pageInfo.getPages());
+        page.setTotal(pageInfo.getTotal());
+        page.setRows(data);
+        return page;
+    }
+
     public static <T> MSPageInfo<T> of(Page<T> pageInfo) {
         MSPageInfo<T> page = new MSPageInfo<>();
         page.setPageNum(pageInfo.getNumber());
@@ -45,6 +55,16 @@ public class PageUtils {
         page.setPages(pageInfo.getTotalPages());
         page.setTotal(pageInfo.getTotalElements());
         page.setRows(pageInfo.getContent());
+        return page;
+    }
+
+    public static <T,E> MSPageInfo<E> of(Page<T> pageInfo, List<E> data) {
+        MSPageInfo<E> page = new MSPageInfo<>();
+        page.setPageNum(pageInfo.getNumber());
+        page.setPageSize( pageInfo.getSize());
+        page.setPages(pageInfo.getTotalPages());
+        page.setTotal(pageInfo.getTotalElements());
+        page.setRows(data);
         return page;
     }
 
