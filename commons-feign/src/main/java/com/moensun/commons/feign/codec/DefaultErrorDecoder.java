@@ -1,7 +1,7 @@
 package com.moensun.commons.feign.codec;
 
 import com.alibaba.fastjson.JSON;
-import com.moensun.commons.core.error.ErrorResponse;
+import com.moensun.commons.exception.ErrorResponse;
 import com.moensun.commons.exception.InternalRequestException;
 import com.moensun.commons.feign.FeignUtils;
 import feign.Response;

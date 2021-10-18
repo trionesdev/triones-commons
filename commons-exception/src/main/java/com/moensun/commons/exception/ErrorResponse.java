@@ -1,4 +1,4 @@
-package com.moensun.commons.core.error;
+package com.moensun.commons.exception;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
