@@ -1,10 +1,10 @@
-package com.moensun.commons.core.page;
+package com.moensun.commons.page;
 
-import java.util.List;
-
-import org.springframework.data.domain.Page;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.github.pagehelper.PageInfo;
+import org.springframework.data.domain.Page;
+
+import java.util.List;
 
 public class PageUtils {
 

@@ -14,6 +14,7 @@
         <module>commons-context</module>
         <module>commons-i18n</module>
         <module>commons-feign</module>
+        <module>commons-page</module>
     </modules>
     <groupId>com.moensun.commons</groupId>
     <artifactId>moensun-commons</artifactId>
@@ -87,6 +88,11 @@
             <dependency>
                 <groupId>com.moensun.commons</groupId>
                 <artifactId>commons-core</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.moensun.commons</groupId>
+                <artifactId>commons-page</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
