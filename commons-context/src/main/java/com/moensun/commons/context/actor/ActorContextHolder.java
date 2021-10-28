@@ -19,7 +19,7 @@ public class ActorContextHolder {
     private ActorContextHolder() {
     }
 
-    private static final  TransmittableThreadLocal<ActorWrapper> actorHolder = new TransmittableThreadLocal<>();
+    private static final  TransmittableThreadLocal<Actor> actorHolder = new TransmittableThreadLocal<>();
 
     public static void setActor(Actor actor) {
         if(hasTracer()){
@@ -31,9 +31,9 @@ public class ActorContextHolder {
 
     public static Actor getActor() {
         if(hasTracer()){
-            return getActorFromTracer();
+            return getTracerActor();
         }else {
-            return getActorFromLocal();
+            return getLocalActor();
         }
     }
 
@@ -45,27 +45,15 @@ public class ActorContextHolder {
         }
     }
 
-    public static void removeActor() {
-        if(hasTracer()){
-            resetTracerActor();
-        }else {
-            removeLocalActor();
-        }
-    }
-
     private static boolean hasTracer(){
         return !(GlobalTracer.get().activeSpan() instanceof NoopSpan);
     }
 
-    private static Actor getActorFromLocal(){
-        ActorWrapper actorWrapper = actorHolder.get();
-        if(Objects.isNull(actorWrapper)){
-            return null;
-        }
-        return actorWrapper.actor;
+    private static Actor getLocalActor(){
+        return actorHolder.get();
     }
 
-    private static Actor getActorFromTracer(){
+    private static Actor getTracerActor(){
         Span activeSpan = GlobalTracer.get().activeSpan();
         Actor actor = Actor.builder().build();
         actor.setActorId(activeSpan.getBaggageItem(X_ACTOR_ID));
@@ -74,7 +62,7 @@ public class ActorContextHolder {
     }
 
     private static void setLocalActor(Actor actor){
-        actorHolder.set(new ActorWrapper(actor));
+        actorHolder.set(actor);
     }
 
     private static void setTracerActor(Actor actor){
@@ -91,13 +79,6 @@ public class ActorContextHolder {
         Span activeSpan = GlobalTracer.get().activeSpan();
         activeSpan.setBaggageItem(X_ACTOR_ID,null);
         activeSpan.setBaggageItem(X_TENANT_ID,null);
-    }
-
-    private static void removeLocalActor(){
-        ActorWrapper actorWrapper = actorHolder.get();
-        if(Objects.nonNull(actorWrapper)){
-            actorWrapper.remove();
-        }
     }
 
     public static class ActorWrapper{
