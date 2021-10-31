@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.concurrent.LinkedBlockingDeque;
+import java.util.function.Supplier;
 
 import static com.moensun.commons.context.actor.ActorConstants.X_ACTOR_ID;
 import static com.moensun.commons.context.actor.ActorConstants.X_TENANT_ID;
@@ -43,6 +44,25 @@ public class ActorContextHolder {
         }else {
             resetLocalActor();
         }
+    }
+
+    public static void runAs(Actor actor,Runnable runnable){
+        Actor previousActor = getActor();
+        resetActor();
+        setActor(actor);
+        runnable.run();
+        resetActor();
+        setActor(previousActor);
+    }
+
+    public static <T> T runAs(Actor actor, Supplier<T> supplier){
+        Actor previousActor = getActor();
+        resetActor();
+        setActor(actor);
+        T result = supplier.get();
+        resetActor();
+        setActor(previousActor);
+        return result;
     }
 
     private static boolean hasTracer(){

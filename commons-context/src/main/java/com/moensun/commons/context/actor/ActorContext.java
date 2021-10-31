@@ -3,6 +3,7 @@ package com.moensun.commons.context.actor;
 
 import java.time.Instant;
 import java.util.Objects;
+import java.util.function.Supplier;
 
 public class ActorContext {
     public Actor getActor(){
@@ -79,5 +80,13 @@ public class ActorContext {
         ActorContextHolder.getActor();
     }
 
+
+    public void runAs(Actor actor,Runnable runnable){
+        ActorContextHolder.runAs(actor,runnable);
+    }
+
+    public <T> T runAs(Actor actor, Supplier<T> supplier){
+        return ActorContextHolder.runAs(actor,supplier);
+    }
 }
 
