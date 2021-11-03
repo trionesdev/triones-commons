@@ -47,21 +47,15 @@ public class ActorContextHolder {
     }
 
     public static void runAs(Actor actor,Runnable runnable){
-        Actor previousActor = getActor();
-        resetActor();
-        setActor(actor);
+        Actor previousActor = runAsBefore(actor);
         runnable.run();
-        resetActor();
-        setActor(previousActor);
+        runAsAfter(previousActor);
     }
 
     public static <T> T runAs(Actor actor, Supplier<T> supplier){
-        Actor previousActor = getActor();
-        resetActor();
-        setActor(actor);
+        Actor previousActor = runAsBefore(actor);
         T result = supplier.get();
-        resetActor();
-        setActor(previousActor);
+        runAsAfter(previousActor);
         return result;
     }
 
@@ -115,6 +109,18 @@ public class ActorContextHolder {
         }
         activeSpan.setBaggageItem(X_ACTOR_ID,null);
         activeSpan.setBaggageItem(X_TENANT_ID,null);
+    }
+
+    private static Actor runAsBefore(Actor actor){
+        Actor previousActor = getActor();
+        resetActor();
+        setActor(actor);
+        return previousActor;
+    }
+
+    private static void runAsAfter(Actor previousActor){
+        resetActor();
+        setActor(previousActor);
     }
 
     public static class ActorWrapper{
