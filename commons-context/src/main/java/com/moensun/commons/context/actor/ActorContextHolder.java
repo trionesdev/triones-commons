@@ -113,14 +113,18 @@ public class ActorContextHolder {
 
     private static Actor runAsBefore(Actor actor){
         Actor previousActor = getActor();
-        resetActor();
+        if(Objects.nonNull(previousActor)){
+            resetActor();
+        }
         setActor(actor);
         return previousActor;
     }
 
     private static void runAsAfter(Actor previousActor){
         resetActor();
-        setActor(previousActor);
+        if(Objects.nonNull(previousActor)){
+            setActor(previousActor);
+        }
     }
 
     public static class ActorWrapper{
