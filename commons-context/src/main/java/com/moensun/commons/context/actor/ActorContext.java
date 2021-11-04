@@ -88,5 +88,17 @@ public class ActorContext {
     public <T> T runAs(Actor actor, Supplier<T> supplier){
         return ActorContextHolder.runAs(actor,supplier);
     }
+
+    public ActorContext asTenant(String tenantId){
+        Actor actor = Actor.builder().tenantId(tenantId).build();
+        ActorContextHolder.addActorsFirst(actor);
+        return this;
+    }
+
+    public void run(Runnable runnable){
+        runnable.run();
+        ActorContextHolder.removeActorsFirst();
+    }
+
 }
 

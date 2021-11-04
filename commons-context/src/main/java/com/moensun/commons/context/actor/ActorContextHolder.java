@@ -4,6 +4,7 @@ import com.alibaba.ttl.TransmittableThreadLocal;
 import io.opentracing.Span;
 import io.opentracing.noop.NoopSpan;
 import io.opentracing.util.GlobalTracer;
+import org.checkerframework.checker.units.qual.A;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,6 +22,7 @@ public class ActorContextHolder {
     }
 
     private static final  TransmittableThreadLocal<Actor> actorHolder = new TransmittableThreadLocal<>();
+    private static final  TransmittableThreadLocal<LinkedBlockingDeque<Actor>> actorQueue = new TransmittableThreadLocal<>();
 
     public static void setActor(Actor actor) {
         if(hasTracer()){
@@ -46,16 +48,47 @@ public class ActorContextHolder {
         }
     }
 
+    public static void addActorsFirst(Actor actor){
+        if(Objects.isNull(actor)){
+            return;
+        }
+        LinkedBlockingDeque<Actor> actors = actorQueue.get();
+        if(Objects.isNull(actors)){
+            actors = new LinkedBlockingDeque<>();
+        }
+        Actor previousActor = getActor();
+        actors.addFirst(previousActor);
+        actorQueue.set(actors);
+        setActor(actor);
+    }
+
+    public static void removeActorsFirst(){
+        LinkedBlockingDeque<Actor> actors = actorQueue.get();
+        if(Objects.isNull(actors)){
+            setActor(null);
+            return ;
+        }
+        try{
+            Actor previousActor = actors.removeFirst();
+            actorQueue.set(actors);
+            setActor(previousActor);
+        }catch (NoSuchElementException ex){
+            if(logger.isDebugEnabled()){
+                logger.info("[ActorContextHolder] context actors is empty ");
+            }
+        }
+    }
+
     public static void runAs(Actor actor,Runnable runnable){
-        Actor previousActor = runAsBefore(actor);
+        addActorsFirst(actor);
         runnable.run();
-        runAsAfter(previousActor);
+        removeActorsFirst();
     }
 
     public static <T> T runAs(Actor actor, Supplier<T> supplier){
-        Actor previousActor = runAsBefore(actor);
+        addActorsFirst(actor);
         T result = supplier.get();
-        runAsAfter(previousActor);
+        removeActorsFirst();
         return result;
     }
 
@@ -109,22 +142,6 @@ public class ActorContextHolder {
         }
         activeSpan.setBaggageItem(X_ACTOR_ID,null);
         activeSpan.setBaggageItem(X_TENANT_ID,null);
-    }
-
-    private static Actor runAsBefore(Actor actor){
-        Actor previousActor = getActor();
-        if(Objects.nonNull(previousActor)){
-            resetActor();
-        }
-        setActor(actor);
-        return previousActor;
-    }
-
-    private static void runAsAfter(Actor previousActor){
-        resetActor();
-        if(Objects.nonNull(previousActor)){
-            setActor(previousActor);
-        }
     }
 
     public static class ActorWrapper{
