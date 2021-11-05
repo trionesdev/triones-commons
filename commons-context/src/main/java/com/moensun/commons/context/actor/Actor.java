@@ -16,4 +16,14 @@ public class Actor {
     private String actorId;
     private String tenantId;
     private Instant time;
+
+    @Override
+    public String toString() {
+        return "Actor{" +
+                "role='" + role + '\'' +
+                ", actorId='" + actorId + '\'' +
+                ", tenantId='" + tenantId + '\'' +
+                ", time=" + time +
+                '}';
+    }
 }
