@@ -101,7 +101,7 @@ public class ActorContextHolder {
     }
 
     private static Actor getTracerActor(){
-        Span activeSpan = GlobalTracer.get().activeSpan();
+        Span activeSpan = GlobalTracer.get().scopeManager().activeSpan();
         if(Objects.isNull(activeSpan)){
             return null;
         }
@@ -118,15 +118,15 @@ public class ActorContextHolder {
 
     private static void setTracerActor(Actor actor){
         boolean hasTracer = false;
-        Span activeSpan = GlobalTracer.get().activeSpan();
+        Span activeSpan = GlobalTracer.get().scopeManager().activeSpan();
         if(Objects.isNull(activeSpan)){
             activeSpan = GlobalTracer.get().buildSpan("set-actor").start();
-            GlobalTracer.get().activateSpan(activeSpan);
         }else {
             hasTracer = true;
         }
         activeSpan.setBaggageItem(X_ACTOR_ID, actor.getActorId());
         activeSpan.setBaggageItem(X_TENANT_ID, actor.getTenantId());
+        GlobalTracer.get().scopeManager().activate(activeSpan);
         if(!hasTracer){
             activeSpan.finish();
         }
