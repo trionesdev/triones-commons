@@ -7,14 +7,14 @@ import io.opentracing.util.GlobalTracer;
 import org.checkerframework.checker.units.qual.A;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 
 import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.function.Supplier;
 
-import static com.moensun.commons.context.actor.ActorConstants.X_ACTOR_ID;
-import static com.moensun.commons.context.actor.ActorConstants.X_TENANT_ID;
+import static com.moensun.commons.context.actor.ActorConstants.*;
 
 public class ActorContextHolder {
     private static final Logger logger = LoggerFactory.getLogger(ActorContextHolder.class);
@@ -113,6 +113,7 @@ public class ActorContextHolder {
 
     private static void setLocalActor(Actor actor){
         actorHolder.set(actor);
+        putLocalMDCContext(actor);
     }
 
     private static void setTracerActor(Actor actor){
@@ -133,6 +134,7 @@ public class ActorContextHolder {
 
     private static void resetLocalActor(){
         actorHolder.remove();
+        cleanLocalMDCContext();
     }
 
     private static void resetTracerActor(){
@@ -175,4 +177,17 @@ public class ActorContextHolder {
             }
         }
     }
+
+    private static void putLocalMDCContext(Actor actor){
+        if(Objects.nonNull(actor)){
+            MDC.put(MDC_ACTOR_ID,actor.getActorId());
+            MDC.put(MDC_TENANT_ID,actor.getTenantId());
+        }
+    }
+
+    private static void cleanLocalMDCContext(){
+        MDC.put(MDC_ACTOR_ID,null);
+        MDC.put(MDC_TENANT_ID,null);
+    }
+
 }
