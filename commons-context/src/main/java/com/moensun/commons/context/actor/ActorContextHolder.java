@@ -1,7 +1,10 @@
 package com.moensun.commons.context.actor;
 
 import com.alibaba.ttl.TransmittableThreadLocal;
+import io.opentracing.ScopeManager;
 import io.opentracing.Span;
+import io.opentracing.SpanContext;
+import io.opentracing.Tracer;
 import io.opentracing.noop.NoopSpan;
 import io.opentracing.util.GlobalTracer;
 import org.checkerframework.checker.units.qual.A;
@@ -117,19 +120,19 @@ public class ActorContextHolder {
     }
 
     private static void setTracerActor(Actor actor){
-        boolean hasTracer = false;
-        Span activeSpan = GlobalTracer.get().scopeManager().activeSpan();
-        if(Objects.isNull(activeSpan)){
-            activeSpan = GlobalTracer.get().buildSpan("set-actor").start();
+        ScopeManager scopeManager = GlobalTracer.get().scopeManager();
+        Span parentSpan = scopeManager.activeSpan();
+        Tracer.SpanBuilder spanBuilder = GlobalTracer.get().buildSpan("set-actor");
+        Span actorSpan ;
+        if(Objects.nonNull(parentSpan)){
+            actorSpan = spanBuilder.asChildOf(parentSpan).start();
         }else {
-            hasTracer = true;
+            actorSpan = spanBuilder.start();
         }
-        activeSpan.setBaggageItem(X_ACTOR_ID, actor.getActorId());
-        activeSpan.setBaggageItem(X_TENANT_ID, actor.getTenantId());
-        GlobalTracer.get().scopeManager().activate(activeSpan);
-        if(!hasTracer){
-            activeSpan.finish();
-        }
+        actorSpan.setBaggageItem(X_ACTOR_ID, actor.getActorId());
+        actorSpan.setBaggageItem(X_TENANT_ID, actor.getTenantId());
+        scopeManager.activate(actorSpan);
+        actorSpan.finish();
     }
 
     private static void resetLocalActor(){
