@@ -15,6 +15,8 @@
         <module>commons-i18n</module>
         <module>commons-feign</module>
         <module>commons-page</module>
+        <module>commons-opentracing</module>
+        <module>commons-jaegertracing</module>
     </modules>
     <groupId>com.moensun.commons</groupId>
     <artifactId>moensun-commons</artifactId>
@@ -83,6 +85,16 @@
                 <version>1.2.78</version>
             </dependency>
             <dependency>
+                <groupId>io.opentracing</groupId>
+                <artifactId>opentracing-util</artifactId>
+                <version>0.33.0</version>
+            </dependency>
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>transmittable-thread-local</artifactId>
+                <version>2.12.2</version>
+            </dependency>
+            <dependency>
                 <groupId>org.springframework.data</groupId>
                 <artifactId>spring-data-commons</artifactId>
                 <version>2.5.3</version>
@@ -148,6 +160,16 @@
             <dependency>
                 <groupId>com.moensun.commons</groupId>
                 <artifactId>commons-mybatis-plus</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.moensun.commons</groupId>
+                <artifactId>commons-opentracing</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.moensun.commons</groupId>
+                <artifactId>commons-jaegertracing</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <!--moensun commons-->
