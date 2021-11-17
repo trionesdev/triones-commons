@@ -156,11 +156,11 @@ public class ActorContextHolder {
 
 
 
-        public void add(Actor newOperator){
+        public void add(Actor newActor){
             if(Objects.nonNull(actor)){
                 actors.addFirst(actor);
             }
-            actor = newOperator;
+            actor = newActor;
         }
 
         public void remove(){
