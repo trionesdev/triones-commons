@@ -1,6 +1,7 @@
 package com.moensun.commons.context.actor;
 
 import com.alibaba.ttl.TransmittableThreadLocal;
+import com.moensun.commons.opentracing.util.BaggageUtils;
 import io.opentracing.ScopeManager;
 import io.opentracing.Span;
 import io.opentracing.SpanContext;
@@ -109,8 +110,8 @@ public class ActorContextHolder {
             return null;
         }
         Actor actor = Actor.builder().build();
-        actor.setActorId(activeSpan.getBaggageItem(X_ACTOR_ID));
-        actor.setTenantId(activeSpan.getBaggageItem(X_TENANT_ID));
+        actor.setActorId(activeSpan.getBaggageItem(BaggageUtils.itemKey(X_ACTOR_ID)));
+        actor.setTenantId(activeSpan.getBaggageItem(BaggageUtils.itemKey(X_TENANT_ID)));
         return actor;
     }
 
@@ -129,8 +130,8 @@ public class ActorContextHolder {
         }else {
             actorSpan = spanBuilder.start();
         }
-        actorSpan.setBaggageItem(X_ACTOR_ID, actor.getActorId());
-        actorSpan.setBaggageItem(X_TENANT_ID, actor.getTenantId());
+        actorSpan.setBaggageItem(BaggageUtils.itemKey(X_ACTOR_ID), actor.getActorId());
+        actorSpan.setBaggageItem(BaggageUtils.itemKey(X_TENANT_ID), actor.getTenantId());
         scopeManager.activate(actorSpan);
         actorSpan.finish();
     }
