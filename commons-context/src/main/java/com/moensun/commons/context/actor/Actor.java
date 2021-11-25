@@ -5,13 +5,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+import java.io.Serializable;
 import java.time.Instant;
 
 @Data
 @SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Actor {
+public class Actor implements Serializable {
     private String role;
     private String actorId;
     private String tenantId;

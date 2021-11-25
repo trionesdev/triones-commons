@@ -5,43 +5,75 @@ import java.util.Objects;
 
 public class BigDecimalUtils {
 
+    /**
+     * 加
+     * @param a
+     * @param b
+     * @return
+     */
     public static BigDecimal add(BigDecimal a,BigDecimal b){
-        if(Objects.isNull(a)){
-            a = BigDecimal.ZERO;
+        BigDecimal scopeA = a;
+        BigDecimal scopeB = b;
+        if(Objects.isNull(scopeA)){
+            scopeA = BigDecimal.ZERO;
         }
-        if(Objects.isNull(b)){
-            b = BigDecimal.ZERO;
+        if(Objects.isNull(scopeB)){
+            scopeB = BigDecimal.ZERO;
         }
-        return a.add(b);
+        return scopeA.add(scopeB);
     }
 
+    /**
+     * 减
+     * @param a
+     * @param b
+     * @return
+     */
     public static BigDecimal subtract(BigDecimal a,BigDecimal b){
-        if(Objects.isNull(a)){
-            a = BigDecimal.ZERO;
+        BigDecimal scopeA = a;
+        BigDecimal scopeB = b;
+        if(Objects.isNull(scopeA)){
+            scopeA = BigDecimal.ZERO;
         }
-        if(Objects.isNull(b)){
-            b = BigDecimal.ZERO;
+        if(Objects.isNull(scopeB)){
+            scopeB = BigDecimal.ZERO;
         }
-        return a.subtract(b);
+        return scopeA.subtract(scopeB);
     }
 
+    /**
+     * 乘
+     * @param a
+     * @param b
+     * @return
+     */
     public static BigDecimal multiply(BigDecimal a,BigDecimal b){
-        if(Objects.isNull(a)){
-            a = BigDecimal.ZERO;
+        BigDecimal scopeA = a;
+        BigDecimal scopeB = b;
+        if(Objects.isNull(scopeA)){
+            scopeA = BigDecimal.ZERO;
         }
-        if(Objects.isNull(b)){
-            b = BigDecimal.ZERO;
+        if(Objects.isNull(scopeB)){
+            scopeB = BigDecimal.ZERO;
         }
-        return a.multiply(b);
+        return scopeA.multiply(scopeB);
     }
 
+    /**
+     * 除
+     * @param a
+     * @param b
+     * @return
+     */
     public static BigDecimal divide(BigDecimal a,BigDecimal b){
-        if(Objects.isNull(a)){
-            a = BigDecimal.ZERO;
+        BigDecimal scopeA = a;
+        BigDecimal scopeB = b;
+        if(Objects.isNull(scopeA)){
+            scopeA = BigDecimal.ZERO;
         }
-        if(Objects.isNull(b)){
-            b = BigDecimal.ZERO;
+        if(Objects.isNull(scopeB)){
+            scopeB = BigDecimal.ZERO;
         }
-        return a.divide(b);
+        return scopeA.divide(scopeB);
     }
 }
