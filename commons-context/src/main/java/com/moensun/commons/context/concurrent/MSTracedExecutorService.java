@@ -1,7 +1,7 @@
 package com.moensun.commons.context.concurrent;
 
-import com.bwts.commons.core.operator.Operator;
-import com.bwts.commons.core.operator.OperatorContextHolder;
+import com.moensun.commons.context.actor.Actor;
+import com.moensun.commons.context.actor.ActorContextHolder;
 import io.opentracing.Span;
 import io.opentracing.Tracer;
 
@@ -10,12 +10,12 @@ import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.*;
 
-public class BWTracedExecutorService extends BWTracedExecutor implements ExecutorService {
+public class MSTracedExecutorService extends MSTracedExecutor implements ExecutorService {
     private final ExecutorService delegate;
     protected final Tracer tracer;
 
 
-    public BWTracedExecutorService(ExecutorService delegate, Tracer tracer) {
+    public MSTracedExecutorService(ExecutorService delegate, Tracer tracer) {
         super(tracer, delegate);
         this.tracer = tracer;
         this.delegate = delegate;
@@ -51,8 +51,8 @@ public class BWTracedExecutorService extends BWTracedExecutor implements Executo
         Span span = createSpan("submit");
         try {
             Span toActivate = span != null ? span : tracer.scopeManager().activeSpan();
-            Operator operator = OperatorContextHolder.getOperator();
-            return delegate.submit(new BWTracedCallable<T>(callable, tracer, toActivate, operator));
+            Actor actor = ActorContextHolder.getActor();
+            return delegate.submit(new MSTracedCallable<T>(callable, tracer, toActivate, actor));
         } finally {
             if (span != null) {
                 span.finish();
@@ -65,8 +65,8 @@ public class BWTracedExecutorService extends BWTracedExecutor implements Executo
         Span span = createSpan("submit");
         try {
             Span toActivate = span != null ? span : tracer.scopeManager().activeSpan();
-            Operator operator = OperatorContextHolder.getOperator();
-            return delegate.submit(new BWTracedRunnable(runnable, tracer, toActivate, operator), result);
+            Actor actor = ActorContextHolder.getActor();
+            return delegate.submit(new MSTracedRunnable(runnable, tracer, toActivate, actor), result);
         } finally {
             if (span != null) {
                 span.finish();
@@ -79,8 +79,8 @@ public class BWTracedExecutorService extends BWTracedExecutor implements Executo
         Span span = createSpan("submit");
         try {
             Span toActivate = span != null ? span : tracer.scopeManager().activeSpan();
-            Operator operator = OperatorContextHolder.getOperator();
-            return delegate.submit(new BWTracedRunnable(runnable, tracer, toActivate, operator));
+            Actor actor = ActorContextHolder.getActor();
+            return delegate.submit(new MSTracedRunnable(runnable, tracer, toActivate, actor));
         } finally {
             if (span != null) {
                 span.finish();
@@ -142,9 +142,9 @@ public class BWTracedExecutorService extends BWTracedExecutor implements Executo
 
     private <T> Collection<? extends Callable<T>> toTraced(Collection<? extends Callable<T>> delegate, Span toActivate) {
         List<Callable<T>> tracedCallables = new ArrayList<Callable<T>>(delegate.size());
-        Operator operator = OperatorContextHolder.getOperator();
+        Actor actor = ActorContextHolder.getActor();
         for (Callable<T> callable : delegate) {
-            tracedCallables.add(new BWTracedCallable<T>(callable, tracer, toActivate, operator));
+            tracedCallables.add(new MSTracedCallable<T>(callable, tracer, toActivate, actor));
         }
 
         return tracedCallables;

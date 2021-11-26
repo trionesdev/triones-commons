@@ -1,7 +1,7 @@
 package com.moensun.commons.context.concurrent;
 
-import com.bwts.commons.core.operator.Operator;
-import com.bwts.commons.core.operator.OperatorContextHolder;
+import com.moensun.commons.context.actor.Actor;
+import com.moensun.commons.context.actor.ActorContextHolder;
 import io.opentracing.Span;
 import io.opentracing.Tracer;
 
@@ -10,10 +10,10 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
-public class BWTracedScheduledExecutorService extends com.bwts.commons.core.concurrent.BWTracedExecutorService implements ScheduledExecutorService {
+public class MSTracedScheduledExecutorService extends MSTracedExecutorService implements ScheduledExecutorService {
     private final ScheduledExecutorService delegate;
 
-    public BWTracedScheduledExecutorService(ScheduledExecutorService delegate, Tracer tracer) {
+    public MSTracedScheduledExecutorService(ScheduledExecutorService delegate, Tracer tracer) {
         super(delegate, tracer);
         this.delegate = delegate;
     }
@@ -23,8 +23,8 @@ public class BWTracedScheduledExecutorService extends com.bwts.commons.core.conc
         Span span = createSpan("schedule");
         try {
             Span toActivate = span != null ? span : tracer.activeSpan();
-            Operator operator = OperatorContextHolder.getOperator();
-            return delegate.schedule(new com.bwts.commons.core.concurrent.BWTracedRunnable(runnable, tracer, toActivate, operator), delay, timeUnit
+            Actor actor = ActorContextHolder.getActor();
+            return delegate.schedule(new MSTracedRunnable(runnable, tracer, toActivate, actor), delay, timeUnit
             );
         } finally {
             if (span != null) {
@@ -38,8 +38,8 @@ public class BWTracedScheduledExecutorService extends com.bwts.commons.core.conc
         Span span = createSpan("schedule");
         try {
             Span toActivate = span != null ? span : tracer.activeSpan();
-            Operator operator = OperatorContextHolder.getOperator();
-            return delegate.schedule(new com.bwts.commons.core.concurrent.BWTracedCallable<V>(callable, tracer, toActivate, operator), delay, timeUnit);
+            Actor actor = ActorContextHolder.getActor();
+            return delegate.schedule(new MSTracedCallable<V>(callable, tracer, toActivate, actor), delay, timeUnit);
         } finally {
             if (span != null) {
                 span.finish();
@@ -52,8 +52,8 @@ public class BWTracedScheduledExecutorService extends com.bwts.commons.core.conc
         Span span = createSpan("scheduleAtFixedRate");
         try {
             Span toActivate = span != null ? span : tracer.activeSpan();
-            Operator operator = OperatorContextHolder.getOperator();
-            return delegate.scheduleAtFixedRate(new com.bwts.commons.core.concurrent.BWTracedRunnable(runnable, tracer, toActivate, operator), initialDelay, period, timeUnit);
+            Actor actor = ActorContextHolder.getActor();
+            return delegate.scheduleAtFixedRate(new MSTracedRunnable(runnable, tracer, toActivate, actor), initialDelay, period, timeUnit);
         } finally {
             if (span != null) {
                 span.finish();
@@ -66,8 +66,8 @@ public class BWTracedScheduledExecutorService extends com.bwts.commons.core.conc
         Span span = createSpan("scheduleWithFixedDelay");
         try {
             Span toActivate = span != null ? span : tracer.activeSpan();
-            Operator operator = OperatorContextHolder.getOperator();
-            return delegate.scheduleWithFixedDelay(new com.bwts.commons.core.concurrent.BWTracedRunnable(runnable, tracer, toActivate,operator), initialDelay, delay, timeUnit);
+            Actor actor = ActorContextHolder.getActor();
+            return delegate.scheduleWithFixedDelay(new MSTracedRunnable(runnable, tracer, toActivate,actor), initialDelay, delay, timeUnit);
         } finally {
             if (span != null) {
                 span.finish();

@@ -1,7 +1,7 @@
 package com.moensun.commons.context.concurrent;
 
-import com.bwts.commons.core.operator.Operator;
-import com.bwts.commons.core.operator.OperatorContextHolder;
+import com.moensun.commons.context.actor.Actor;
+import com.moensun.commons.context.actor.ActorContextHolder;
 import io.opentracing.Span;
 import io.opentracing.Tracer;
 import io.opentracing.util.GlobalTracer;
@@ -9,16 +9,16 @@ import io.opentracing.util.GlobalTracer;
 import java.util.Objects;
 import java.util.concurrent.Executor;
 
-public class BWTracedExecutor implements Executor {
+public class MSTracedExecutor implements Executor {
     private final Executor delegate;
     protected final Tracer tracer;
 
-    public BWTracedExecutor(Tracer tracer, Executor delegate) {
+    public MSTracedExecutor(Tracer tracer, Executor delegate) {
         this.tracer = tracer;
         this.delegate = delegate;
     }
 
-    public BWTracedExecutor(Executor delegate) {
+    public MSTracedExecutor(Executor delegate) {
         this.tracer = GlobalTracer.get();
         this.delegate = delegate;
     }
@@ -26,11 +26,11 @@ public class BWTracedExecutor implements Executor {
 
     @Override
     public void execute(Runnable command) {
-        if (OperatorContextHolder.hasTracer()) {
+        if (ActorContextHolder.hasTracer()) {
             Span span = createSpan("execute");
             try {
                 Span activeSpan = Objects.nonNull(span) ? span : tracer.scopeManager().activeSpan();
-                delegate.execute(new com.bwts.commons.core.concurrent.BWTracedRunnable(command,tracer, activeSpan));
+                delegate.execute(new MSTracedRunnable(command,tracer, activeSpan));
             } finally {
                 if (Objects.nonNull(span)) {
                     span.finish();
@@ -38,8 +38,8 @@ public class BWTracedExecutor implements Executor {
             }
 
         } else {
-            Operator operator = OperatorContextHolder.getOperator();
-            delegate.execute(new com.bwts.commons.core.concurrent.BWTracedRunnable(command, operator));
+            Actor actor = ActorContextHolder.getActor();
+            delegate.execute(new MSTracedRunnable(command, actor));
         }
     }
 

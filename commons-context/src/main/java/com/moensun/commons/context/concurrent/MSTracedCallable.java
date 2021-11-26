@@ -1,58 +1,58 @@
 package com.moensun.commons.context.concurrent;
 
-import com.bwts.commons.core.operator.Operator;
-import com.bwts.commons.core.operator.OperatorContextHolder;
+import com.moensun.commons.context.actor.Actor;
+import com.moensun.commons.context.actor.ActorContextHolder;
 import io.opentracing.Scope;
 import io.opentracing.Span;
 import io.opentracing.Tracer;
 import io.opentracing.util.GlobalTracer;
 
 import java.util.Objects;
+import java.util.concurrent.Callable;
 
-public class BWTracedRunnable implements Runnable {
-    private final Runnable delegate;
+public class MSTracedCallable<V> implements Callable<V> {
+    private final Callable<V> delegate;
     private final Tracer tracer;
     private final Span span;
-    private final Operator operator;
+    private final Actor actor;
 
-    public BWTracedRunnable(Runnable delegate) {
+    public MSTracedCallable(Callable<V> delegate) {
         this(delegate, null, null, null);
     }
 
-    public BWTracedRunnable(Runnable delegate, Tracer tracer, Span span) {
+    public MSTracedCallable(Callable<V> delegate, Tracer tracer, Span span) {
         this(delegate, tracer, span, null);
     }
 
-    public BWTracedRunnable(Runnable delegate, Span span) {
+    public MSTracedCallable(Callable<V> delegate, Span span) {
         this(delegate, null, span, null);
     }
 
-    public BWTracedRunnable(Runnable delegate, Operator operator) {
-        this(delegate, null, null, operator);
+    public MSTracedCallable(Callable<V> delegate, Actor actor) {
+        this(delegate, null, null, actor);
     }
 
-    public BWTracedRunnable(Runnable delegate, Tracer tracer, Span span, Operator operator) {
+    public MSTracedCallable(Callable<V> delegate, Tracer tracer, Span span, Actor actor) {
         this.delegate = delegate;
         this.tracer = Objects.nonNull(tracer) ? tracer : GlobalTracer.get();
         this.span = Objects.nonNull(span) ? span : Objects.nonNull(this.tracer) ? this.tracer.scopeManager().activeSpan() : null;
-        this.operator = Objects.nonNull(operator) ? operator : OperatorContextHolder.getOperator();
+        this.actor = Objects.nonNull(actor) ? actor : ActorContextHolder.getActor();
     }
 
     @Override
-    public void run() {
-        if (OperatorContextHolder.hasTracer()) {
+    public V call() throws Exception {
+        if (ActorContextHolder.hasTracer()) {
             Scope scope = Objects.isNull(span) ? null : tracer.scopeManager().activate(span);
             try {
-                delegate.run();
+                return delegate.call();
             } finally {
                 if (Objects.nonNull(scope)) {
                     scope.close();
                 }
             }
         } else {
-            OperatorContextHolder.setOperator(operator);
-            delegate.run();
+            ActorContextHolder.setActor(actor);
+            return delegate.call();
         }
-
     }
 }
