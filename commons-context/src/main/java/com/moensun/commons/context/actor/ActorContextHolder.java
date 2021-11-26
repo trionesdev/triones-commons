@@ -96,7 +96,7 @@ public class ActorContextHolder {
         return result;
     }
 
-    private static boolean hasTracer(){
+    public static boolean hasTracer(){
         return !(GlobalTracer.get().activeSpan() instanceof NoopSpan);
     }
 
