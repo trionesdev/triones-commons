@@ -187,11 +187,11 @@
                 </repository>-->
         <snapshotRepository>
             <id>moensun</id>
-            <url>http://nexus.moensun.com/repository/maven-snapshots/</url>
+            <url>https://nexus.moensun.com/repository/maven-snapshots/</url>
         </snapshotRepository>
         <repository>
             <id>moensun</id>
-            <url>http://nexus.moensun.com/repository/maven-releases/</url>
+            <url>https://nexus.moensun.com/repository/maven-releases/</url>
         </repository>
     </distributionManagement>
 
