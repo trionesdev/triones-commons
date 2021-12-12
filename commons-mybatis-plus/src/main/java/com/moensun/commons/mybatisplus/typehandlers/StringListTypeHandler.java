@@ -43,11 +43,7 @@ public class StringListTypeHandler extends AbstractJsonTypeHandler<List<String>>
     @SneakyThrows
     @Override
     protected List<String> parse(String json) {
-        List<String> result = getObjectMapper().readValue(json, new TypeReference<List<String>>() {});
-        if(result.size()>0){
-            result.forEach(t->t = String.valueOf(t));
-        }
-        return result;
+        return getObjectMapper().readValue(json, new TypeReference<List<String>>() {});
     }
 
     @SneakyThrows
