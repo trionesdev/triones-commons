@@ -43,6 +43,10 @@
             <artifactId>jackson-databind</artifactId>
             <scope>compile</scope>
         </dependency>
+        <dependency>
+            <groupId>com.moensun.commons</groupId>
+            <artifactId>commons-i18n</artifactId>
+        </dependency>
     </dependencies>
 
 </project>
