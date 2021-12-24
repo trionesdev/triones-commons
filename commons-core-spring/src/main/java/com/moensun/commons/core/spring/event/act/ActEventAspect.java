@@ -30,7 +30,7 @@ public class ActEventAspect {
         }
     }
 
-    @Before(value = "actorLogAspect()")
+    @After(value = "actorLogAspect()")
     public void after(JoinPoint joinPoint){
         ActEvent actorLog = getMethodAnnotation(joinPoint);
         if(Objects.nonNull(actorLog)){
