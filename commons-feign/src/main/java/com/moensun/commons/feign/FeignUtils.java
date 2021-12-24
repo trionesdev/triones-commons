@@ -1,10 +1,11 @@
 package com.moensun.commons.feign;
 
+import com.google.common.base.Charsets;
+import com.google.common.io.CharStreams;
 import feign.Response;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
+import java.io.InputStreamReader;
 
 public class FeignUtils {
     public static String requestUrl(Response response) {
@@ -12,13 +13,6 @@ public class FeignUtils {
     }
 
     public static String requestBody(Response response) throws IOException {
-        try (BufferedReader bufferedReader = new BufferedReader(response.body().asReader(StandardCharsets.UTF_8))) {
-            StringBuilder bodyBuffer = new StringBuilder();
-            String line = null;
-            while ((line = bufferedReader.readLine()) != null) {
-                bodyBuffer.append(line);
-            }
-            return bodyBuffer.toString();
-        }
+        return CharStreams.toString(new InputStreamReader(response.body().asInputStream(), Charsets.UTF_8));
     }
 }

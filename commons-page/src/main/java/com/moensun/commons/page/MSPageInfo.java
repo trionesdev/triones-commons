@@ -14,6 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class MSPageInfo<T> implements Serializable {
+    private static final long serialVersionUID = 7156771088266349472L;
     private int pageNum;
     private int pageSize;
     private long total;

@@ -1,6 +1,7 @@
 package com.moensun.commons.exception;
 
 public class MSException extends RuntimeException{
+    private static final long serialVersionUID = -5195341167826040681L;
     private String code;
     private String message;
 

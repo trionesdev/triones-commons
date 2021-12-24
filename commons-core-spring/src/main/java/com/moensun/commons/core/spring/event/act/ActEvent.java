@@ -6,6 +6,7 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 public @interface ActEvent {
+    String value() default "";
     String subject() default "";
     String actionMethod() default "";
     String action() default "";

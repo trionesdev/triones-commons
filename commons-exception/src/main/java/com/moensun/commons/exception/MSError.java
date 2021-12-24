@@ -12,6 +12,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 public class MSError implements Serializable {
+    private static final long serialVersionUID = -1926135926270553351L;
     private String code;
     private String message;
 }

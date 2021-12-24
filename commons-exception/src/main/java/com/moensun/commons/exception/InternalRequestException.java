@@ -1,6 +1,8 @@
 package com.moensun.commons.exception;
 
 public class InternalRequestException extends MSException{
+    private static final long serialVersionUID = 3851795892433283556L;
+
     public InternalRequestException() {
     }
 
