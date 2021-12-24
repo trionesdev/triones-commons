@@ -1,5 +1,6 @@
 package com.moensun.commons.core.spring.event.act;
 
+import lombok.RequiredArgsConstructor;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
@@ -11,69 +12,90 @@ import org.springframework.core.annotation.AnnotationUtils;
 import javax.annotation.Resource;
 import java.util.Objects;
 
+@RequiredArgsConstructor
 @Aspect
 public class ActEventAspect {
 
     @Resource
     @Lazy
-    private ActEventHandler actEventHandler;
+    private ActEventHandlerFactory actEventHandlerFactory;
 
     @Pointcut("@annotation(ActEvent)")
     public void actorLogAspect() {
     }
 
     @Before(value = "actorLogAspect()")
-    public void before(JoinPoint joinPoint){
+    public void before(JoinPoint joinPoint) {
         ActEvent actorLog = getMethodAnnotation(joinPoint);
-        if(Objects.nonNull(actorLog)){
-            actEventHandler.before(actorLog, joinPoint.getArgs());
+        if (Objects.nonNull(actorLog)) {
+            AbsActEventHandler actEventHandler = actEventHandlerFactory.get(actorLog);
+            if (Objects.nonNull(actEventHandler)) {
+                actEventHandler.before(actorLog, joinPoint.getArgs());
+            }
         }
     }
 
     @After(value = "actorLogAspect()")
-    public void after(JoinPoint joinPoint){
+    public void after(JoinPoint joinPoint) {
         ActEvent actorLog = getMethodAnnotation(joinPoint);
-        if(Objects.nonNull(actorLog)){
-            actEventHandler.after(actorLog, joinPoint.getArgs());
+        if (Objects.nonNull(actorLog)) {
+            AbsActEventHandler actEventHandler = actEventHandlerFactory.get(actorLog);
+            if (Objects.nonNull(actEventHandler)) {
+                actEventHandler.after(actorLog, joinPoint.getArgs());
+            }
         }
     }
 
     @Around(value = "actorLogAspect()")
     public Object around(ProceedingJoinPoint joinPoint) throws Throwable {
         ActEvent actorLog = getMethodAnnotation(joinPoint);
-        Object previousData = null;
-        if(Objects.nonNull(actorLog)){
-            previousData = actEventHandler.aroundBefore(actorLog, joinPoint.getArgs());
+        AbsActEventHandler actEventHandler = null;
+        if (Objects.nonNull(actorLog)) {
+            actEventHandler = actEventHandlerFactory.get(actorLog);
         }
-        Object result =  joinPoint.proceed();
-        if(Objects.nonNull(actorLog)){
-            actEventHandler.aroundAfter(actorLog, joinPoint.getArgs(),previousData, result);
+        Object previousData = null;
+        if (Objects.nonNull(actorLog)) {
+            if (Objects.nonNull(actEventHandler)) {
+                previousData = actEventHandler.aroundBefore(actorLog, joinPoint.getArgs());
+            }
+        }
+        Object result = joinPoint.proceed();
+        if (Objects.nonNull(actorLog)) {
+            if (Objects.nonNull(actEventHandler)) {
+                actEventHandler.aroundAfter(actorLog, joinPoint.getArgs(), previousData, result);
+            }
         }
         return result;
     }
 
-    @AfterReturning(value = "actorLogAspect()",returning = "returnValue")
-    public void afterReturning(JoinPoint joinPoint, Object returnValue){
+    @AfterReturning(value = "actorLogAspect()", returning = "returnValue")
+    public void afterReturning(JoinPoint joinPoint, Object returnValue) {
         ActEvent actorLog = getMethodAnnotation(joinPoint);
-        if(Objects.nonNull(actorLog)){
-            actEventHandler.afterRetuning(actorLog,joinPoint.getArgs(),returnValue);
+        if (Objects.nonNull(actorLog)) {
+            AbsActEventHandler actEventHandler = actEventHandlerFactory.get(actorLog);
+            if (Objects.nonNull(actEventHandler)) {
+                actEventHandler.afterRetuning(actorLog, joinPoint.getArgs(), returnValue);
+            }
         }
     }
 
-    @AfterThrowing(value = "actorLogAspect()",throwing = "ex")
-    public void afterThrowing(JoinPoint joinPoint, Exception ex){
+    @AfterThrowing(value = "actorLogAspect()", throwing = "ex")
+    public void afterThrowing(JoinPoint joinPoint, Exception ex) {
         ActEvent actorLog = getMethodAnnotation(joinPoint);
-        if(Objects.nonNull(actorLog)){
-            actEventHandler.afterRetuning(actorLog, joinPoint.getArgs(), ex);
+        if (Objects.nonNull(actorLog)) {
+            AbsActEventHandler actEventHandler = actEventHandlerFactory.get(actorLog);
+            if (Objects.nonNull(actEventHandler)) {
+                actEventHandler.afterRetuning(actorLog, joinPoint.getArgs(), ex);
+            }
         }
     }
 
-    private ActEvent getMethodAnnotation(JoinPoint joinPoint){
-        if(Objects.isNull(actEventHandler)){
+    private ActEvent getMethodAnnotation(JoinPoint joinPoint) {
+        if (Objects.isNull(actEventHandlerFactory)) {
             return null;
         }
         Signature signature = joinPoint.getSignature();
-        MethodSignature methodSignature = (MethodSignature)signature;
+        MethodSignature methodSignature = (MethodSignature) signature;
         return AnnotationUtils.getAnnotation(methodSignature.getMethod(), ActEvent.class);
     }
 }
