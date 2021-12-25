@@ -11,7 +11,7 @@ import java.util.Objects;
 
 @RequiredArgsConstructor
 public class ActEventHandlerFactory {
-    private MultiKeyMap<String, AbsActEventHandler> actEventHandlersMap;
+    private final MultiKeyMap<String, AbsActEventHandler> actEventHandlersMap = new MultiKeyMap<>();
 
     private final List<AbsActEventHandler> actEventHandlers;
 
@@ -21,14 +21,14 @@ public class ActEventHandlerFactory {
             actEventHandlers.forEach(t -> {
                 ActEventHandler actEventHandler = AnnotationUtils.findAnnotation(t.getClass(), ActEventHandler.class);
                 if (Objects.nonNull(actEventHandler)) {
-                    actEventHandlersMap.put(actEventHandler.value(), actEventHandler.subject(), actEventHandler.actionMethod(), actEventHandler.action(), t);
+                    actEventHandlersMap.put( actEventHandler.subject(), actEventHandler.actionMethod(), actEventHandler.action(), t);
                 }
             });
         }
     }
 
     public AbsActEventHandler get(ActEvent actEvent) {
-        return actEventHandlersMap.get(actEvent.value(), actEvent.subject(), actEvent.actionMethod(), actEvent.action());
+        return actEventHandlersMap.get( actEvent.subject(), actEvent.actionMethod(), actEvent.action());
     }
 
 }
