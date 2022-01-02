@@ -11,4 +11,5 @@ public @interface ActEvent {
     String actionMethod() default "";
     String action() default "";
     String description()  default "";
+    String objectId() default "";
 }

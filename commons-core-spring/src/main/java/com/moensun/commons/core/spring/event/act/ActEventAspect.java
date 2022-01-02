@@ -30,7 +30,7 @@ public class ActEventAspect {
         if (Objects.nonNull(actorLog)) {
             AbsActEventHandler actEventHandler = actEventHandlerFactory.get(actorLog);
             if (Objects.nonNull(actEventHandler)) {
-                actEventHandler.before(actorLog, joinPoint.getArgs());
+                actEventHandler.before(actorLog, joinPoint);
             }
         }
     }
@@ -41,7 +41,7 @@ public class ActEventAspect {
         if (Objects.nonNull(actorLog)) {
             AbsActEventHandler actEventHandler = actEventHandlerFactory.get(actorLog);
             if (Objects.nonNull(actEventHandler)) {
-                actEventHandler.after(actorLog, joinPoint.getArgs());
+                actEventHandler.after(actorLog, joinPoint);
             }
         }
     }
@@ -56,13 +56,13 @@ public class ActEventAspect {
         Object previousData = null;
         if (Objects.nonNull(actorLog)) {
             if (Objects.nonNull(actEventHandler)) {
-                previousData = actEventHandler.aroundBefore(actorLog, joinPoint.getArgs());
+                previousData = actEventHandler.aroundBefore(actorLog, joinPoint);
             }
         }
         Object result = joinPoint.proceed();
         if (Objects.nonNull(actorLog)) {
             if (Objects.nonNull(actEventHandler)) {
-                actEventHandler.aroundAfter(actorLog, joinPoint.getArgs(), previousData, result);
+                actEventHandler.aroundAfter(actorLog, previousData, result, joinPoint);
             }
         }
         return result;
@@ -74,7 +74,7 @@ public class ActEventAspect {
         if (Objects.nonNull(actorLog)) {
             AbsActEventHandler actEventHandler = actEventHandlerFactory.get(actorLog);
             if (Objects.nonNull(actEventHandler)) {
-                actEventHandler.afterRetuning(actorLog, joinPoint.getArgs(), returnValue);
+                actEventHandler.afterRetuning(actorLog, returnValue, joinPoint);
             }
         }
     }
@@ -85,7 +85,7 @@ public class ActEventAspect {
         if (Objects.nonNull(actorLog)) {
             AbsActEventHandler actEventHandler = actEventHandlerFactory.get(actorLog);
             if (Objects.nonNull(actEventHandler)) {
-                actEventHandler.afterRetuning(actorLog, joinPoint.getArgs(), ex);
+                actEventHandler.afterThrowing(actorLog, ex, joinPoint);
             }
         }
     }
