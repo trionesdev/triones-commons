@@ -1,5 +1,6 @@
-package com.moensun.commons.core.spring.permission.act;
+package com.moensun.commons.core.spring.event.act;
 
+import lombok.RequiredArgsConstructor;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.Aspect;
@@ -16,35 +17,31 @@ import org.springframework.expression.BeanResolver;
 import org.springframework.expression.ExpressionParser;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
-import org.springframework.stereotype.Component;
 
 import java.util.Objects;
 
+@RequiredArgsConstructor
 @Aspect
-@Component
-public class ActPermissionAspect implements ApplicationContextAware {
+public class ActEventBeforeAspect implements ApplicationContextAware {
 
     private BeanResolver beanResolver;
 
-    @Pointcut(value = "@annotation(ActPermission)")
-    public void actPermissionAspect() {
+    @Pointcut("@annotation(ActEventBefore)")
+    public void actEventBefore() {
     }
 
-    @Before(value = "actPermissionAspect()")
+    @Before(value = "actEventBefore()")
     public void before(JoinPoint joinPoint) {
         Signature signature = joinPoint.getSignature();
         MethodSignature methodSignature = (MethodSignature) signature;
-        ActPermission actPermission = AnnotationUtils.getAnnotation(methodSignature.getMethod(), ActPermission.class);
-        if (Objects.isNull(actPermission)) {
+        ActEventBefore actEventBefore = AnnotationUtils.getAnnotation(methodSignature.getMethod(), ActEventBefore.class);
+        if (Objects.isNull(actEventBefore)) {
             return;
         }
         ExpressionParser parser = new SpelExpressionParser();
-        StandardEvaluationContext context = new ActPermissionEvaluationContext(joinPoint, methodSignature.getMethod(), joinPoint.getArgs(), new DefaultParameterNameDiscoverer());
+        StandardEvaluationContext context = new ActEventEvaluationContext(joinPoint, methodSignature.getMethod(), joinPoint.getArgs(), new DefaultParameterNameDiscoverer());
         context.setBeanResolver(this.beanResolver);
-        Boolean result = parser.parseExpression(actPermission.value()).getValue(context, Boolean.class);
-        if (Objects.isNull(result) || !result) {
-            throw new PermissionDeniedException();
-        }
+        parser.parseExpression(actEventBefore.value()).getValue(context);
     }
 
     @Override

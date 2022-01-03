@@ -1,4 +1,4 @@
-package com.moensun.commons.core.spring.permission.act;
+package com.moensun.commons.core.spring.event.act;
 
 import java.lang.annotation.*;
 
@@ -6,8 +6,7 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Inherited
 @Documented
-public @interface ActPermission {
-
+public @interface ActEventAfter {
     /**
      * @return the Spring-EL expression to be evaluated after invoking the protected
      * method
