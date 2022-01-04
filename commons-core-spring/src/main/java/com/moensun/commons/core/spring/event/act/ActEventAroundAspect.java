@@ -8,13 +8,8 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
-import org.springframework.beans.BeansException;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
-import org.springframework.context.expression.BeanFactoryResolver;
 import org.springframework.core.DefaultParameterNameDiscoverer;
 import org.springframework.core.annotation.AnnotationUtils;
-import org.springframework.expression.BeanResolver;
 import org.springframework.expression.ExpressionParser;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
@@ -23,9 +18,7 @@ import java.util.Objects;
 
 @RequiredArgsConstructor
 @Aspect
-public class ActEventAroundAspect implements ApplicationContextAware {
-
-    private BeanResolver beanResolver;
+public class ActEventAroundAspect extends ActEventAspect {
 
     @Pointcut("@annotation(ActEventAround)")
     public void actEventAround() {
@@ -53,8 +46,4 @@ public class ActEventAroundAspect implements ApplicationContextAware {
         return result;
     }
 
-    @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        this.beanResolver = new BeanFactoryResolver(applicationContext);
-    }
 }
