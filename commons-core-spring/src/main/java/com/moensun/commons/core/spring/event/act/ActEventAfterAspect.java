@@ -31,7 +31,7 @@ public class ActEventAfterAspect implements ApplicationContextAware {
     }
 
     @After(value = "actEventAfter()")
-    public void before(JoinPoint joinPoint) {
+    public void after(JoinPoint joinPoint) {
         Signature signature = joinPoint.getSignature();
         MethodSignature methodSignature = (MethodSignature) signature;
         ActEventAfter actEventAfter = AnnotationUtils.getAnnotation(methodSignature.getMethod(), ActEventAfter.class);

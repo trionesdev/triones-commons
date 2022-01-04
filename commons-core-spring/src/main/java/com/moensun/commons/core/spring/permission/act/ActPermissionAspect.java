@@ -1,5 +1,6 @@
 package com.moensun.commons.core.spring.permission.act;
 
+import com.moensun.commons.exception.PermissionDeniedException;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.Aspect;
@@ -16,12 +17,10 @@ import org.springframework.expression.BeanResolver;
 import org.springframework.expression.ExpressionParser;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
-import org.springframework.stereotype.Component;
 
 import java.util.Objects;
 
 @Aspect
-@Component
 public class ActPermissionAspect implements ApplicationContextAware {
 
     private BeanResolver beanResolver;

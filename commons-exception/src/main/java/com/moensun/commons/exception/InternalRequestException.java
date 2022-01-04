@@ -26,8 +26,8 @@ public class InternalRequestException extends MSException{
         super(cause, code, message);
     }
 
-    public InternalRequestException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace, String code, String message1) {
-        super(message, cause, enableSuppression, writableStackTrace, code, message1);
+    public InternalRequestException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace, String code) {
+        super(message, cause, enableSuppression, writableStackTrace,code);
     }
 
     public InternalRequestException(MSError error) {

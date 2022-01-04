@@ -31,7 +31,7 @@ public class ActEventAfterThrowingAspect implements ApplicationContextAware {
     }
 
     @AfterThrowing(value = "actEventAfterThrowing()", throwing = "ex")
-    public void afterReturning(JoinPoint joinPoint, Exception ex) {
+    public void afterThrowing(JoinPoint joinPoint, Exception ex) {
         Signature signature = joinPoint.getSignature();
         MethodSignature methodSignature = (MethodSignature) signature;
         ActEventAfterReturning actEventAfterReturning = AnnotationUtils.getAnnotation(methodSignature.getMethod(), ActEventAfterReturning.class);

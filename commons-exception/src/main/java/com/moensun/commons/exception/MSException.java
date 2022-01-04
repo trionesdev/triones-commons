@@ -47,10 +47,10 @@ public class MSException extends RuntimeException{
         this.message = message;
     }
 
-    public MSException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace, String code, String message1) {
+    public MSException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace, String code) {
         super(message, cause, enableSuppression, writableStackTrace);
         this.code = code;
-        this.message = message1;
+        this.message = message;
     }
 
     public MSException(MSError error){
