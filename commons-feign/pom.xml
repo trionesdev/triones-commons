@@ -20,7 +20,6 @@
         <dependency>
             <groupId>io.github.openfeign</groupId>
             <artifactId>feign-core</artifactId>
-            <version>11.5</version>
         </dependency>
         <dependency>
             <groupId>com.alibaba</groupId>
