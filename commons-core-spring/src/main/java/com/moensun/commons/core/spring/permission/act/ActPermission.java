@@ -1,5 +1,7 @@
 package com.moensun.commons.core.spring.permission.act;
 
+import org.intellij.lang.annotations.Language;
+
 import java.lang.annotation.*;
 
 @Target({ ElementType.METHOD, ElementType.TYPE })
@@ -8,9 +10,7 @@ import java.lang.annotation.*;
 @Documented
 public @interface ActPermission {
 
-    /**
-     * @return the Spring-EL expression to be evaluated after invoking the protected
-     * method
-     */
+    // language=SpEL
+    @Language(value = "SpEL")
     String value();
 }
