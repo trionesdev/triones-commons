@@ -13,4 +13,6 @@ public @interface ActPermission {
     // language=SpEL
     @Language(value = "SpEL")
     String value();
+
+    String description() default "";
 }
