@@ -11,7 +11,7 @@ public class IdentityUtils {
     }
 
     public static boolean stringValid(String id){
-        return StringUtils.isNotBlank(id);
+        return StringUtils.isNotBlank(id) && !Objects.equals("0",id);
     }
 
 }
