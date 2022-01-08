@@ -10,7 +10,7 @@ public class IdentityUtils {
         return Objects.nonNull(id) && !Objects.equals(0L,id);
     }
 
-    public static boolean stringValid(String id){
+    public static boolean stringIdValid(String id){
         return StringUtils.isNotBlank(id) && !Objects.equals("0",id);
     }
 
