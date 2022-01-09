@@ -10,12 +10,12 @@ import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.*;
 
-public class MSTracedExecutorService extends MSTracedExecutor implements ExecutorService {
+public class TracedExecutorService extends TracedExecutor implements ExecutorService {
     private final ExecutorService delegate;
     protected final Tracer tracer;
 
 
-    public MSTracedExecutorService(ExecutorService delegate, Tracer tracer) {
+    public TracedExecutorService(ExecutorService delegate, Tracer tracer) {
         super(tracer, delegate);
         this.tracer = tracer;
         this.delegate = delegate;
@@ -52,7 +52,7 @@ public class MSTracedExecutorService extends MSTracedExecutor implements Executo
         try {
             Span toActivate = span != null ? span : tracer.scopeManager().activeSpan();
             Actor actor = ActorContextHolder.getActor();
-            return delegate.submit(new MSTracedCallable<T>(callable, tracer, toActivate, actor));
+            return delegate.submit(new TracedCallable<T>(callable, tracer, toActivate, actor));
         } finally {
             if (span != null) {
                 span.finish();
@@ -66,7 +66,7 @@ public class MSTracedExecutorService extends MSTracedExecutor implements Executo
         try {
             Span toActivate = span != null ? span : tracer.scopeManager().activeSpan();
             Actor actor = ActorContextHolder.getActor();
-            return delegate.submit(new MSTracedRunnable(runnable, tracer, toActivate, actor), result);
+            return delegate.submit(new TracedRunnable(runnable, tracer, toActivate, actor), result);
         } finally {
             if (span != null) {
                 span.finish();
@@ -80,7 +80,7 @@ public class MSTracedExecutorService extends MSTracedExecutor implements Executo
         try {
             Span toActivate = span != null ? span : tracer.scopeManager().activeSpan();
             Actor actor = ActorContextHolder.getActor();
-            return delegate.submit(new MSTracedRunnable(runnable, tracer, toActivate, actor));
+            return delegate.submit(new TracedRunnable(runnable, tracer, toActivate, actor));
         } finally {
             if (span != null) {
                 span.finish();
@@ -144,7 +144,7 @@ public class MSTracedExecutorService extends MSTracedExecutor implements Executo
         List<Callable<T>> tracedCallables = new ArrayList<Callable<T>>(delegate.size());
         Actor actor = ActorContextHolder.getActor();
         for (Callable<T> callable : delegate) {
-            tracedCallables.add(new MSTracedCallable<T>(callable, tracer, toActivate, actor));
+            tracedCallables.add(new TracedCallable<T>(callable, tracer, toActivate, actor));
         }
 
         return tracedCallables;

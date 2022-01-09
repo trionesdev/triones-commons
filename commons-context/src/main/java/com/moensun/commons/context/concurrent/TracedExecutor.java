@@ -9,16 +9,16 @@ import io.opentracing.util.GlobalTracer;
 import java.util.Objects;
 import java.util.concurrent.Executor;
 
-public class MSTracedExecutor implements Executor {
+public class TracedExecutor implements Executor {
     private final Executor delegate;
     protected final Tracer tracer;
 
-    public MSTracedExecutor(Tracer tracer, Executor delegate) {
+    public TracedExecutor(Tracer tracer, Executor delegate) {
         this.tracer = tracer;
         this.delegate = delegate;
     }
 
-    public MSTracedExecutor(Executor delegate) {
+    public TracedExecutor(Executor delegate) {
         this.tracer = GlobalTracer.get();
         this.delegate = delegate;
     }
@@ -30,7 +30,7 @@ public class MSTracedExecutor implements Executor {
             Span span = createSpan("execute");
             try {
                 Span activeSpan = Objects.nonNull(span) ? span : tracer.scopeManager().activeSpan();
-                delegate.execute(new MSTracedRunnable(command,tracer, activeSpan));
+                delegate.execute(new TracedRunnable(command,tracer, activeSpan));
             } finally {
                 if (Objects.nonNull(span)) {
                     span.finish();
@@ -39,7 +39,7 @@ public class MSTracedExecutor implements Executor {
 
         } else {
             Actor actor = ActorContextHolder.getActor();
-            delegate.execute(new MSTracedRunnable(command, actor));
+            delegate.execute(new TracedRunnable(command, actor));
         }
     }
 

@@ -10,29 +10,29 @@ import io.opentracing.util.GlobalTracer;
 import java.util.Objects;
 import java.util.concurrent.Callable;
 
-public class MSTracedCallable<V> implements Callable<V> {
+public class TracedCallable<V> implements Callable<V> {
     private final Callable<V> delegate;
     private final Tracer tracer;
     private final Span span;
     private final Actor actor;
 
-    public MSTracedCallable(Callable<V> delegate) {
+    public TracedCallable(Callable<V> delegate) {
         this(delegate, null, null, null);
     }
 
-    public MSTracedCallable(Callable<V> delegate, Tracer tracer, Span span) {
+    public TracedCallable(Callable<V> delegate, Tracer tracer, Span span) {
         this(delegate, tracer, span, null);
     }
 
-    public MSTracedCallable(Callable<V> delegate, Span span) {
+    public TracedCallable(Callable<V> delegate, Span span) {
         this(delegate, null, span, null);
     }
 
-    public MSTracedCallable(Callable<V> delegate, Actor actor) {
+    public TracedCallable(Callable<V> delegate, Actor actor) {
         this(delegate, null, null, actor);
     }
 
-    public MSTracedCallable(Callable<V> delegate, Tracer tracer, Span span, Actor actor) {
+    public TracedCallable(Callable<V> delegate, Tracer tracer, Span span, Actor actor) {
         this.delegate = delegate;
         this.tracer = Objects.nonNull(tracer) ? tracer : GlobalTracer.get();
         this.span = Objects.nonNull(span) ? span : Objects.nonNull(this.tracer) ? this.tracer.scopeManager().activeSpan() : null;

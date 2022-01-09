@@ -10,10 +10,10 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
-public class MSTracedScheduledExecutorService extends MSTracedExecutorService implements ScheduledExecutorService {
+public class TracedScheduledExecutorService extends TracedExecutorService implements ScheduledExecutorService {
     private final ScheduledExecutorService delegate;
 
-    public MSTracedScheduledExecutorService(ScheduledExecutorService delegate, Tracer tracer) {
+    public TracedScheduledExecutorService(ScheduledExecutorService delegate, Tracer tracer) {
         super(delegate, tracer);
         this.delegate = delegate;
     }
@@ -24,7 +24,7 @@ public class MSTracedScheduledExecutorService extends MSTracedExecutorService im
         try {
             Span toActivate = span != null ? span : tracer.activeSpan();
             Actor actor = ActorContextHolder.getActor();
-            return delegate.schedule(new MSTracedRunnable(runnable, tracer, toActivate, actor), delay, timeUnit
+            return delegate.schedule(new TracedRunnable(runnable, tracer, toActivate, actor), delay, timeUnit
             );
         } finally {
             if (span != null) {
@@ -39,7 +39,7 @@ public class MSTracedScheduledExecutorService extends MSTracedExecutorService im
         try {
             Span toActivate = span != null ? span : tracer.activeSpan();
             Actor actor = ActorContextHolder.getActor();
-            return delegate.schedule(new MSTracedCallable<V>(callable, tracer, toActivate, actor), delay, timeUnit);
+            return delegate.schedule(new TracedCallable<V>(callable, tracer, toActivate, actor), delay, timeUnit);
         } finally {
             if (span != null) {
                 span.finish();
@@ -53,7 +53,7 @@ public class MSTracedScheduledExecutorService extends MSTracedExecutorService im
         try {
             Span toActivate = span != null ? span : tracer.activeSpan();
             Actor actor = ActorContextHolder.getActor();
-            return delegate.scheduleAtFixedRate(new MSTracedRunnable(runnable, tracer, toActivate, actor), initialDelay, period, timeUnit);
+            return delegate.scheduleAtFixedRate(new TracedRunnable(runnable, tracer, toActivate, actor), initialDelay, period, timeUnit);
         } finally {
             if (span != null) {
                 span.finish();
@@ -67,7 +67,7 @@ public class MSTracedScheduledExecutorService extends MSTracedExecutorService im
         try {
             Span toActivate = span != null ? span : tracer.activeSpan();
             Actor actor = ActorContextHolder.getActor();
-            return delegate.scheduleWithFixedDelay(new MSTracedRunnable(runnable, tracer, toActivate,actor), initialDelay, delay, timeUnit);
+            return delegate.scheduleWithFixedDelay(new TracedRunnable(runnable, tracer, toActivate,actor), initialDelay, delay, timeUnit);
         } finally {
             if (span != null) {
                 span.finish();
