@@ -17,7 +17,7 @@ public class IdentityUtils {
      * @return
      */
     public static boolean longIdValid(Long id) {
-        return Objects.nonNull(id) && !Objects.equals(DEFAULT_NULL_LONG_ID, id);
+        return Objects.nonNull(id) && !Objects.equals(LONG_ID_ZERO_VALUE, id);
     }
 
     /**
@@ -26,7 +26,7 @@ public class IdentityUtils {
      * @return
      */
     public static boolean intIdValid(Integer id) {
-        return Objects.nonNull(id) && !Objects.equals(DEFAULT_NULL_INTEGER_ID, id);
+        return Objects.nonNull(id) && !Objects.equals(INTEGER_ID_ZERO_VALUE, id);
     }
 
     /**
@@ -35,7 +35,7 @@ public class IdentityUtils {
      * @return
      */
     public static boolean stringIdValid(String id) {
-        return StringUtils.isNotBlank(id) && !Objects.equals(DEFAULT_NULL_STRING_ID, id);
+        return StringUtils.isNotBlank(id) && !Objects.equals(STRING_ID_ZERO_VALUE, id);
     }
 
 }
