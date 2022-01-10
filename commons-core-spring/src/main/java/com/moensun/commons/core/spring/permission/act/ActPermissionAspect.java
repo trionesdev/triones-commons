@@ -1,6 +1,7 @@
 package com.moensun.commons.core.spring.permission.act;
 
 import com.moensun.commons.exception.PermissionDeniedException;
+import org.apache.commons.lang3.BooleanUtils;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.Aspect;
@@ -38,10 +39,10 @@ public class ActPermissionAspect implements ApplicationContextAware {
             return;
         }
         ExpressionParser parser = new SpelExpressionParser();
-        StandardEvaluationContext context = new ActPermissionEvaluationContext(joinPoint, methodSignature.getMethod(), joinPoint.getArgs(), new DefaultParameterNameDiscoverer());
+        StandardEvaluationContext context = new ActPermissionEvaluationContext(joinPoint.getTarget(), methodSignature.getMethod(), joinPoint.getArgs(), new DefaultParameterNameDiscoverer());
         context.setBeanResolver(this.beanResolver);
         Boolean result = parser.parseExpression(actPermission.value()).getValue(context, Boolean.class);
-        if (Objects.isNull(result) || !result) {
+        if (BooleanUtils.isNotTrue(result)) {
             throw new PermissionDeniedException();
         }
     }

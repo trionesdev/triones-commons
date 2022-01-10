@@ -32,7 +32,7 @@ public class ActEventAroundAspect extends ActEventAspect {
         ExpressionParser parser = new SpelExpressionParser();
         StandardEvaluationContext context = null;
         if (Objects.nonNull(actEventAround)) {
-            context = new ActEventEvaluationContext(joinPoint, methodSignature.getMethod(), joinPoint.getArgs(), new DefaultParameterNameDiscoverer());
+            context = new ActEventEvaluationContext(joinPoint.getTarget(), methodSignature.getMethod(), joinPoint.getArgs(), new DefaultParameterNameDiscoverer());
             context.setBeanResolver(this.beanResolver);
             if (StringUtils.isNoneBlank(actEventAround.before())) {
                 Object beforeResult = parser.parseExpression(actEventAround.before()).getValue(context);
