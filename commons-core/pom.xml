@@ -47,6 +47,10 @@
             <groupId>com.moensun.commons</groupId>
             <artifactId>commons-i18n</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.jsoup</groupId>
+            <artifactId>jsoup</artifactId>
+        </dependency>
     </dependencies>
 
 </project>
