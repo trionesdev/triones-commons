@@ -112,6 +112,7 @@ public class ActorContextHolder {
         Actor actor = Actor.builder().build();
         actor.setActorId(activeSpan.getBaggageItem(BaggageUtils.itemKey(X_ACTOR_ID)));
         actor.setTenantId(activeSpan.getBaggageItem(BaggageUtils.itemKey(X_TENANT_ID)));
+        actor.setRole(activeSpan.getBaggageItem(BaggageUtils.itemKey(X_ROLE)));
         return actor;
     }
 
@@ -132,6 +133,7 @@ public class ActorContextHolder {
         }
         actorSpan.setBaggageItem(BaggageUtils.itemKey(X_ACTOR_ID), actor.getActorId());
         actorSpan.setBaggageItem(BaggageUtils.itemKey(X_TENANT_ID), actor.getTenantId());
+        actorSpan.setBaggageItem(BaggageUtils.itemKey(X_ROLE), actor.getRole());
         scopeManager.activate(actorSpan);
         actorSpan.finish();
     }
@@ -148,6 +150,7 @@ public class ActorContextHolder {
         }
         activeSpan.setBaggageItem(X_ACTOR_ID,null);
         activeSpan.setBaggageItem(X_TENANT_ID,null);
+        activeSpan.setBaggageItem(X_ROLE,null);
     }
 
     public static class ActorWrapper{
@@ -186,12 +189,14 @@ public class ActorContextHolder {
         if(Objects.nonNull(actor)){
             MDC.put(MDC_ACTOR_ID,actor.getActorId());
             MDC.put(MDC_TENANT_ID,actor.getTenantId());
+            MDC.put(MDC_ROLE,actor.getRole());
         }
     }
 
     private static void cleanLocalMDCContext(){
         MDC.put(MDC_ACTOR_ID,null);
         MDC.put(MDC_TENANT_ID,null);
+        MDC.put(MDC_ROLE,null);
     }
 
 }
