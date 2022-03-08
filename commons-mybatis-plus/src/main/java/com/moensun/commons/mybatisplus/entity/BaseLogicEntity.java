@@ -15,7 +15,7 @@ import java.time.Instant;
 @AllArgsConstructor
 @NoArgsConstructor
 public class BaseLogicEntity {
-    @TableLogic(value = "0",delval = "1")
+    @TableLogic(value = "false",delval = "true")
     @TableField(value = "is_deleted",fill = FieldFill.INSERT)
     private Boolean deleted;
     @TableField(fill = FieldFill.INSERT)
