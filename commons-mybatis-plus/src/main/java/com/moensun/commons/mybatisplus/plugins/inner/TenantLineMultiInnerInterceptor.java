@@ -1,22 +1,16 @@
 package com.moensun.commons.mybatisplus.plugins.inner;
 
 import com.baomidou.mybatisplus.core.plugins.InterceptorIgnoreHelper;
-import com.baomidou.mybatisplus.core.toolkit.ClassUtils;
-import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
-import com.baomidou.mybatisplus.core.toolkit.PluginUtils;
-import com.baomidou.mybatisplus.core.toolkit.StringPool;
+import com.baomidou.mybatisplus.core.toolkit.*;
 import com.baomidou.mybatisplus.extension.parser.JsqlParserSupport;
 import com.baomidou.mybatisplus.extension.plugins.inner.InnerInterceptor;
 import com.baomidou.mybatisplus.extension.toolkit.PropertyMapper;
-import com.moensun.commons.mybatisplus.plugins.handler.TenantLineValuesHandler;
+import com.moensun.commons.mybatisplus.plugins.handler.TenantLineMultiHandler;
 import lombok.*;
 import net.sf.jsqlparser.expression.*;
 import net.sf.jsqlparser.expression.operators.conditional.AndExpression;
 import net.sf.jsqlparser.expression.operators.conditional.OrExpression;
-import net.sf.jsqlparser.expression.operators.relational.ExistsExpression;
-import net.sf.jsqlparser.expression.operators.relational.ExpressionList;
-import net.sf.jsqlparser.expression.operators.relational.InExpression;
-import net.sf.jsqlparser.expression.operators.relational.ItemsList;
+import net.sf.jsqlparser.expression.operators.relational.*;
 import net.sf.jsqlparser.schema.Column;
 import net.sf.jsqlparser.schema.Table;
 import net.sf.jsqlparser.statement.delete.Delete;
@@ -40,12 +34,12 @@ import java.util.Properties;
 @AllArgsConstructor
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-public class TenantLineValuesInnerInterceptor extends JsqlParserSupport implements InnerInterceptor {
-    private TenantLineValuesHandler tenantLineValuesHandler;
+public class TenantLineMultiInnerInterceptor extends JsqlParserSupport implements InnerInterceptor {
+    private TenantLineMultiHandler tenantLineMultiHandler;
 
     @Override
     public void beforeQuery(
-            Executor executor, MappedStatement ms, Object parameter, RowBounds rowBounds, ResultHandler resultHandler, BoundSql boundSql)  {
+            Executor executor, MappedStatement ms, Object parameter, RowBounds rowBounds, ResultHandler resultHandler, BoundSql boundSql) {
         if (InterceptorIgnoreHelper.willIgnoreTenantLine(ms.getId())) return;
         PluginUtils.MPBoundSql mpBs = PluginUtils.mpBoundSql(boundSql);
         mpBs.sql(parserSingle(mpBs.sql(), null));
@@ -92,7 +86,45 @@ public class TenantLineValuesInnerInterceptor extends JsqlParserSupport implemen
 
     @Override
     protected void processInsert(Insert insert, int index, String sql, Object obj) {
+        if (tenantLineMultiHandler.ignoreTable(insert.getTable().getName())) {
+            // 过滤退出执行
+            return;
+        }
+        List<Column> columns = insert.getColumns();
+        if (CollectionUtils.isEmpty(columns)) {
+            // 针对不给列名的insert 不处理
+            return;
+        }
+        String tenantIdColumn = tenantLineMultiHandler.getTenantIdColumn();
+        if (tenantLineMultiHandler.ignoreInsert(columns, tenantIdColumn)) {
+            // 针对已给出租户列的insert 不处理
+            return;
+        }
+        columns.add(new Column(tenantIdColumn));
 
+        // fixed gitee pulls/141 duplicate update
+        List<Expression> duplicateUpdateColumns = insert.getDuplicateUpdateExpressionList();
+        if (CollectionUtils.isNotEmpty(duplicateUpdateColumns)) {
+            EqualsTo equalsTo = new EqualsTo();
+            equalsTo.setLeftExpression(new StringValue(tenantIdColumn));
+            equalsTo.setRightExpression(tenantLineMultiHandler.getTenantId());
+            duplicateUpdateColumns.add(equalsTo);
+        }
+
+        Select select = insert.getSelect();
+        if (select != null) {
+            this.processInsertSelect(select.getSelectBody());
+        } else if (insert.getItemsList() != null) {
+            // fixed github pull/295
+            ItemsList itemsList = insert.getItemsList();
+            if (itemsList instanceof MultiExpressionList) {
+                ((MultiExpressionList) itemsList).getExpressionLists().forEach(el -> el.getExpressions().add(tenantLineMultiHandler.getTenantId()));
+            } else {
+                ((ExpressionList) itemsList).getExpressions().add(tenantLineMultiHandler.getTenantId());
+            }
+        } else {
+            throw ExceptionUtils.mpe("Failed to process multiple-table update, please exclude the tableName or statementId");
+        }
     }
 
     /**
@@ -101,7 +133,7 @@ public class TenantLineValuesInnerInterceptor extends JsqlParserSupport implemen
     @Override
     protected void processUpdate(Update update, int index, String sql, Object obj) {
         final Table table = update.getTable();
-        if (tenantLineValuesHandler.ignoreTable(table.getName())) {
+        if (tenantLineMultiHandler.ignoreTable(table.getName())) {
             // 过滤退出执行
             return;
         }
@@ -113,7 +145,7 @@ public class TenantLineValuesInnerInterceptor extends JsqlParserSupport implemen
      */
     @Override
     protected void processDelete(Delete delete, int index, String sql, Object obj) {
-        if (tenantLineValuesHandler.ignoreTable(delete.getTable().getName())) {
+        if (tenantLineMultiHandler.ignoreTable(delete.getTable().getName())) {
             // 过滤退出执行
             return;
         }
@@ -124,19 +156,68 @@ public class TenantLineValuesInnerInterceptor extends JsqlParserSupport implemen
      * delete update 语句 where 处理
      */
     protected Expression andExpression(Table table, Expression where) {
-        //获得where条件表达式
-        InExpression inExpression = new InExpression();
-        inExpression.setLeftExpression(this.getAliasColumn(table));
-        inExpression.setRightItemsList(tenantLineValuesHandler.getTenantIds());
-        if (null != where) {
-            if (where instanceof OrExpression) {
-                return new AndExpression(inExpression, new Parenthesis(where));
-            } else {
-                return new AndExpression(inExpression, where);
+        if (isMultiTenant(tenantLineMultiHandler.getTenantIds())) {
+            //获得where条件表达式
+            InExpression inExpression = new InExpression();
+            inExpression.setLeftExpression(this.getAliasColumn(table));
+            inExpression.setRightItemsList(tenantLineMultiHandler.getTenantIds());
+            if (null != where) {
+                if (where instanceof OrExpression) {
+                    return new AndExpression(inExpression, new Parenthesis(where));
+                } else {
+                    return new AndExpression(inExpression, where);
+                }
             }
+            return inExpression;
+        } else {
+            //获得where条件表达式
+            EqualsTo equalsTo = new EqualsTo();
+            equalsTo.setLeftExpression(this.getAliasColumn(table));
+            equalsTo.setRightExpression(tenantLineMultiHandler.getTenantId());
+            if (null != where) {
+                if (where instanceof OrExpression) {
+                    return new AndExpression(equalsTo, new Parenthesis(where));
+                } else {
+                    return new AndExpression(equalsTo, where);
+                }
+            }
+            return equalsTo;
         }
-        return inExpression;
+    }
 
+    /**
+     * 处理 insert into select
+     * <p>
+     * 进入这里表示需要 insert 的表启用了多租户,则 select 的表都启动了
+     *
+     * @param selectBody SelectBody
+     */
+    protected void processInsertSelect(SelectBody selectBody) {
+        PlainSelect plainSelect = (PlainSelect) selectBody;
+        FromItem fromItem = plainSelect.getFromItem();
+        if (fromItem instanceof Table) {
+            // fixed gitee pulls/141 duplicate update
+            processPlainSelect(plainSelect);
+            appendSelectItem(plainSelect.getSelectItems());
+        } else if (fromItem instanceof SubSelect) {
+            SubSelect subSelect = (SubSelect) fromItem;
+            appendSelectItem(plainSelect.getSelectItems());
+            processInsertSelect(subSelect.getSelectBody());
+        }
+    }
+
+    /**
+     * 追加 SelectItem
+     *
+     * @param selectItems SelectItem
+     */
+    protected void appendSelectItem(List<SelectItem> selectItems) {
+        if (CollectionUtils.isEmpty(selectItems)) return;
+        if (selectItems.size() == 1) {
+            SelectItem item = selectItems.get(0);
+            if (item instanceof AllColumns || item instanceof AllTableColumns) return;
+        }
+        selectItems.add(new SelectExpressionItem(new Column(tenantLineMultiHandler.getTenantIdColumn())));
     }
 
     /**
@@ -148,7 +229,7 @@ public class TenantLineValuesInnerInterceptor extends JsqlParserSupport implemen
         processWhereSubSelect(where);
         if (fromItem instanceof Table) {
             Table fromTable = (Table) fromItem;
-            if (!tenantLineValuesHandler.ignoreTable(fromTable.getName())) {
+            if (!tenantLineMultiHandler.ignoreTable(fromTable.getName())) {
                 //#1186 github
                 plainSelect.setWhere(builderExpression(where, fromTable));
             }
@@ -293,7 +374,7 @@ public class TenantLineValuesInnerInterceptor extends JsqlParserSupport implemen
     protected void processJoin(Join join) {
         if (join.getRightItem() instanceof Table) {
             Table fromTable = (Table) join.getRightItem();
-            if (tenantLineValuesHandler.ignoreTable(fromTable.getName())) {
+            if (tenantLineMultiHandler.ignoreTable(fromTable.getName())) {
                 // 过滤退出执行
                 return;
             }
@@ -305,17 +386,32 @@ public class TenantLineValuesInnerInterceptor extends JsqlParserSupport implemen
      * 处理条件
      */
     protected Expression builderExpression(Expression currentExpression, Table table) {
-        InExpression inExpression = new InExpression();
-        inExpression.setLeftExpression(this.getAliasColumn(table));
-        inExpression.setRightItemsList(tenantLineValuesHandler.getTenantIds());
-        if (currentExpression == null) {
-            return inExpression;
-        }
-        if (currentExpression instanceof OrExpression) {
-            return new AndExpression(new Parenthesis(currentExpression), inExpression);
+        if (isMultiTenant(tenantLineMultiHandler.getTenantIds())) {
+            InExpression inExpression = new InExpression();
+            inExpression.setLeftExpression(this.getAliasColumn(table));
+            inExpression.setRightItemsList(tenantLineMultiHandler.getTenantIds());
+            if (currentExpression == null) {
+                return inExpression;
+            }
+            if (currentExpression instanceof OrExpression) {
+                return new AndExpression(new Parenthesis(currentExpression), inExpression);
+            } else {
+                return new AndExpression(currentExpression, inExpression);
+            }
         } else {
-            return new AndExpression(currentExpression, inExpression);
+            EqualsTo equalsTo = new EqualsTo();
+            equalsTo.setLeftExpression(this.getAliasColumn(table));
+            equalsTo.setRightExpression(tenantLineMultiHandler.getTenantId());
+            if (currentExpression == null) {
+                return equalsTo;
+            }
+            if (currentExpression instanceof OrExpression) {
+                return new AndExpression(new Parenthesis(currentExpression), equalsTo);
+            } else {
+                return new AndExpression(currentExpression, equalsTo);
+            }
         }
+
     }
 
     /**
@@ -330,13 +426,30 @@ public class TenantLineValuesInnerInterceptor extends JsqlParserSupport implemen
         if (table.getAlias() != null) {
             column.append(table.getAlias().getName()).append(StringPool.DOT);
         }
-        column.append(tenantLineValuesHandler.getTenantIdColumn());
+        column.append(tenantLineMultiHandler.getTenantIdColumn());
         return new Column(column.toString());
     }
 
     @Override
     public void setProperties(Properties properties) {
-        PropertyMapper.newInstance(properties).whenNotBlank("tenantLineValuesHandler", ClassUtils::newInstance, this::setTenantLineValuesHandler);
+        PropertyMapper.newInstance(properties).whenNotBlank("tenantLineValuesHandler", ClassUtils::newInstance, this::setTenantLineMultiHandler);
     }
 
+
+    private boolean isMultiTenant(ItemsList itemsList) {
+        if (itemsList instanceof ExpressionList) {
+            List<Expression> expressionList = ((ExpressionList) itemsList).getExpressions();
+            return CollectionUtils.isNotEmpty(expressionList) && expressionList.size() > 1;
+        } else if (itemsList instanceof MultiExpressionList) {
+            List<ExpressionList> expressionLists = ((MultiExpressionList) itemsList).getExpressionLists();
+            return CollectionUtils.isNotEmpty(expressionLists) && expressionLists.get(0).getExpressions().size() > 1;
+        } else if (itemsList instanceof NamedExpressionList) {
+            List<Expression> expressionList = ((NamedExpressionList) itemsList).getExpressions();
+            return CollectionUtils.isNotEmpty(expressionList) && expressionList.size() > 1;
+        } else if (itemsList instanceof SubSelect) {
+            List<WithItem> withItems = ((SubSelect) itemsList).getWithItemsList();
+            return CollectionUtils.isNotEmpty(withItems) && withItems.size() > 1;
+        }
+        return false;
+    }
 }

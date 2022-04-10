@@ -1,8 +1,15 @@
 package com.moensun.commons.mybatisplus.plugins.handler;
 
+import net.sf.jsqlparser.expression.Expression;
+import net.sf.jsqlparser.expression.operators.relational.ExpressionList;
 import net.sf.jsqlparser.expression.operators.relational.ItemsList;
+import net.sf.jsqlparser.schema.Column;
 
-public interface TenantLineValuesHandler {
+import java.util.List;
+
+public interface TenantLineMultiHandler {
+
+    Expression getTenantId();
 
     ItemsList getTenantIds();
 
@@ -28,4 +35,16 @@ public interface TenantLineValuesHandler {
     default boolean ignoreTable(String tableName) {
         return false;
     }
+
+    /**
+     * 忽略插入租户字段逻辑
+     *
+     * @param columns        插入字段
+     * @param tenantIdColumn 租户 ID 字段
+     * @return
+     */
+    default boolean ignoreInsert(List<Column> columns, String tenantIdColumn) {
+        return columns.stream().map(Column::getColumnName).anyMatch(i -> i.equalsIgnoreCase(tenantIdColumn));
+    }
+
 }
