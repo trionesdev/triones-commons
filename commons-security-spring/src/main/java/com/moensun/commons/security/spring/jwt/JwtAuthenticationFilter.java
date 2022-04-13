@@ -101,6 +101,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
                 .url(jwtTokenConfig.getEndpoint()+"/"+JWT_TOKEN_URI)
+                .header(AUTHORIZATION,token)
                 .build();
         try (Response response = client.newCall(request).execute()) {
             return JSON.parseObject(response.body().string(), new TypeReference<Map<String, Object>>(){});
