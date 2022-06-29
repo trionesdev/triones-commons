@@ -11,12 +11,11 @@ import org.apache.ibatis.type.MappedJdbcTypes;
 import org.apache.ibatis.type.MappedTypes;
 
 import java.util.Collection;
-import java.util.List;
 
 @Slf4j
-@MappedTypes({List.class})
+@MappedTypes({Collection.class})
 @MappedJdbcTypes(JdbcType.VARCHAR)
-public class CollectionTypeHandler<T> extends AbstractJsonTypeHandler<Collection<T>> {
+public class CollectionTypeHandler extends AbstractJsonTypeHandler<Collection<Object>> {
     private static ObjectMapper OBJECT_MAPPER;
     private final Class<?> type;
 
@@ -42,13 +41,13 @@ public class CollectionTypeHandler<T> extends AbstractJsonTypeHandler<Collection
 
     @SneakyThrows
     @Override
-    protected Collection<T> parse(String json) {
-        return getObjectMapper().readValue(json, new TypeReference<Collection<T>>() {});
+    protected Collection<Object> parse(String json) {
+        return getObjectMapper().readValue(json, new TypeReference<Collection<Object>>() {});
     }
 
     @SneakyThrows
     @Override
-    protected String toJson(Collection<T> obj) {
+    protected String toJson(Collection<Object> obj) {
         return getObjectMapper().writeValueAsString(obj);
     }
 }
