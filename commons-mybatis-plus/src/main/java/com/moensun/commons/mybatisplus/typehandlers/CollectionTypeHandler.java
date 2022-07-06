@@ -11,21 +11,14 @@ import org.apache.ibatis.type.MappedJdbcTypes;
 import org.apache.ibatis.type.MappedTypes;
 
 import java.util.Collection;
+import java.util.List;
+import java.util.Objects;
 
 @Slf4j
 @MappedTypes({Collection.class})
 @MappedJdbcTypes(JdbcType.VARCHAR)
-public class CollectionTypeHandler extends AbstractJsonTypeHandler<Collection<Object>> {
+public abstract class CollectionTypeHandler<T> extends AbstractJsonTypeHandler<Collection<T>> {
     private static ObjectMapper OBJECT_MAPPER;
-    private final Class<?> type;
-
-    public CollectionTypeHandler(Class<?> type) {
-        if (log.isTraceEnabled()) {
-            log.trace("JacksonTypeHandler(" + type + ")");
-        }
-        Assert.notNull(type, "Type argument cannot be null");
-        this.type = type;
-    }
 
     public static ObjectMapper getObjectMapper() {
         if (null == OBJECT_MAPPER) {
@@ -41,13 +34,21 @@ public class CollectionTypeHandler extends AbstractJsonTypeHandler<Collection<Ob
 
     @SneakyThrows
     @Override
-    protected Collection<Object> parse(String json) {
-        return getObjectMapper().readValue(json, new TypeReference<Collection<Object>>() {});
+    protected Collection<T> parse(String json) {
+        TypeReference<List<T>> specificType = specificType();
+        if (Objects.isNull(specificType)) {
+            specificType = new TypeReference<List<T>>() {
+            };
+        }
+        return getObjectMapper().readValue(json, specificType);
     }
 
     @SneakyThrows
     @Override
-    protected String toJson(Collection<Object> obj) {
+    protected String toJson(Collection<T> obj) {
         return getObjectMapper().writeValueAsString(obj);
     }
+
+    protected abstract TypeReference<List<T>> specificType();
+
 }
