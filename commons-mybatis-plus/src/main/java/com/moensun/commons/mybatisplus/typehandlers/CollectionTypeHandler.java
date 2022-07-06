@@ -11,7 +11,6 @@ import org.apache.ibatis.type.MappedJdbcTypes;
 import org.apache.ibatis.type.MappedTypes;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.Objects;
 
 @Slf4j
@@ -35,9 +34,9 @@ public abstract class CollectionTypeHandler<T> extends AbstractJsonTypeHandler<C
     @SneakyThrows
     @Override
     protected Collection<T> parse(String json) {
-        TypeReference<List<T>> specificType = specificType();
+        TypeReference<Collection<T>> specificType = specificType();
         if (Objects.isNull(specificType)) {
-            specificType = new TypeReference<List<T>>() {
+            specificType = new TypeReference<Collection<T>>() {
             };
         }
         return getObjectMapper().readValue(json, specificType);
@@ -49,6 +48,6 @@ public abstract class CollectionTypeHandler<T> extends AbstractJsonTypeHandler<C
         return getObjectMapper().writeValueAsString(obj);
     }
 
-    protected abstract TypeReference<List<T>> specificType();
+    protected abstract TypeReference<Collection<T>> specificType();
 
 }
