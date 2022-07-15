@@ -44,6 +44,12 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-jsr310</artifactId>
+            <version>2.13.3</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
             <groupId>com.moensun.commons</groupId>
             <artifactId>commons-i18n</artifactId>
         </dependency>
