@@ -2,7 +2,7 @@ package com.moensun.commons.mybatisplus.typehandlers;
 
 import com.baomidou.mybatisplus.core.toolkit.Assert;
 import com.baomidou.mybatisplus.extension.handlers.AbstractJsonTypeHandler;
-import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -11,7 +11,6 @@ import org.apache.ibatis.type.MappedJdbcTypes;
 import org.apache.ibatis.type.MappedTypes;
 
 import java.util.Collection;
-import java.util.Objects;
 
 @Slf4j
 @MappedTypes({Collection.class})
@@ -34,12 +33,8 @@ public abstract class CollectionTypeHandler<T> extends AbstractJsonTypeHandler<C
     @SneakyThrows
     @Override
     protected Collection<T> parse(String json) {
-        TypeReference<Collection<T>> specificType = specificType();
-        if (Objects.isNull(specificType)) {
-            specificType = new TypeReference<Collection<T>>() {
-            };
-        }
-        return getObjectMapper().readValue(json, specificType);
+        JavaType javaType = getObjectMapper().getTypeFactory().constructCollectionType(Collection.class,specificType());
+        return getObjectMapper().readValue(json, javaType);
     }
 
     @SneakyThrows
@@ -48,6 +43,6 @@ public abstract class CollectionTypeHandler<T> extends AbstractJsonTypeHandler<C
         return getObjectMapper().writeValueAsString(obj);
     }
 
-    protected abstract TypeReference<Collection<T>> specificType();
+    protected abstract Class<T> specificType();
 
 }
