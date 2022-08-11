@@ -21,10 +21,17 @@ import java.util.Set;
 
 @Slf4j
 public class JsonUtils {
-    private final static ObjectMapper mapper;
+    private static ObjectMapper OBJECT_MAPPER;
 
-    static {
-        mapper = initMapper();
+    public static ObjectMapper getObjectMapper() {
+        if (null == OBJECT_MAPPER) {
+            OBJECT_MAPPER = initMapper();
+        }
+        return OBJECT_MAPPER;
+    }
+
+    public static void setObjectMapper(ObjectMapper objectMapper) {
+        JsonUtils.OBJECT_MAPPER = objectMapper;
     }
 
     public static ObjectMapper initMapper() {
@@ -42,23 +49,23 @@ public class JsonUtils {
     }
 
     public static JavaType constructType(Class<?> clazz) {
-        return mapper.constructType(clazz);
+        return getObjectMapper().constructType(clazz);
     }
 
     public static JavaType constructCollectionType(Class<? extends Collection> collectionClass,
                                                    Class<?> elementClass) {
-        return mapper.getTypeFactory().constructCollectionType(collectionClass, elementClass);
+        return getObjectMapper().getTypeFactory().constructCollectionType(collectionClass, elementClass);
     }
 
     public static JavaType constructMapType(Class<? extends Map> mapClass, Class<?> keyClass,
                                             Class<?> valueClass) {
-        return mapper.getTypeFactory().constructMapType(mapClass, keyClass, valueClass);
+        return getObjectMapper().getTypeFactory().constructMapType(mapClass, keyClass, valueClass);
     }
 
 
     public static String toJsonString(Object object) {
         try {
-            return mapper.writeValueAsString(object);
+            return getObjectMapper().writeValueAsString(object);
         } catch (IOException ex) {
             log.error(ex.getMessage(), ex);
             throw new JsonException(ex.getMessage());
@@ -70,7 +77,7 @@ public class JsonUtils {
             return null;
         }
         try {
-            return mapper.readValue(jsonString, clazz);
+            return getObjectMapper().readValue(jsonString, clazz);
         } catch (IOException ex) {
             log.error(ex.getMessage(), ex);
             throw new JsonException(ex.getMessage());
@@ -84,7 +91,7 @@ public class JsonUtils {
         }
 
         try {
-            return (T) mapper.readValue(jsonString, javaType);
+            return (T) getObjectMapper().readValue(jsonString, javaType);
         } catch (IOException ex) {
             log.error(ex.getMessage(), ex);
             throw new JsonException(ex.getMessage());
@@ -94,7 +101,7 @@ public class JsonUtils {
     public static <T> Collection<T> parseCollection(String jsonString, Class<T> clazz) {
         JavaType javaType = constructCollectionType(Collection.class, clazz);
         try {
-            return mapper.readValue(jsonString, javaType);
+            return getObjectMapper().readValue(jsonString, javaType);
         } catch (IOException ex) {
             log.error(ex.getMessage(), ex);
             throw new JsonException(ex.getMessage());
@@ -104,7 +111,7 @@ public class JsonUtils {
     public static <T> List<T> parseList(String jsonString, Class<T> clazz) {
         JavaType javaType = constructCollectionType(List.class, clazz);
         try {
-            return mapper.readValue(jsonString, javaType);
+            return getObjectMapper().readValue(jsonString, javaType);
         } catch (IOException ex) {
             log.error(ex.getMessage(), ex);
             throw new JsonException(ex.getMessage());
@@ -114,7 +121,7 @@ public class JsonUtils {
     public static <T> Set<T> parseSet(String jsonString, Class<T> clazz) {
         JavaType javaType = constructCollectionType(Set.class, clazz);
         try {
-            return mapper.readValue(jsonString, javaType);
+            return getObjectMapper().readValue(jsonString, javaType);
         } catch (IOException ex) {
             log.error(ex.getMessage(), ex);
             throw new JsonException(ex.getMessage());
@@ -126,7 +133,7 @@ public class JsonUtils {
      */
     public void update(Object object, String jsonString) {
         try {
-            mapper.readerForUpdating(object).readValue(jsonString);
+            getObjectMapper().readerForUpdating(object).readValue(jsonString);
         } catch (IOException e) {
             log.error("update json string:" + jsonString + " to object:" + object + " error.", e);
         }
