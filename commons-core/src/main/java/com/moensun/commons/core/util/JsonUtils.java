@@ -10,14 +10,13 @@ import com.fasterxml.jackson.datatype.jsr310.deser.InstantDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.InstantSerializer;
 import com.moensun.commons.core.ex.JsonException;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
 import java.time.Instant;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 @Slf4j
 public class JsonUtils {
@@ -92,6 +91,32 @@ public class JsonUtils {
 
         try {
             return (T) getObjectMapper().readValue(jsonString, javaType);
+        } catch (IOException ex) {
+            log.error(ex.getMessage(), ex);
+            throw new JsonException(ex.getMessage());
+        }
+    }
+
+    public static <T> T parse(byte[] bytes, Class<T> clazz) {
+        if (ArrayUtils.isEmpty(bytes)) {
+            return null;
+        }
+        try {
+            return getObjectMapper().readValue(bytes, clazz);
+        } catch (IOException ex) {
+            log.error(ex.getMessage(), ex);
+            throw new JsonException(ex.getMessage());
+        }
+    }
+
+    @SuppressWarnings(value = "unchecked")
+    public static <T> T parse(byte[] bytes, JavaType javaType) {
+        if (ArrayUtils.isEmpty(bytes)) {
+            return null;
+        }
+
+        try {
+            return (T) getObjectMapper().readValue(bytes, javaType);
         } catch (IOException ex) {
             log.error(ex.getMessage(), ex);
             throw new JsonException(ex.getMessage());
