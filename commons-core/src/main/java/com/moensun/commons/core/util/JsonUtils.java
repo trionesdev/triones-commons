@@ -133,6 +133,16 @@ public class JsonUtils {
         }
     }
 
+    public static <T> Collection<T> parseCollection(byte[] bytes, Class<T> clazz) {
+        JavaType javaType = constructCollectionType(Collection.class, clazz);
+        try {
+            return getObjectMapper().readValue(bytes, javaType);
+        } catch (IOException ex) {
+            log.error(ex.getMessage(), ex);
+            throw new JsonException(ex.getMessage());
+        }
+    }
+
     public static <T> List<T> parseList(String jsonString, Class<T> clazz) {
         JavaType javaType = constructCollectionType(List.class, clazz);
         try {
@@ -143,10 +153,30 @@ public class JsonUtils {
         }
     }
 
+    public static <T> List<T> parseList(byte[] bytes, Class<T> clazz) {
+        JavaType javaType = constructCollectionType(List.class, clazz);
+        try {
+            return getObjectMapper().readValue(bytes, javaType);
+        } catch (IOException ex) {
+            log.error(ex.getMessage(), ex);
+            throw new JsonException(ex.getMessage());
+        }
+    }
+
     public static <T> Set<T> parseSet(String jsonString, Class<T> clazz) {
         JavaType javaType = constructCollectionType(Set.class, clazz);
         try {
             return getObjectMapper().readValue(jsonString, javaType);
+        } catch (IOException ex) {
+            log.error(ex.getMessage(), ex);
+            throw new JsonException(ex.getMessage());
+        }
+    }
+
+    public static <T> Set<T> parseSet(byte[] bytes, Class<T> clazz) {
+        JavaType javaType = constructCollectionType(Set.class, clazz);
+        try {
+            return getObjectMapper().readValue(bytes, javaType);
         } catch (IOException ex) {
             log.error(ex.getMessage(), ex);
             throw new JsonException(ex.getMessage());
