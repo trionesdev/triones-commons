@@ -1,6 +1,7 @@
 package com.moensun.commons.core.util;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -83,6 +84,18 @@ public class JsonUtils {
         }
     }
 
+    public static <T> T parse(String jsonString, TypeReference<T> valueTypeRef) {
+        if (StringUtils.isBlank(jsonString)) {
+            return null;
+        }
+        try {
+            return getObjectMapper().readValue(jsonString, valueTypeRef);
+        } catch (IOException ex) {
+            log.error(ex.getMessage(), ex);
+            throw new JsonException(ex.getMessage());
+        }
+    }
+
     @SuppressWarnings(value = "unchecked")
     public static <T> T parse(String jsonString, JavaType javaType) {
         if (StringUtils.isBlank(jsonString)) {
@@ -103,6 +116,18 @@ public class JsonUtils {
         }
         try {
             return getObjectMapper().readValue(bytes, clazz);
+        } catch (IOException ex) {
+            log.error(ex.getMessage(), ex);
+            throw new JsonException(ex.getMessage());
+        }
+    }
+
+    public static <T> T parse(byte[] bytes, TypeReference<T> valueTypeRef) {
+        if (ArrayUtils.isEmpty(bytes)) {
+            return null;
+        }
+        try {
+            return getObjectMapper().readValue(bytes, valueTypeRef);
         } catch (IOException ex) {
             log.error(ex.getMessage(), ex);
             throw new JsonException(ex.getMessage());
