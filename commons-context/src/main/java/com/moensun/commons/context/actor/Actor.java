@@ -20,6 +20,6 @@ public class Actor implements Serializable {
     private String role;
     private String actorId;
     private String tenantId;
-    private String memberId;
+    private String tenantMemberId;
     private Instant time;
 }
