@@ -54,6 +54,10 @@
                     <groupId>com.baomidou</groupId>
                     <artifactId>mybatis-plus-core</artifactId>
                 </exclusion>
+                <exclusion>
+                    <groupId>com.github.jsqlparser</groupId>
+                    <artifactId>jsqlparser</artifactId>
+                </exclusion>
             </exclusions>
         </dependency>
     </dependencies>

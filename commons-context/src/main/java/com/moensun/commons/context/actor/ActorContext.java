@@ -47,7 +47,7 @@ public class ActorContext {
     }
 
     public String getMemberId() {
-        return Optional.ofNullable(getActor()).map(Actor::getMemberId).orElse(null);
+        return Optional.ofNullable(getActor()).map(Actor::getTenantMemberId).orElse(null);
     }
 
     public Instant getTime() {
@@ -73,7 +73,7 @@ public class ActorContext {
     }
 
     public boolean hasPermission(Object operateId) {
-        return oneself(operateId) || Objects.equals(getRole(), ActorRoleEnum.BOSS_USER);
+        return oneself(operateId) || Objects.equals(getRole(), ActorRoleEnum.BOSS_USER.name());
     }
 
     public void resetActor() {
