@@ -1,4 +1,4 @@
-package com.moensun.commons.security.spring.reactive;
+package com.moensun.commons.security.spring.jwt.reactive;
 
 import com.google.common.collect.Lists;
 import com.moensun.commons.context.actor.Actor;
@@ -30,7 +30,7 @@ public class JwtServerSecurityContextRepository implements ServerSecurityContext
             try {
                 Actor actor = contextView.get(Actor.class);
                 JwtUserDetails userDetails =
-                        JwtUserDetails.builder().actorId(actor.getActorId()).role(actor.getRole()).tenantId(actor.getTenantId()).memberId(actor.getMemberId())
+                        JwtUserDetails.builder().actorId(actor.getActorId()).role(actor.getRole()).tenantId(actor.getTenantId()).tenantMemberId(actor.getTenantMemberId())
                                 .build();
                 List<SimpleGrantedAuthority> authorities = Lists.newArrayList(new SimpleGrantedAuthority(actor.getRole()));
                 Authentication authentication = new JwtAuthenticationToken(userDetails.getActorId(), userDetails, authorities);

@@ -14,5 +14,5 @@ public class JwtUserDetails {
     private String actorId;
     private String role;
     private String tenantId;
-    private String memberId;
+    private String tenantMemberId;
 }

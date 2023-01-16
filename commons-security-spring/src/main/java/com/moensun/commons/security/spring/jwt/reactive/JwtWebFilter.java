@@ -1,7 +1,7 @@
-package com.moensun.commons.security.spring.reactive;
+package com.moensun.commons.security.spring.jwt.reactive;
 
 import com.moensun.commons.context.actor.Actor;
-import com.moensun.commons.context.reactive.ActorContext;
+import com.moensun.commons.context.actor.reactive.ActorContext;
 import com.moensun.commons.core.jwt.JwtFacade;
 import io.opentracing.ScopeManager;
 import io.opentracing.Span;
