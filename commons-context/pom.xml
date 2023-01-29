@@ -30,8 +30,8 @@
             <artifactId>commons-core</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.moensun.commons</groupId>
-            <artifactId>commons-opentracing</artifactId>
+            <groupId>com.alibaba</groupId>
+            <artifactId>transmittable-thread-local</artifactId>
         </dependency>
     </dependencies>
 
