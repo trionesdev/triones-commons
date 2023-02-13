@@ -48,17 +48,7 @@
         </dependency>
         <dependency>
             <groupId>com.moensun.commons</groupId>
-            <artifactId>commons-page</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>com.baomidou</groupId>
-                    <artifactId>mybatis-plus-core</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>com.github.jsqlparser</groupId>
-                    <artifactId>jsqlparser</artifactId>
-                </exclusion>
-            </exclusions>
+            <artifactId>commons-core</artifactId>
         </dependency>
     </dependencies>
 </project>

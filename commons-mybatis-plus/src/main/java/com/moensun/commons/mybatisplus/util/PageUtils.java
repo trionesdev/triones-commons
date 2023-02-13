@@ -17,7 +17,7 @@ public class PageUtils {
         return page;
     }
 
-    public static <T,E> MSPageInfo<E> of(IPage<T> pageInfo, List<E> data) {
+    public static <T, E> MSPageInfo<E> of(IPage<T> pageInfo, List<E> data) {
         MSPageInfo<E> page = new MSPageInfo<>();
         page.setPageNum((int) pageInfo.getCurrent());
         page.setPageSize((int) pageInfo.getSize());
@@ -37,13 +37,13 @@ public class PageUtils {
         return page;
     }
 
-    public static <E> MSPageInfo<E> of(List<E> data){
+    public static <E> MSPageInfo<E> of(List<E> data) {
         MSPageInfo<E> page = new MSPageInfo<>();
         page.setRows(data);
         return page;
     }
 
-    public static <E> MSPageInfo<E> empty(){
+    public static <E> MSPageInfo<E> empty() {
         return new MSPageInfo<>();
     }
 
