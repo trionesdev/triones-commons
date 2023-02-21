@@ -22,13 +22,18 @@ public class JwtFacade {
     }
 
     public String generate(Object userId, String role, Object tenantId) {
+        return generate(userId, role, tenantId, null);
+    }
+
+    public String generate(Object userId, String role, Object tenantId, Object tenantMemberId) {
         if (Objects.isNull(userId)) {
             return null;
         }
         Map<String, Object> claims = Maps.newHashMap();
-        claims.put(ACTOR_ID, userId);
+        claims.put(ACTOR_USER_ID, userId);
         claims.put(ACTOR_ROLE, role);
         claims.put(ACTOR_TENANT_ID, tenantId);
+        claims.put(ClaimsKeyConstant.ACTOR_TENANT_MEMBER_ID, tenantMemberId);
         return JwtUtils.generateToken(jwtConfig, String.valueOf(userId), claims);
     }
 

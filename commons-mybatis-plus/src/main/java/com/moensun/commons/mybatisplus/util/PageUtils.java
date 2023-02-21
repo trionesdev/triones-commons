@@ -1,7 +1,7 @@
 package com.moensun.commons.mybatisplus.util;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.moensun.commons.page.MSPageInfo;
+import com.moensun.commons.core.page.MSPageInfo;
 
 import java.util.List;
 

@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.Serializable;
 import java.time.Instant;
@@ -26,6 +27,10 @@ public class Actor implements Serializable {
     private Instant time;
 
     public String getActorId() {
-        return Objects.equals(ActorRoleEnum.TENANT_USER.name(), this.role) ? tenantMemberId : userId;
+        if(StringUtils.isNotBlank(actorId)){
+            return this.actorId;
+        }else {
+            return Objects.equals(ActorRoleEnum.TENANT_USER.name(), this.role) ? tenantMemberId : userId;
+        }
     }
 }

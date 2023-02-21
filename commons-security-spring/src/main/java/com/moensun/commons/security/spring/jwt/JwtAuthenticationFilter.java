@@ -25,6 +25,7 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -74,13 +75,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 claims = remoteClaims(authorization);
             }
             if (Objects.nonNull(claims)) {
-                String actorId = String.valueOf(claims.get(ACTOR_ID));
-                String role = String.valueOf(claims.get(ACTOR_ROLE));
-                String tenantId = String.valueOf(claims.get(ACTOR_TENANT_ID));
-                if (Objects.nonNull(actorId) && Objects.nonNull(role)) {
+                String actorId = Optional.ofNullable(claims.get(ACTOR_ID)).map(String::valueOf).orElse(null);
+                String userId = Optional.ofNullable(claims.get(ACTOR_USER_ID)).map(String::valueOf).orElse(null);
+                String role = Optional.ofNullable(claims.get(ACTOR_ROLE)).map(String::valueOf).orElse(null);
+                String tenantId = Optional.ofNullable(claims.get(ACTOR_TENANT_ID)).map(String::valueOf).orElse(null);
+                String tenantMemberId = Optional.ofNullable(claims.get(ACTOR_TENANT_MEMBER_ID)).map(String::valueOf).orElse(null);
+                if ((Objects.nonNull(actorId) || Objects.nonNull(userId)) && Objects.nonNull(role)) {
                     actor.setActorId(actorId);
+                    actor.setUserId(userId);
                     actor.setRole(role);
                     actor.setTenantId(tenantId);
+                    actor.setTenantMemberId(tenantMemberId);
                     JwtUserDetails userDetails =
                             JwtUserDetails.builder().token(authorization).actorId(actorId).role(role).tenantId(tenantId)
                                     .build();
@@ -97,14 +102,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     }
 
 
-    public Map<String,Object> remoteClaims(String token) throws IOException {
+    public Map<String, Object> remoteClaims(String token) throws IOException {
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
-                .url(jwtTokenConfig.getEndpoint()+"/"+JWT_TOKEN_URI)
-                .header(AUTHORIZATION,token)
+                .url(jwtTokenConfig.getEndpoint() + "/" + JWT_TOKEN_URI)
+                .header(AUTHORIZATION, token)
                 .build();
         try (Response response = client.newCall(request).execute()) {
-            return JSON.parseObject(response.body().string(), new TypeReference<Map<String, Object>>(){});
+            return JSON.parseObject(response.body().string(), new TypeReference<Map<String, Object>>() {
+            });
         }
     }
 }
