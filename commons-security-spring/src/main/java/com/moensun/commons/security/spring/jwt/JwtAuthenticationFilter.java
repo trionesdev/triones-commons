@@ -87,7 +87,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     actor.setTenantId(tenantId);
                     actor.setTenantMemberId(tenantMemberId);
                     JwtUserDetails userDetails =
-                            JwtUserDetails.builder().token(authorization).actorId(actorId).role(role).tenantId(tenantId)
+                            JwtUserDetails.builder().token(authorization)
+                                    .actorId(actorId).userId(userId).role(role).tenantId(tenantId)
                                     .build();
                     List<SimpleGrantedAuthority> authorities = Lists.newArrayList(new SimpleGrantedAuthority(role));
                     Authentication authentication =

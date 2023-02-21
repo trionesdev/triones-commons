@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 public class JwtUserDetails {
     private String token;
     private String actorId;
+    private String userId;
     private String role;
     private String tenantId;
     private String tenantMemberId;
