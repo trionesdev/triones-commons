@@ -33,7 +33,7 @@ public class JwtFacade {
         claims.put(ACTOR_USER_ID, userId);
         claims.put(ACTOR_ROLE, role);
         claims.put(ACTOR_TENANT_ID, tenantId);
-        claims.put(ClaimsKeyConstant.ACTOR_TENANT_MEMBER_ID, tenantMemberId);
+        claims.put(ACTOR_TENANT_MEMBER_ID, tenantMemberId);
         return JwtUtils.generateToken(jwtConfig, String.valueOf(userId), claims);
     }
 
