@@ -14,7 +14,6 @@
         <module>commons-context</module>
         <module>commons-i18n</module>
         <module>commons-feign</module>
-        <module>commons-page</module>
         <module>commons-opentracing</module>
         <module>commons-jaegertracing</module>
         <module>commons-security-spring</module>
