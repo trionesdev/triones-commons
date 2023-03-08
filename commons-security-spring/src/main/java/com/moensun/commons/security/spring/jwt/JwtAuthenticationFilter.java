@@ -6,6 +6,7 @@ import com.google.common.collect.Lists;
 import com.moensun.commons.context.actor.Actor;
 import com.moensun.commons.context.actor.ActorContext;
 import com.moensun.commons.core.jwt.JwtFacade;
+import lombok.extern.slf4j.Slf4j;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -33,6 +34,7 @@ import static com.moensun.commons.core.jwt.ClaimsKeyConstant.*;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON_VALUE;
 
+@Slf4j
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtTokenConfig jwtTokenConfig;
     private final JwtFacade jwtFacade;
@@ -49,53 +51,57 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-        String authorization = request.getHeader(AUTHORIZATION);
-        if (StringUtils.isNotBlank(authorization)) {
-            authorization = authorization.replace("Bearer ", "");
-        }
-        //region jwt token 解析逻辑
-        if (BooleanUtils.isTrue(jwtTokenConfig.getLocal()) && StringUtils.isNotBlank(authorization)) {
-            Pattern pattern = Pattern.compile(JWT_TOKEN_URI);
-            Matcher matcher = pattern.matcher(request.getRequestURI());
-            if (matcher.matches()) {
-                response.setContentType(APPLICATION_JSON_VALUE);
-                response.getWriter().write(JSON.toJSONString(jwtFacade.parse(authorization)));
-                return;
-            }
-        }
-        //endregion
-
         Actor actor = new Actor();
-        actor.setTime(Instant.now());
-        if (StringUtils.isNotBlank(authorization)) {
-            Map<String, Object> claims = null;
-            if (BooleanUtils.isTrue(jwtTokenConfig.getLocal())) {
-                claims = jwtFacade.parse(authorization);
-            } else {
-                claims = remoteClaims(authorization);
+        try {
+            String authorization = request.getHeader(AUTHORIZATION);
+            if (StringUtils.isNotBlank(authorization)) {
+                authorization = authorization.replace("Bearer ", "");
             }
-            if (Objects.nonNull(claims)) {
-                String actorId = Optional.ofNullable(claims.get(ACTOR_ID)).map(String::valueOf).orElse(null);
-                String userId = Optional.ofNullable(claims.get(ACTOR_USER_ID)).map(String::valueOf).orElse(null);
-                String role = Optional.ofNullable(claims.get(ACTOR_ROLE)).map(String::valueOf).orElse(null);
-                String tenantId = Optional.ofNullable(claims.get(ACTOR_TENANT_ID)).map(String::valueOf).orElse(null);
-                String tenantMemberId = Optional.ofNullable(claims.get(ACTOR_TENANT_MEMBER_ID)).map(String::valueOf).orElse(null);
-                if ((Objects.nonNull(actorId) || Objects.nonNull(userId)) && Objects.nonNull(role)) {
-                    actor.setActorId(actorId);
-                    actor.setUserId(userId);
-                    actor.setRole(role);
-                    actor.setTenantId(tenantId);
-                    actor.setTenantMemberId(tenantMemberId);
-                    JwtUserDetails userDetails =
-                            JwtUserDetails.builder().token(authorization)
-                                    .actorId(actorId).userId(userId).role(role).tenantId(tenantId)
-                                    .build();
-                    List<SimpleGrantedAuthority> authorities = Lists.newArrayList(new SimpleGrantedAuthority(role));
-                    Authentication authentication =
-                            new JwtAuthenticationToken(userDetails.getActorId(), userDetails, authorities);
-                    SecurityContextHolder.getContext().setAuthentication(authentication);
+            //region jwt token 解析逻辑
+            if (BooleanUtils.isTrue(jwtTokenConfig.getLocal()) && StringUtils.isNotBlank(authorization)) {
+                Pattern pattern = Pattern.compile(JWT_TOKEN_URI);
+                Matcher matcher = pattern.matcher(request.getRequestURI());
+                if (matcher.matches()) {
+                    response.setContentType(APPLICATION_JSON_VALUE);
+                    response.getWriter().write(JSON.toJSONString(jwtFacade.parse(authorization)));
+                    return;
                 }
             }
+            //endregion
+
+            actor.setTime(Instant.now());
+            if (StringUtils.isNotBlank(authorization)) {
+                Map<String, Object> claims = null;
+                if (BooleanUtils.isTrue(jwtTokenConfig.getLocal())) {
+                    claims = jwtFacade.parse(authorization);
+                } else {
+                    claims = remoteClaims(authorization);
+                }
+                if (Objects.nonNull(claims)) {
+                    String actorId = Optional.ofNullable(claims.get(ACTOR_ID)).map(String::valueOf).orElse(null);
+                    String userId = Optional.ofNullable(claims.get(ACTOR_USER_ID)).map(String::valueOf).orElse(null);
+                    String role = Optional.ofNullable(claims.get(ACTOR_ROLE)).map(String::valueOf).orElse(null);
+                    String tenantId = Optional.ofNullable(claims.get(ACTOR_TENANT_ID)).map(String::valueOf).orElse(null);
+                    String tenantMemberId = Optional.ofNullable(claims.get(ACTOR_TENANT_MEMBER_ID)).map(String::valueOf).orElse(null);
+                    if ((Objects.nonNull(actorId) || Objects.nonNull(userId)) && Objects.nonNull(role)) {
+                        actor.setActorId(actorId);
+                        actor.setUserId(userId);
+                        actor.setRole(role);
+                        actor.setTenantId(tenantId);
+                        actor.setTenantMemberId(tenantMemberId);
+                        JwtUserDetails userDetails =
+                                JwtUserDetails.builder().token(authorization)
+                                        .actorId(actorId).userId(userId).role(role).tenantId(tenantId)
+                                        .build();
+                        List<SimpleGrantedAuthority> authorities = Lists.newArrayList(new SimpleGrantedAuthority(role));
+                        Authentication authentication =
+                                new JwtAuthenticationToken(userDetails.getActorId(), userDetails, authorities);
+                        SecurityContextHolder.getContext().setAuthentication(authentication);
+                    }
+                }
+            }
+        } catch (Exception ex) {
+            log.error(ex.getMessage(), ex);
         }
         actorContext.setActor(actor);
         filterChain.doFilter(request, response);
