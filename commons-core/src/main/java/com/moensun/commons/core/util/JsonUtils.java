@@ -210,7 +210,7 @@ public class JsonUtils {
     /**
      * 当JSON里只含有Bean的部分屬性時，更新一個已存在Bean，只覆蓋該部分的屬性.
      */
-    public void update(Object object, String jsonString) {
+    public static void update(Object object, String jsonString) {
         try {
             getObjectMapper().readerForUpdating(object).readValue(jsonString);
         } catch (IOException e) {
@@ -218,15 +218,15 @@ public class JsonUtils {
         }
     }
 
-    public <T> T treeToValue(TreeNode n, Class<T> valueType) throws JsonProcessingException {
+    public static  <T> T treeToValue(TreeNode n, Class<T> valueType) throws JsonProcessingException {
         return getObjectMapper().treeToValue(n, valueType);
     }
 
-    public <T> T treeToValue(TreeNode n, JavaType javaType) throws JsonProcessingException {
+    public static  <T> T treeToValue(TreeNode n, JavaType javaType) throws JsonProcessingException {
         return getObjectMapper().treeToValue(n, javaType);
     }
 
-    public <T extends JsonNode> T valueToTree(Object fromValue) {
+    public static  <T extends JsonNode> T valueToTree(Object fromValue) {
         return getObjectMapper().valueToTree(fromValue);
     }
 
