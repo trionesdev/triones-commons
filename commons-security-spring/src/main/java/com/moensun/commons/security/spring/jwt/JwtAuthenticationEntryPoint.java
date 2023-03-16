@@ -24,7 +24,7 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
         }
         response.setStatus(HttpStatus.UNAUTHORIZED.value());
         ErrorResponse errorResponse = ErrorResponse.builder().code(HttpStatus.UNAUTHORIZED.name()).message("未认证").build();
-        response.setContentType(APPLICATION_JSON_VALUE);
+        response.setContentType(APPLICATION_JSON_VALUE+";charset=UTF-8");
         response.getWriter().write(JSON.toJSONString(errorResponse));
     }
 }
