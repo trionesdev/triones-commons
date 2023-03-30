@@ -116,6 +116,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 .header(AUTHORIZATION, token)
                 .build();
         try (Response response = client.newCall(request).execute()) {
+            assert response.body() != null;
             return JSON.parseObject(response.body().string(), new TypeReference<Map<String, Object>>() {
             });
         }

@@ -3,6 +3,7 @@ package com.moensun.commons.security.spring.jwt;
 import org.springframework.context.ApplicationContext;
 import org.springframework.security.config.annotation.web.HttpSecurityBuilder;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.web.context.SecurityContextHolderFilter;
 import org.springframework.security.web.context.SecurityContextPersistenceFilter;
 
 public class JwtServerConfigurer<H extends HttpSecurityBuilder<H>>
@@ -22,6 +23,6 @@ public class JwtServerConfigurer<H extends HttpSecurityBuilder<H>>
 
     @Override
     public void configure(H builder) {
-        builder.addFilterAfter(jwtAuthenticationFilter, SecurityContextPersistenceFilter.class);
+        builder.addFilterAfter(jwtAuthenticationFilter, SecurityContextHolderFilter.class);
     }
 }
