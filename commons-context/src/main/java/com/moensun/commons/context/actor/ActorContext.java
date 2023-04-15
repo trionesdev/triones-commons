@@ -20,12 +20,7 @@ public class ActorContext {
     }
 
     public String getActorId() {
-        Actor actor = getActor();
-        if (Objects.isNull(actor)) {
-            return null;
-        } else {
-            return actor.getActorId();
-        }
+        return Optional.ofNullable(getActor()).map(Actor::getActorId).orElse(null);
     }
 
     public <T> T getActorId(Class<T> requiredType) {
@@ -37,13 +32,12 @@ public class ActorContext {
         }
     }
 
+    public String getUserId() {
+        return Optional.ofNullable(getActor()).map(Actor::getUserId).orElse(null);
+    }
+
     public String getTenantId() {
-        Actor actor = getActor();
-        if (Objects.isNull(actor)) {
-            return null;
-        } else {
-            return actor.getTenantId();
-        }
+        return Optional.ofNullable(getActor()).map(Actor::getTenantId).orElse(null);
     }
 
     public String getMemberId() {
