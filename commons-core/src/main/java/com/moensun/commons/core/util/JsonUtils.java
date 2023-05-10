@@ -232,15 +232,15 @@ public class JsonUtils {
 
 
     //region convertValue
-    public <T> T convertValue(Object fromValue, Class<T> toValueType) throws IllegalArgumentException {
+    public static <T> T convertValue(Object fromValue, Class<T> toValueType) throws IllegalArgumentException {
         return getObjectMapper().convertValue(fromValue, toValueType);
     }
 
-    public <T> T convertValue(Object fromValue, TypeReference<T> toValueTypeRef) throws IllegalArgumentException {
+    public static <T> T convertValue(Object fromValue, TypeReference<T> toValueTypeRef) throws IllegalArgumentException {
         return getObjectMapper().convertValue(fromValue, toValueTypeRef);
     }
 
-    public <T> T convertValue(Object fromValue, JavaType toValueType) throws IllegalArgumentException {
+    public static <T> T convertValue(Object fromValue, JavaType toValueType) throws IllegalArgumentException {
         return getObjectMapper().convertValue(fromValue, toValueType);
     }
     //endregion
