@@ -218,16 +218,31 @@ public class JsonUtils {
         }
     }
 
-    public static  <T> T treeToValue(TreeNode n, Class<T> valueType) throws JsonProcessingException {
+    public static <T> T treeToValue(TreeNode n, Class<T> valueType) throws JsonProcessingException {
         return getObjectMapper().treeToValue(n, valueType);
     }
 
-    public static  <T> T treeToValue(TreeNode n, JavaType javaType) throws JsonProcessingException {
+    public static <T> T treeToValue(TreeNode n, JavaType javaType) throws JsonProcessingException {
         return getObjectMapper().treeToValue(n, javaType);
     }
 
-    public static  <T extends JsonNode> T valueToTree(Object fromValue) {
+    public static <T extends JsonNode> T valueToTree(Object fromValue) {
         return getObjectMapper().valueToTree(fromValue);
     }
+
+
+    //region convertValue
+    public <T> T convertValue(Object fromValue, Class<T> toValueType) throws IllegalArgumentException {
+        return getObjectMapper().convertValue(fromValue, toValueType);
+    }
+
+    public <T> T convertValue(Object fromValue, TypeReference<T> toValueTypeRef) throws IllegalArgumentException {
+        return getObjectMapper().convertValue(fromValue, toValueTypeRef);
+    }
+
+    public <T> T convertValue(Object fromValue, JavaType toValueType) throws IllegalArgumentException {
+        return getObjectMapper().convertValue(fromValue, toValueType);
+    }
+    //endregion
 
 }

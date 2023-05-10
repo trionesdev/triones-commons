@@ -4,6 +4,7 @@ import ma.glasnost.orika.MapperFacade;
 import ma.glasnost.orika.MapperFactory;
 import ma.glasnost.orika.impl.DefaultMapperFactory;
 
+@Deprecated
 public class OrikaUtils {
     private static MapperFactory MAPPER_FACTORY;
     private static MapperFacade MAPPER_FACADE;
