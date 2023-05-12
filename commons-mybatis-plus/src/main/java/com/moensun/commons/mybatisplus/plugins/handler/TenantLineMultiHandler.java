@@ -10,9 +10,12 @@ public interface TenantLineMultiHandler extends TenantLineHandler {
     /**
      * 是否开启多租户查询 支持查询多个租户数据
      * 如果不开启，则与普通多租户一样
+     *
      * @return
      */
-    boolean enableTenantMulti();
+    default boolean enableTenantMulti() {
+        return false;
+    }
 
     ItemsList getTenantIds();
 
