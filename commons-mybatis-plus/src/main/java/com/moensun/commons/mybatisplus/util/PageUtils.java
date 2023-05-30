@@ -5,6 +5,7 @@ import com.moensun.commons.core.page.MSPageInfo;
 
 import java.util.List;
 
+@Deprecated
 public class PageUtils {
 
     public static <T> MSPageInfo<T> of(IPage<T> pageInfo) {

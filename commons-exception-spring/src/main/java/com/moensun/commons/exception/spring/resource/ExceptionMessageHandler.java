@@ -1,7 +1,6 @@
 package com.moensun.commons.exception.spring.resource;
 
 import com.moensun.commons.core.spring.context.SpringContextHolder;
-import com.moensun.commons.exception.ResourceProperties;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;

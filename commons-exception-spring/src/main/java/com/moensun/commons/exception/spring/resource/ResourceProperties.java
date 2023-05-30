@@ -1,4 +1,4 @@
-package com.moensun.commons.exception;
+package com.moensun.commons.exception.spring.resource;
 
 import java.util.HashMap;
 import java.util.Locale;

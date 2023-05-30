@@ -1,20 +1,16 @@
-# moensun commons core
+package com.moensun.commons.core.test;
 
-> commons包的核心模块
+import com.moensun.commons.core.jwt.JwtConfig;
+import com.moensun.commons.core.jwt.JwtFacade;
+import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.Test;
 
-- util 工具类
-    - IdentityUtils 
-    - BigDecimalUtils 
-    - FilePathUtils 文件路径工具类
-    - PageUtils 分页工具类
-    - JsonUtils 基于jackson的json工具类
-- jackson jackson的序列化与反序列化
-- constant 常量
-- page 分页
-- jwt
-  - JwtFacade Jwt门面
-  ```java
-  class Jwt{
+import java.util.HashMap;
+import java.util.Map;
+
+@Slf4j
+public class JwtTest {
+
     @Test
     public void generateJwt() {
         JwtConfig jwtConfig = JwtConfig.builder().secret("123456789").expiration(3600).build();
@@ -24,7 +20,7 @@
         String token = jwtFacade.generate("bane", claims);
         System.out.println(token);
     }
-  
+
     @Test
     public void generateToken() {
         JwtConfig jwtConfig = JwtConfig.builder().secret("123456789").expiration(3600).build();
@@ -32,5 +28,5 @@
         String token = jwtFacade.generate("userId", "role", "tenantId", "tenantMemberId");
         System.out.println(token);
     }
-  }
-  ```
+
+}

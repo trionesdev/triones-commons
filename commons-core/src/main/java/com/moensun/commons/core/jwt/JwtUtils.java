@@ -1,5 +1,6 @@
 package com.moensun.commons.core.jwt;
 
+import com.google.common.base.Strings;
 import com.nimbusds.jose.JWSAlgorithm;
 import com.nimbusds.jose.JWSHeader;
 import com.nimbusds.jose.JWSVerifier;
@@ -23,7 +24,7 @@ public final class JwtUtils {
         JWTClaimsSet.Builder jwtClaimsSetBuilder = new JWTClaimsSet.Builder()
                 .subject(subject)
                 .issueTime(issueAt);
-        if(MapUtils.isNotEmpty(claims)){
+        if (MapUtils.isNotEmpty(claims)) {
             claims.forEach(jwtClaimsSetBuilder::claim);
         }
         if (jwtConfig.getExpiration() > 0) {
@@ -33,15 +34,15 @@ public final class JwtUtils {
             jwtClaimsSetBuilder.expirationTime(calendar.getTime());
         }
         SignedJWT signedJWT = new SignedJWT(new JWSHeader(JWSAlgorithm.HS256), jwtClaimsSetBuilder.build());
-        signedJWT.sign(new MACSigner(jwtConfig.getSecret()));
+        signedJWT.sign(new MACSigner(Strings.padEnd(jwtConfig.getSecret(), 128, '0')));
         return signedJWT.serialize();
     }
 
     @SneakyThrows
-    public static Map<String,Object> parseClaims(JwtConfig jwtConfig, String token) {
-        JWSVerifier verifier = new MACVerifier(jwtConfig.getSecret());
+    public static Map<String, Object> parseClaims(JwtConfig jwtConfig, String token) {
+        JWSVerifier verifier = new MACVerifier(Strings.padEnd(jwtConfig.getSecret(), 128, '0'));
         SignedJWT signedJWT = SignedJWT.parse(token);
-        if(!signedJWT.verify(verifier)){
+        if (!signedJWT.verify(verifier)) {
             return null;
         }
         return signedJWT.getJWTClaimsSet().getClaims();
