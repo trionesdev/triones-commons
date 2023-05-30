@@ -1,12 +1,6 @@
 package com.moensun.commons.context.actor;
 
 import com.alibaba.ttl.TransmittableThreadLocal;
-import com.moensun.commons.opentracing.util.BaggageUtils;
-import io.opentracing.ScopeManager;
-import io.opentracing.Span;
-import io.opentracing.Tracer;
-import io.opentracing.noop.NoopSpan;
-import io.opentracing.util.GlobalTracer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
@@ -27,27 +21,15 @@ public class ActorContextHolder {
     private static final  TransmittableThreadLocal<LinkedBlockingDeque<Actor>> actorQueue = new TransmittableThreadLocal<>();
 
     public static void setActor(Actor actor) {
-        if(hasTracer()){
-            setTracerActor(actor);
-        }else {
-            setLocalActor(actor);
-        }
+        setLocalActor(actor);
     }
 
     public static Actor getActor() {
-        if(hasTracer()){
-            return getTracerActor();
-        }else {
-            return getLocalActor();
-        }
+        return getLocalActor();
     }
 
     public static void resetActor() {
-        if(hasTracer()){
-            resetTracerActor();
-        }else {
-            resetLocalActor();
-        }
+        resetLocalActor();
     }
 
     public static void addActorsFirst(Actor actor){
@@ -94,24 +76,8 @@ public class ActorContextHolder {
         return result;
     }
 
-    public static boolean hasTracer(){
-        return !(GlobalTracer.get().activeSpan() instanceof NoopSpan);
-    }
-
     private static Actor getLocalActor(){
         return actorHolder.get();
-    }
-
-    private static Actor getTracerActor(){
-        Span activeSpan = GlobalTracer.get().scopeManager().activeSpan();
-        if(Objects.isNull(activeSpan)){
-            return null;
-        }
-        Actor actor = Actor.builder().build();
-        actor.setActorId(activeSpan.getBaggageItem(BaggageUtils.itemKey(X_ACTOR_ID)));
-        actor.setTenantId(activeSpan.getBaggageItem(BaggageUtils.itemKey(X_TENANT_ID)));
-        actor.setRole(activeSpan.getBaggageItem(BaggageUtils.itemKey(X_ROLE)));
-        return actor;
     }
 
     private static void setLocalActor(Actor actor){
@@ -119,68 +85,9 @@ public class ActorContextHolder {
         putLocalMDCContext(actor);
     }
 
-    private static void setTracerActor(Actor actor){
-        ScopeManager scopeManager = GlobalTracer.get().scopeManager();
-        Span parentSpan = scopeManager.activeSpan();
-        Tracer.SpanBuilder spanBuilder = GlobalTracer.get().buildSpan("set-actor");
-        Span actorSpan ;
-        if(Objects.nonNull(parentSpan)){
-            actorSpan = spanBuilder.asChildOf(parentSpan).start();
-        }else {
-            actorSpan = spanBuilder.start();
-        }
-        actorSpan.setBaggageItem(BaggageUtils.itemKey(X_ACTOR_ID), actor.getActorId());
-        actorSpan.setBaggageItem(BaggageUtils.itemKey(X_TENANT_ID), actor.getTenantId());
-        actorSpan.setBaggageItem(BaggageUtils.itemKey(X_ROLE), actor.getRole());
-        scopeManager.activate(actorSpan);
-        actorSpan.finish();
-    }
-
     private static void resetLocalActor(){
         actorHolder.remove();
         cleanLocalMDCContext();
-    }
-
-    private static void resetTracerActor(){
-        Span activeSpan = GlobalTracer.get().activeSpan();
-        if(Objects.isNull(activeSpan)){
-            return;
-        }
-        activeSpan.setBaggageItem(X_ACTOR_ID,null);
-        activeSpan.setBaggageItem(X_TENANT_ID,null);
-        activeSpan.setBaggageItem(X_ROLE,null);
-    }
-
-    public static class ActorWrapper{
-        private Actor actor;
-        private final LinkedBlockingDeque<Actor> actors = new LinkedBlockingDeque<>();
-
-        public ActorWrapper(Actor actor) {
-            this.actor = actor;
-        }
-
-
-
-        public void add(Actor newActor){
-            if(Objects.nonNull(actor)){
-                actors.addFirst(actor);
-            }
-            actor = newActor;
-        }
-
-        public void remove(){
-            actor = null;
-            if(actors.isEmpty()){
-                return;
-            }
-            try{
-                actor = actors.removeFirst();
-            }catch (NoSuchElementException ex){
-                if(logger.isDebugEnabled()){
-                    logger.info("[ActorContextHolder] context actors is empty ");
-                }
-            }
-        }
     }
 
     private static void putLocalMDCContext(Actor actor){
