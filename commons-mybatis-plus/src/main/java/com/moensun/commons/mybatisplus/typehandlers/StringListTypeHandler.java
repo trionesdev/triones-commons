@@ -12,6 +12,7 @@ import org.apache.ibatis.type.MappedTypes;
 
 import java.util.List;
 
+@Deprecated
 @Slf4j
 @MappedTypes({List.class})
 @MappedJdbcTypes(JdbcType.VARCHAR)

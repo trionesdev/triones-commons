@@ -10,18 +10,18 @@ import org.apache.ibatis.type.JdbcType;
 import org.apache.ibatis.type.MappedJdbcTypes;
 import org.apache.ibatis.type.MappedTypes;
 
+import java.util.Collection;
 import java.util.List;
 
-@Deprecated
 @Slf4j
-@MappedTypes({List.class})
+@MappedTypes({Collection.class})
 @MappedJdbcTypes(JdbcType.VARCHAR)
-public class LongListTypeHandler extends AbstractJsonTypeHandler<List<Long>> {
+public class DoubleCollectionTypeHandler extends AbstractJsonTypeHandler<Collection<Double>> {
 
     private static ObjectMapper OBJECT_MAPPER;
     private final Class<?> type;
 
-    public LongListTypeHandler(Class<?> type) {
+    public DoubleCollectionTypeHandler(Class<?> type) {
         if (log.isTraceEnabled()) {
             log.trace("JacksonTypeHandler(" + type + ")");
         }
@@ -38,18 +38,18 @@ public class LongListTypeHandler extends AbstractJsonTypeHandler<List<Long>> {
 
     public static void setObjectMapper(ObjectMapper objectMapper) {
         Assert.notNull(objectMapper, "ObjectMapper should not be null");
-        LongListTypeHandler.OBJECT_MAPPER = objectMapper;
+        DoubleCollectionTypeHandler.OBJECT_MAPPER = objectMapper;
     }
 
     @SneakyThrows
     @Override
-    protected List<Long> parse(String json) {
-        return getObjectMapper().readValue(json, new TypeReference<List<Long>>() {});
+    protected List<Double> parse(String json) {
+        return getObjectMapper().readValue(json, new TypeReference<List<Double>>() {});
     }
 
     @SneakyThrows
     @Override
-    protected String toJson(List<Long> obj) {
+    protected String toJson(Collection<Double> obj) {
         return getObjectMapper().writeValueAsString(obj);
     }
 }
