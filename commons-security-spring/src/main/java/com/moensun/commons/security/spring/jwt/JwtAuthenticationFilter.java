@@ -51,7 +51,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-        Actor actor = new Actor();
+
         try {
             String authorization = request.getHeader(AUTHORIZATION);
             if (StringUtils.isNotBlank(authorization)) {
@@ -69,8 +69,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             }
             //endregion
 
-            actor.setTime(Instant.now());
+
             if (StringUtils.isNotBlank(authorization)) {
+                Actor actor = new Actor();
                 Map<String, Object> claims = null;
                 if (BooleanUtils.isTrue(jwtTokenConfig.getLocal())) {
                     claims = jwtFacade.parse(authorization);
@@ -89,6 +90,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                         actor.setRole(role);
                         actor.setTenantId(tenantId);
                         actor.setTenantMemberId(tenantMemberId);
+                        actor.setTime(Instant.now());
                         JwtUserDetails userDetails =
                                 JwtUserDetails.builder().token(authorization)
                                         .actorId(actor.getActorId())
@@ -103,11 +105,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                         SecurityContextHolder.getContext().setAuthentication(authentication);
                     }
                 }
+                actorContext.setActor(actor);
             }
         } catch (Exception ex) {
             log.error(ex.getMessage(), ex);
         }
-        actorContext.setActor(actor);
         filterChain.doFilter(request, response);
         actorContext.resetActor();
     }

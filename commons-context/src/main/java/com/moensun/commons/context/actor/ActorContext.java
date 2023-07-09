@@ -44,6 +44,12 @@ public class ActorContext {
         return Optional.ofNullable(getActor()).map(Actor::getTenantMemberId).orElse(null);
     }
 
+    public Boolean isEmpty() {
+        return Optional.ofNullable(getActor()).map(actor -> {
+            return Objects.isNull(actor.getActorId()) && Objects.isNull(actor.getTenantMemberId()) && Objects.isNull(actor.getUserId());
+        }).orElse(true);
+    }
+
     public Instant getTime() {
         Actor actor = getActor();
         if (Objects.isNull(actor) || Objects.isNull(actor.getTime())) {
@@ -71,7 +77,7 @@ public class ActorContext {
     }
 
     public void resetActor() {
-        ActorContextHolder.getActor();
+        ActorContextHolder.resetActor();
     }
 
 
