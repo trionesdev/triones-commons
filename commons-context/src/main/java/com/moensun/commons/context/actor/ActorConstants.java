@@ -7,7 +7,7 @@ public class ActorConstants {
     public static final String X_TENANT_ID = "X-Request-TenantId";
     public static final String X_TENANT_MEMBER_ID = "X-Request-Tenant-MemberId";
     public static final String X_ROLE = "X-Request-Role";
-    public static final String X_Time = "X-Request-Time";
+    public static final String X_TIME = "X-Request-Time";
 
     public static final String MDC_TRACE_ID = "traceId";
     public static final String MDC_ACTOR_ID = "actorId";
