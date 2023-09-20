@@ -12,6 +12,6 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PageCriteria {
-    private String pageNum;
-    private String pageSize;
+    private Integer pageNum;
+    private Integer pageSize;
 }
