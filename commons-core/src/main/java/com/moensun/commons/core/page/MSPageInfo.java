@@ -12,6 +12,7 @@ import java.util.List;
 @SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
+@Deprecated
 public class MSPageInfo<T> extends PageInfo<T> {
     private static final long serialVersionUID = 7156771088266349472L;
     private int pageNum;
