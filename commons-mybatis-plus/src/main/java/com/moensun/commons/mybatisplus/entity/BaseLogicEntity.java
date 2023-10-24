@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 import lombok.experimental.SuperBuilder;
 
+import java.io.Serializable;
 import java.time.Instant;
 
 @Data
@@ -16,9 +17,9 @@ import java.time.Instant;
 @SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
-public class BaseLogicEntity {
-    @TableLogic(value = "false",delval = "true")
-    @TableField(value = "is_deleted",fill = FieldFill.INSERT)
+public class BaseLogicEntity implements Serializable {
+    @TableLogic(value = "false", delval = "true")
+    @TableField(value = "is_deleted", fill = FieldFill.INSERT)
     private Boolean deleted;
     @TableField(fill = FieldFill.INSERT)
     private Instant createdAt;

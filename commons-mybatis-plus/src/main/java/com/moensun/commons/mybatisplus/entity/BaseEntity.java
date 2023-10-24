@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 import lombok.experimental.SuperBuilder;
 
+import java.io.Serializable;
 import java.time.Instant;
 
 @Data
@@ -15,7 +16,7 @@ import java.time.Instant;
 @SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
-public class BaseEntity {
+public class BaseEntity implements Serializable {
     @TableField(fill = FieldFill.INSERT)
     private Instant createdAt;
     @TableField(fill = FieldFill.INSERT)
