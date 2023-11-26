@@ -6,17 +6,15 @@
     <packaging>pom</packaging>
     <name>MS:Commons</name>
     <modules>
-        <module>commons-core</module>
-        <module>commons-core-spring</module>
-        <module>commons-exception-spring</module>
-        <module>commons-exception</module>
-        <module>commons-mybatis-plus</module>
-        <module>commons-context</module>
-        <module>commons-i18n</module>
-        <module>commons-feign</module>
-        <module>commons-opentracing</module>
-        <module>commons-jaegertracing</module>
-        <module>commons-security-spring</module>
+        <module>triones-commons-core</module>
+        <module>triones-commons-core-spring</module>
+        <module>triones-commons-exception-spring</module>
+        <module>triones-commons-exception</module>
+        <module>triones-commons-mybatis-plus</module>
+        <module>triones-commons-context</module>
+        <module>triones-commons-i18n</module>
+        <module>triones-commons-feign</module>
+        <module>triones-commons-security-spring</module>
     </modules>
     <groupId>com.moensun.commons</groupId>
     <artifactId>moensun-commons</artifactId>
@@ -198,52 +196,52 @@
             <!--moensun commons-->
             <dependency>
                 <groupId>com.moensun.commons</groupId>
-                <artifactId>commons-core</artifactId>
+                <artifactId>triones-commons-core</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.moensun.commons</groupId>
-                <artifactId>commons-page</artifactId>
+                <artifactId>triones-commons-page</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.moensun.commons</groupId>
-                <artifactId>commons-core-spring</artifactId>
+                <artifactId>triones-commons-core-spring</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.moensun.commons</groupId>
-                <artifactId>commons-context</artifactId>
+                <artifactId>triones-commons-context</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.moensun.commons</groupId>
-                <artifactId>commons-i18n</artifactId>
+                <artifactId>triones-commons-i18n</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.moensun.commons</groupId>
-                <artifactId>commons-exception</artifactId>
+                <artifactId>triones-commons-exception</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.moensun.commons</groupId>
-                <artifactId>commons-exception-spring</artifactId>
+                <artifactId>triones-commons-exception-spring</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.moensun.commons</groupId>
-                <artifactId>commons-feign</artifactId>
+                <artifactId>triones-commons-feign</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.moensun.commons</groupId>
-                <artifactId>commons-mybatis-plus</artifactId>
+                <artifactId>triones-commons-mybatis-plus</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.moensun.commons</groupId>
-                <artifactId>commons-security-spring</artifactId>
+                <artifactId>triones-commons-security-spring</artifactId>
                 <version>${project.version}</version>
                 <exclusions>
                     <exclusion>
@@ -255,16 +253,6 @@
                         <artifactId>spring-security-config</artifactId>
                     </exclusion>
                 </exclusions>
-            </dependency>
-            <dependency>
-                <groupId>com.moensun.commons</groupId>
-                <artifactId>commons-opentracing</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.moensun.commons</groupId>
-                <artifactId>commons-jaegertracing</artifactId>
-                <version>${project.version}</version>
             </dependency>
             <!--moensun commons-->
         </dependencies>
