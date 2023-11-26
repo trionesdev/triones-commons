@@ -7,6 +7,7 @@ import java.util.ResourceBundle;
 import org.springframework.context.MessageSource;
 import org.springframework.context.NoSuchMessageException;
 
+@Deprecated
 public class MessageSourceResourceBundle extends ResourceBundle {
     private final MessageSource messageSource;
 

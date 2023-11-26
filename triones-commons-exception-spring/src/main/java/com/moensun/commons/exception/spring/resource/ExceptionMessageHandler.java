@@ -1,6 +1,7 @@
 package com.moensun.commons.exception.spring.resource;
 
 import com.moensun.commons.core.spring.context.SpringContextHolder;
+import com.moensun.commons.exception.ExceptionResourceProperties;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
@@ -10,6 +11,7 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import java.text.MessageFormat;
 import java.util.*;
 
+@Deprecated
 public class ExceptionMessageHandler implements ApplicationContextAware {
 
     private String[] resourcePaths;
@@ -24,6 +26,7 @@ public class ExceptionMessageHandler implements ApplicationContextAware {
 
     public void setResourcePaths(String[] resourcePaths) {
         this.resourcePaths = resourcePaths;
+        ExceptionResourceProperties.setResourcePaths(resourcePaths);
     }
 
     public String text(String code, Object... params) {
