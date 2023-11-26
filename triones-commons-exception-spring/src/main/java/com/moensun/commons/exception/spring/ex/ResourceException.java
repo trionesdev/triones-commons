@@ -8,6 +8,7 @@ import org.springframework.context.ApplicationContext;
 
 import java.util.Objects;
 
+@Deprecated
 public abstract class ResourceException extends TrionesException {
     private String code;
     private String message;

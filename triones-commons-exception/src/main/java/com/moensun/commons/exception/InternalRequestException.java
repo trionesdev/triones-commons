@@ -6,16 +6,12 @@ public class InternalRequestException extends TrionesException {
     public InternalRequestException() {
     }
 
-    public InternalRequestException(String message) {
-        super(message);
+    public InternalRequestException(String code, Object... params) {
+        super(code, params);
     }
 
     public InternalRequestException(String message, Throwable cause) {
         super(message, cause);
-    }
-
-    public InternalRequestException(String code, String message) {
-        super(code, message);
     }
 
     public InternalRequestException(String code, String message, Throwable cause) {

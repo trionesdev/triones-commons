@@ -2,6 +2,7 @@ package com.moensun.commons.exception.spring.ex;
 
 import com.moensun.commons.exception.TrionesError;
 
+@Deprecated
 public class NotFoundException extends ResourceException{
 
     public NotFoundException(){
