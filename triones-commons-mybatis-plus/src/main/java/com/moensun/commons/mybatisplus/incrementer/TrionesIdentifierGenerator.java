@@ -8,24 +8,24 @@ import java.net.InetAddress;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class MSIdentifierGenerator implements IdentifierGenerator {
+public class TrionesIdentifierGenerator implements IdentifierGenerator {
     private final Sequence sequence;
 
     @SneakyThrows
-    public MSIdentifierGenerator(){
+    public TrionesIdentifierGenerator(){
         InetAddress inetAddress = InetAddress.getLocalHost();
         this.sequence = new Sequence(inetAddress);
     }
 
-    public MSIdentifierGenerator(InetAddress inetAddress) {
+    public TrionesIdentifierGenerator(InetAddress inetAddress) {
         this.sequence = new Sequence(inetAddress);
     }
 
-    public MSIdentifierGenerator(long workerId, long dataCenterId) {
+    public TrionesIdentifierGenerator(long workerId, long dataCenterId) {
         this.sequence = new Sequence(workerId, dataCenterId);
     }
 
-    public MSIdentifierGenerator(Sequence sequence) {
+    public TrionesIdentifierGenerator(Sequence sequence) {
         this.sequence = sequence;
     }
 
