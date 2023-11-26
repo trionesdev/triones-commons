@@ -3,12 +3,12 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>moensun-commons</artifactId>
+        <artifactId>triones-commons</artifactId>
         <groupId>com.moensun.commons</groupId>
         <version>1.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <name>MS:Commons:i18n</name>
+    <name>Triones:Commons:i18n</name>
     <artifactId>triones-commons-i18n</artifactId>
 
     <properties>

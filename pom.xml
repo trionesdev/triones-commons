@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <packaging>pom</packaging>
-    <name>MS:Commons</name>
+    <name>Triones:Commons</name>
     <modules>
         <module>triones-commons-core</module>
         <module>triones-commons-core-spring</module>
@@ -17,7 +17,7 @@
         <module>triones-commons-security-spring</module>
     </modules>
     <groupId>com.moensun.commons</groupId>
-    <artifactId>moensun-commons</artifactId>
+    <artifactId>triones-commons</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <properties>
