@@ -9,20 +9,8 @@ public class ValidationException extends TrionesException{
         super(code, params);
     }
 
-    public ValidationException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
-    public ValidationException(String code, String message, Throwable cause) {
-        super(code, message, cause);
-    }
-
-    public ValidationException(Throwable cause, String code, String message) {
-        super(cause, code, message);
-    }
-
-    public ValidationException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace, String code) {
-        super(message, cause, enableSuppression, writableStackTrace, code);
+    public ValidationException(Throwable cause, String code, Object... params) {
+        super(cause, code, params);
     }
 
     public ValidationException(TrionesError error) {

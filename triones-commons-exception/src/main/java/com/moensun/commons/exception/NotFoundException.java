@@ -8,21 +8,14 @@ public class NotFoundException extends TrionesException {
     }
 
 
-    public NotFoundException(String message, Throwable cause) {
-        super(message, cause);
+    public NotFoundException(String code, Object... params) {
+        super(code, params);
     }
 
-    public NotFoundException(String code, String message, Throwable cause) {
-        super(code, message, cause);
+    public NotFoundException(Throwable cause, String code, Object... params) {
+        super(cause, code, params);
     }
 
-    public NotFoundException(Throwable cause, String code, String message) {
-        super(cause, code, message);
-    }
-
-    public NotFoundException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace, String code) {
-        super(message, cause, enableSuppression, writableStackTrace, code);
-    }
 
     public NotFoundException(TrionesError error) {
         super(error);
