@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>triones-commons</artifactId>
-        <groupId>com.moensun.commons</groupId>
+        <groupId>com.trionesdev.commons</groupId>
         <version>1.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -36,22 +36,26 @@
             <artifactId>fastjson2</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.moensun.commons</groupId>
-            <artifactId>triones-commons-exception</artifactId>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>okhttp</artifactId>
+            <version>4.9.3</version>
         </dependency>
+
+        <!--        trionesdev-->
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.moensun.commons</groupId>
-            <artifactId>triones-commons-context</artifactId>
+            <groupId>com.trionesdev.commons</groupId>
+            <artifactId>triones-commons-exception</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.squareup.okhttp3</groupId>
-            <artifactId>okhttp</artifactId>
-            <version>4.9.3</version>
+            <groupId>com.trionesdev.commons</groupId>
+            <artifactId>triones-commons-context</artifactId>
         </dependency>
+        <!--        trionesdev-->
+
     </dependencies>
 
 </project>
