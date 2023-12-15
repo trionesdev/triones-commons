@@ -11,6 +11,7 @@
 - jackson jackson的序列化与反序列化
 - constant 常量
 - page 分页
+  > 为了统一不同的ORM组件的返回值，抽象出了统一的分页对象
 - jwt
   - JwtFacade Jwt门面
   ```java
