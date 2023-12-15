@@ -28,7 +28,7 @@ public class TrionesException extends RuntimeException {
     }
 
     public TrionesException(TrionesError error) {
-        super(error.getMessage());
+        super(error.getMessage(), error.getCause());
         this.code = error.getCode();
         this.message = error.getMessage();
     }
