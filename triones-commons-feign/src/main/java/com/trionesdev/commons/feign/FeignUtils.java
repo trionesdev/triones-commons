@@ -13,6 +13,9 @@ public class FeignUtils {
     }
 
     public static String requestBody(Response response) throws IOException {
+        if (response.body() == null) {
+            return null;
+        }
         return CharStreams.toString(new InputStreamReader(response.body().asInputStream(), Charsets.UTF_8));
     }
 }
