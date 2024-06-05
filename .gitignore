@@ -2,3 +2,5 @@
 *.iml
 */target
 /target
+pom.xml.versionsBackup
+*/pom.xml.versionsBackup
