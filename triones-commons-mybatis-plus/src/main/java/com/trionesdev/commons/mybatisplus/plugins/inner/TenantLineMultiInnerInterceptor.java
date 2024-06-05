@@ -15,7 +15,7 @@ import net.sf.jsqlparser.expression.Expression;
 import net.sf.jsqlparser.expression.operators.relational.*;
 import net.sf.jsqlparser.schema.Column;
 import net.sf.jsqlparser.schema.Table;
-import net.sf.jsqlparser.statement.select.SubSelect;
+import net.sf.jsqlparser.statement.select.Select;
 import net.sf.jsqlparser.statement.select.WithItem;
 
 import java.util.List;
@@ -59,21 +59,15 @@ public class TenantLineMultiInnerInterceptor extends TenantLineInnerInterceptor 
     }
 
 
-    private boolean isMultiTenant(ItemsList itemsList) {
+    private boolean isMultiTenant(Expression itemsList) {
         if (!tenantLineMultiHandler.enableTenantMulti()) {
             return false;
         }
         if (itemsList instanceof ExpressionList) {
-            List<Expression> expressionList = ((ExpressionList) itemsList).getExpressions();
+            ExpressionList expressionList = (ExpressionList) itemsList;
             return CollectionUtils.isNotEmpty(expressionList) && expressionList.size() > 1;
-        } else if (itemsList instanceof MultiExpressionList) {
-            List<ExpressionList> expressionLists = ((MultiExpressionList) itemsList).getExpressionLists();
-            return CollectionUtils.isNotEmpty(expressionLists) && expressionLists.get(0).getExpressions().size() > 1;
-        } else if (itemsList instanceof NamedExpressionList) {
-            List<Expression> expressionList = ((NamedExpressionList) itemsList).getExpressions();
-            return CollectionUtils.isNotEmpty(expressionList) && expressionList.size() > 1;
-        } else if (itemsList instanceof SubSelect) {
-            List<WithItem> withItems = ((SubSelect) itemsList).getWithItemsList();
+        }  else if (itemsList instanceof Select) {
+            List<WithItem> withItems = ((Select) itemsList).getWithItemsList();
             return CollectionUtils.isNotEmpty(withItems) && withItems.size() > 1;
         }
         return false;

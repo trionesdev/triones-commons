@@ -1,7 +1,7 @@
 package com.trionesdev.commons.mybatisplus.plugins.handler;
 
 import com.baomidou.mybatisplus.extension.plugins.handler.TenantLineHandler;
-import net.sf.jsqlparser.expression.operators.relational.ItemsList;
+import net.sf.jsqlparser.expression.Expression;
 
 /**
  * 允许同时查询多个租户的多租户
@@ -17,6 +17,6 @@ public interface TenantLineMultiHandler extends TenantLineHandler {
         return false;
     }
 
-    ItemsList getTenantIds();
+    Expression getTenantIds();
 
 }

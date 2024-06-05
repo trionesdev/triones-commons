@@ -19,14 +19,9 @@ import java.util.List;
 public class FloatCollectionTypeHandler extends AbstractJsonTypeHandler<Collection<Float>> {
 
     private static ObjectMapper OBJECT_MAPPER;
-    private final Class<?> type;
 
     public FloatCollectionTypeHandler(Class<?> type) {
-        if (log.isTraceEnabled()) {
-            log.trace("JacksonTypeHandler(" + type + ")");
-        }
-        Assert.notNull(type, "Type argument cannot be null");
-        this.type = type;
+        super(type);
     }
 
     public static ObjectMapper getObjectMapper() {
@@ -43,13 +38,13 @@ public class FloatCollectionTypeHandler extends AbstractJsonTypeHandler<Collecti
 
     @SneakyThrows
     @Override
-    protected List<Float> parse(String json) {
+    public List<Float> parse(String json) {
         return getObjectMapper().readValue(json, new TypeReference<List<Float>>() {});
     }
 
     @SneakyThrows
     @Override
-    protected String toJson(Collection<Float> obj) {
+    public String toJson(Object obj) {
         return getObjectMapper().writeValueAsString(obj);
     }
 }

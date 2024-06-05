@@ -10,6 +10,7 @@ import org.apache.ibatis.type.MappedTypes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.lang.reflect.Field;
 import java.util.Collection;
 
 @MappedTypes({Collection.class})
@@ -19,8 +20,18 @@ public abstract class SpecificTypeHandler<T> extends AbstractJsonTypeHandler<T> 
 
     private static ObjectMapper OBJECT_MAPPER;
 
-    public SpecificTypeHandler() {
+    public SpecificTypeHandler(){
+        super(Object.class);
     }
+
+    public SpecificTypeHandler(Class<?> type) {
+        super(type);
+    }
+
+    public SpecificTypeHandler(Class<?> type, Field field) {
+        super(type, field);
+    }
+
 
     public static ObjectMapper getObjectMapper() {
         if (null == OBJECT_MAPPER) {
@@ -32,13 +43,13 @@ public abstract class SpecificTypeHandler<T> extends AbstractJsonTypeHandler<T> 
 
     @SneakyThrows
     @Override
-    protected T parse(String json) {
+    public T parse(String json) {
         return getObjectMapper().readValue(json,typeReference());
     }
 
     @SneakyThrows
     @Override
-    protected String toJson(T obj) {
+    public String toJson(Object obj) {
         return getObjectMapper().writeValueAsString(obj);
     }
 

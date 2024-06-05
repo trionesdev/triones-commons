@@ -19,14 +19,9 @@ import java.util.List;
 public class BooleanCollectionTypeHandler extends AbstractJsonTypeHandler<Collection<Boolean>> {
 
     private static ObjectMapper OBJECT_MAPPER;
-    private final Class<?> type;
 
     public BooleanCollectionTypeHandler(Class<?> type) {
-        if (log.isTraceEnabled()) {
-            log.trace("JacksonTypeHandler(" + type + ")");
-        }
-        Assert.notNull(type, "Type argument cannot be null");
-        this.type = type;
+        super(type);
     }
 
     public static ObjectMapper getObjectMapper() {
@@ -43,13 +38,13 @@ public class BooleanCollectionTypeHandler extends AbstractJsonTypeHandler<Collec
 
     @SneakyThrows
     @Override
-    protected List<Boolean> parse(String json) {
+    public List<Boolean> parse(String json) {
         return getObjectMapper().readValue(json, new TypeReference<List<Boolean>>() {});
     }
 
     @SneakyThrows
     @Override
-    protected String toJson(Collection<Boolean> obj) {
+    public String toJson(Object obj) {
         return getObjectMapper().writeValueAsString(obj);
     }
 }

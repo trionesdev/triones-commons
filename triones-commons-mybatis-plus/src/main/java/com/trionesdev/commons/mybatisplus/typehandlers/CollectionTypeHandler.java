@@ -10,13 +10,25 @@ import org.apache.ibatis.type.JdbcType;
 import org.apache.ibatis.type.MappedJdbcTypes;
 import org.apache.ibatis.type.MappedTypes;
 
+import java.lang.reflect.Field;
 import java.util.Collection;
+import java.util.List;
+import java.util.Objects;
 
 @Slf4j
 @MappedTypes({Collection.class})
 @MappedJdbcTypes(JdbcType.VARCHAR)
 public abstract class CollectionTypeHandler<T> extends AbstractJsonTypeHandler<Collection<T>> {
     private static ObjectMapper OBJECT_MAPPER;
+
+
+    public CollectionTypeHandler(Class<?> type) {
+        super(type);
+    }
+
+    public CollectionTypeHandler(Class<?> type, Field field) {
+        super(type, field);
+    }
 
     public static ObjectMapper getObjectMapper() {
         if (null == OBJECT_MAPPER) {
@@ -32,14 +44,14 @@ public abstract class CollectionTypeHandler<T> extends AbstractJsonTypeHandler<C
 
     @SneakyThrows
     @Override
-    protected Collection<T> parse(String json) {
-        JavaType javaType = getObjectMapper().getTypeFactory().constructCollectionType(Collection.class,specificType());
+    public Collection<T> parse(String json) {
+        JavaType javaType = getObjectMapper().getTypeFactory().constructCollectionType(Collection.class, specificType());
         return getObjectMapper().readValue(json, javaType);
     }
 
     @SneakyThrows
     @Override
-    protected String toJson(Collection<T> obj) {
+    public String toJson(Object obj) {
         return getObjectMapper().writeValueAsString(obj);
     }
 

@@ -19,14 +19,9 @@ import java.util.List;
 public class LongListTypeHandler extends AbstractJsonTypeHandler<List<Long>> {
 
     private static ObjectMapper OBJECT_MAPPER;
-    private final Class<?> type;
 
     public LongListTypeHandler(Class<?> type) {
-        if (log.isTraceEnabled()) {
-            log.trace("JacksonTypeHandler(" + type + ")");
-        }
-        Assert.notNull(type, "Type argument cannot be null");
-        this.type = type;
+        super(type);
     }
 
     public static ObjectMapper getObjectMapper() {
@@ -43,13 +38,13 @@ public class LongListTypeHandler extends AbstractJsonTypeHandler<List<Long>> {
 
     @SneakyThrows
     @Override
-    protected List<Long> parse(String json) {
+    public List<Long> parse(String json) {
         return getObjectMapper().readValue(json, new TypeReference<List<Long>>() {});
     }
 
     @SneakyThrows
     @Override
-    protected String toJson(List<Long> obj) {
+    public String toJson(Object obj) {
         return getObjectMapper().writeValueAsString(obj);
     }
 }

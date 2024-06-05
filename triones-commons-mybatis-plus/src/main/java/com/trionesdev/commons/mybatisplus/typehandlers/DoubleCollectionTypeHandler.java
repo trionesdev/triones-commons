@@ -19,14 +19,9 @@ import java.util.List;
 public class DoubleCollectionTypeHandler extends AbstractJsonTypeHandler<Collection<Double>> {
 
     private static ObjectMapper OBJECT_MAPPER;
-    private final Class<?> type;
 
     public DoubleCollectionTypeHandler(Class<?> type) {
-        if (log.isTraceEnabled()) {
-            log.trace("JacksonTypeHandler(" + type + ")");
-        }
-        Assert.notNull(type, "Type argument cannot be null");
-        this.type = type;
+        super(type);
     }
 
     public static ObjectMapper getObjectMapper() {
@@ -43,13 +38,13 @@ public class DoubleCollectionTypeHandler extends AbstractJsonTypeHandler<Collect
 
     @SneakyThrows
     @Override
-    protected List<Double> parse(String json) {
+    public List<Double> parse(String json) {
         return getObjectMapper().readValue(json, new TypeReference<List<Double>>() {});
     }
 
     @SneakyThrows
     @Override
-    protected String toJson(Collection<Double> obj) {
+    public String toJson(Object obj) {
         return getObjectMapper().writeValueAsString(obj);
     }
 }
