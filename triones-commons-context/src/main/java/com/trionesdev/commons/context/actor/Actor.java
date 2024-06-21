@@ -30,7 +30,7 @@ public class Actor implements Serializable {
         if(StringUtils.isNotBlank(actorId)){
             return this.actorId;
         }else {
-            return Objects.equals(ActorRoleEnum.TENANT_USER.name(), this.role) ? tenantMemberId : userId;
+            return Objects.equals(ActorRoleEnum.TENANT_MEMBER.name(), this.role) ? tenantMemberId : userId;
         }
     }
 }
