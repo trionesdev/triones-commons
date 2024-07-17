@@ -11,10 +11,17 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 
 public class InstantDeserializer extends JsonDeserializer<Instant> {
+
+    public final static InstantDeserializer instance = new InstantDeserializer();
+
     @Override
     public Instant deserialize(JsonParser p, DeserializationContext ctx) throws IOException, JsonProcessingException {
-        if (StringUtils.isNoneBlank(p.getText()) && p.getLongValue() > 0) {
-            return Instant.ofEpochMilli(p.getLongValue());
+        if (StringUtils.isNoneBlank(p.getText())) {
+            if (StringUtils.isNumeric(p.getText())) {
+                return Instant.ofEpochMilli(p.getLongValue());
+            } else {
+                return Instant.parse(p.getText());
+            }
         } else {
             return null;
         }
