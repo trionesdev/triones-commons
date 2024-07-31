@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 
 public class InstantSerializer extends JsonSerializer<Instant> {
+    public final static InstantSerializer instance = new InstantSerializer();
     @Override
     public void serialize(Instant value, JsonGenerator gen, SerializerProvider serializers) throws IOException {
         if (Objects.nonNull(value)) {

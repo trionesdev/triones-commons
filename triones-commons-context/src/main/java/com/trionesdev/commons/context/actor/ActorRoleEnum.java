@@ -6,7 +6,7 @@ import java.util.Objects;
 
 public enum ActorRoleEnum {
     USER,
-    TENANT_USER,
+    TENANT_MEMBER,
     BOSS_USER;
 
     public static ActorRoleEnum getByName(String val) {
