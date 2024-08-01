@@ -21,6 +21,10 @@ public class JwtFacade {
         return generate(userId, "USER", null);
     }
 
+    public String generate(Object userId, String role) {
+        return generate(userId, role, null, null);
+    }
+
     public String generate(Object userId, String role, Object tenantId) {
         return generate(userId, role, tenantId, null);
     }
