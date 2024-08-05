@@ -1,13 +1,11 @@
 package com.trionesdev.commons.core.jwt;
 
-
 import com.google.common.collect.Maps;
 
 import java.util.Map;
 import java.util.Objects;
 
 import static com.trionesdev.commons.core.jwt.ClaimsKeyConstant.*;
-
 
 public class JwtFacade {
 
@@ -17,15 +15,7 @@ public class JwtFacade {
         this.jwtConfig = jwtConfig;
     }
 
-    public String generateUser(Object userId) {
-        return generate(userId, "USER", null);
-    }
-
-    public String generate(Object userId, String role, Object tenantId) {
-        return generate(userId, role, tenantId, null);
-    }
-
-    public String generate(Object userId, String role, Object tenantId, Object tenantMemberId) {
+    public String generate(Object userId, String role, Object tenantId, Object tenantMemberId, Map<String, String> attributes) {
         if (Objects.isNull(userId)) {
             return null;
         }
@@ -34,7 +24,28 @@ public class JwtFacade {
         claims.put(ACTOR_ROLE, role);
         claims.put(ACTOR_TENANT_ID, tenantId);
         claims.put(ACTOR_TENANT_MEMBER_ID, tenantMemberId);
+        claims.put(ACTOR_ATTRIBUTES, attributes);
         return JwtUtils.generateToken(jwtConfig, String.valueOf(userId), claims);
+    }
+
+    public String generate(Object userId, String role, Object tenantId, Object tenantMemberId) {
+        return generate(userId, role, tenantId, tenantMemberId, null);
+    }
+
+    public String generateUser(Object userId) {
+        return generate(userId, "USER", null);
+    }
+
+    public String generateUser(Object userId, Map<String, Object> attributes) {
+        return generate(userId, "USER", null, attributes);
+    }
+
+    public String generate(Object userId, String role, Object tenantId) {
+        return generate(userId, role, tenantId, null, null);
+    }
+
+    public String generate(Object userId, String role, Object tenantId, Map<String, String> attributes) {
+        return generate(userId, role, tenantId, null, attributes);
     }
 
     public String generate(String subject, Map<String, Object> claims) {
