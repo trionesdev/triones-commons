@@ -40,12 +40,12 @@ public class JwtFacade {
         return generate(userId, "USER", null, attributes);
     }
 
-    public String generate(Object userId, String role, Object tenantId) {
-        return generate(userId, role, tenantId, null, null);
+    public String generate(Object userId, String role) {
+        return generate(userId, role, null, null, null);
     }
 
-    public String generate(Object userId, String role, Object tenantId, Map<String, String> attributes) {
-        return generate(userId, role, tenantId, null, attributes);
+    public String generate(Object userId, String role, Object tenantId) {
+        return generate(userId, role, tenantId, null, null);
     }
 
     public String generate(String subject, Map<String, Object> claims) {
