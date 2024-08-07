@@ -46,7 +46,7 @@ public class ActorContext {
         return Optional.ofNullable(getActor()).map(Actor::getTenantMemberId).orElse(null);
     }
 
-    public Map<String, String> getAttributes() {
+    public Map<String, Object> getAttributes() {
         return Optional.ofNullable(getActor()).map(Actor::getAttributes).orElse(new HashMap<>());
     }
 

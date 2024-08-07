@@ -26,7 +26,7 @@ public class Actor implements Serializable {
     private String tenantId;
     private String tenantMemberId;
     private Instant time;
-    private Map<String,String> attributes;
+    private Map<String,Object> attributes;
 
     public String getActorId() {
         if(StringUtils.isNotBlank(actorId)){

@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Map;
+
 @Data
 @Builder
 @AllArgsConstructor
@@ -16,4 +18,5 @@ public class JwtUserDetails {
     private String role;
     private String tenantId;
     private String tenantMemberId;
+    private Map<String,Object> attributes;
 }
