@@ -4,10 +4,10 @@ import com.trionesdev.commons.lock.TrionesLock;
 import com.trionesdev.commons.lock.TrionesLockTemplate;
 import org.redisson.api.RedissonClient;
 
-public class RedisLockClient implements TrionesLockTemplate {
+public class RedisLockTemplate implements TrionesLockTemplate {
     private final RedissonClient redissonClient;
 
-    public RedisLockClient(RedissonClient redissonClient) {
+    public RedisLockTemplate(RedissonClient redissonClient) {
         this.redissonClient = redissonClient;
     }
 
