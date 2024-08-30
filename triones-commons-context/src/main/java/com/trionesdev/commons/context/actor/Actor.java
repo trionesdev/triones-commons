@@ -9,6 +9,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.Map;
 import java.util.Objects;
 
 @ToString
@@ -25,6 +26,7 @@ public class Actor implements Serializable {
     private String tenantId;
     private String tenantMemberId;
     private Instant time;
+    private Map<String,Object> attributes;
 
     public String getActorId() {
         if(StringUtils.isNotBlank(actorId)){

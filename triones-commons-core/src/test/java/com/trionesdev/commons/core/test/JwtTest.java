@@ -1,5 +1,6 @@
 package com.trionesdev.commons.core.test;
 
+import com.trionesdev.commons.core.jwt.JwtClaims;
 import com.trionesdev.commons.core.jwt.JwtConfig;
 import com.trionesdev.commons.core.jwt.JwtFacade;
 import lombok.extern.slf4j.Slf4j;
@@ -25,7 +26,7 @@ public class JwtTest {
     public void generateToken() {
         JwtConfig jwtConfig = JwtConfig.builder().secret("123456789").expiration(3600).build();
         JwtFacade jwtFacade = new JwtFacade(jwtConfig);
-        String token = jwtFacade.generate("userId", "role", "tenantId", "tenantMemberId");
+        String token = jwtFacade.generate("userId", JwtClaims.builder().build());
         System.out.println(token);
     }
 

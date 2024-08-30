@@ -2,6 +2,8 @@ package com.trionesdev.commons.context.actor;
 
 
 import java.time.Instant;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Supplier;
@@ -42,6 +44,10 @@ public class ActorContext {
 
     public String getMemberId() {
         return Optional.ofNullable(getActor()).map(Actor::getTenantMemberId).orElse(null);
+    }
+
+    public Map<String, Object> getAttributes() {
+        return Optional.ofNullable(getActor()).map(Actor::getAttributes).orElse(new HashMap<>());
     }
 
     public Boolean isEmpty() {
