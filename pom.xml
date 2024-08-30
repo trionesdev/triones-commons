@@ -14,6 +14,7 @@
         <module>triones-commons-i18n</module>
         <module>triones-commons-feign</module>
         <module>triones-commons-security-spring</module>
+        <module>triones-commons-lock</module>
     </modules>
     <groupId>com.trionesdev.commons</groupId>
     <artifactId>triones-commons</artifactId>
@@ -205,6 +206,11 @@
             <dependency>
                 <groupId>com.trionesdev.commons</groupId>
                 <artifactId>triones-commons-exception</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.trionesdev.commons</groupId>
+                <artifactId>triones-commons-lock</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

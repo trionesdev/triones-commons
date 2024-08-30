@@ -40,4 +40,9 @@ public class ExTest {
         }
     }
 
+    public void err_test(){
+        TrionesError error = TrionesError.builder().code("USER_NOT_FOUND").message("用户不存在").build();
+        throw new BusinessException(error);
+    }
+
 }
