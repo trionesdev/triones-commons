@@ -1,6 +1,8 @@
 package com.trionesdev.commons.context.actor;
 
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
@@ -22,7 +24,13 @@ public class ActorContext {
     }
 
     public String getActorId() {
-        return Optional.ofNullable(getActor()).map(Actor::getActorId).orElse(null);
+        return Optional.ofNullable(getActor()).map(actor -> {
+            if (StringUtils.isNotBlank(actor.getActorId())) {
+                return actor.getActorId();
+            } else {
+                return null;
+            }
+        }).orElse(null);
     }
 
     public <T> T getActorId(Class<T> requiredType) {
@@ -30,7 +38,7 @@ public class ActorContext {
         if (Objects.isNull(actor)) {
             return null;
         } else {
-            return requiredType.cast(actor.getActorId());
+            return requiredType.cast(getActorId());
         }
     }
 
