@@ -20,6 +20,7 @@ public class JwtFacade {
             return null;
         }
         Map<String, Object> claims = Maps.newHashMap();
+        claims.put(ACTOR_ID, userId);
         claims.put(ACTOR_USER_ID, userId);
         claims.put(ACTOR_ROLE, claim.getRole());
         claims.put(ACTOR_TENANT_ID, claim.getTenantId());

@@ -28,11 +28,4 @@ public class Actor implements Serializable {
     private Instant time;
     private Map<String,Object> attributes;
 
-    public String getActorId() {
-        if(StringUtils.isNotBlank(actorId)){
-            return this.actorId;
-        }else {
-            return Objects.equals(ActorRoleEnum.TENANT_MEMBER.name(), this.role) ? tenantMemberId : userId;
-        }
-    }
 }
