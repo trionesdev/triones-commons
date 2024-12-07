@@ -7,11 +7,15 @@ public class PermissionDeniedException extends TrionesException {
         super("actor has no permission");
     }
 
-    public PermissionDeniedException(String code, Object... params) {
+    public PermissionDeniedException(String code, Argument... params) {
         super(code, params);
     }
 
-    public PermissionDeniedException(Throwable cause, String code, Object... params) {
+    public PermissionDeniedException(String code, String defaultMessage, Argument... params) {
+        super(code, defaultMessage, params);
+    }
+
+    public PermissionDeniedException(Throwable cause, String code, Argument... params) {
         super(cause, code, params);
     }
 

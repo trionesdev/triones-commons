@@ -16,6 +16,7 @@ import java.io.Serializable;
 public class TrionesError implements Serializable {
     private static final long serialVersionUID = -1926135926270553351L;
     private String code;
+    private Argument[] arguments;
     private String message;
     private Throwable cause;
 }

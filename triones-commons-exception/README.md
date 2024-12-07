@@ -30,3 +30,7 @@
     ExceptionResourceProperties.setResourcePaths("i18n/error");
     throw new TrionesException("USER_NOT_FOUND");
   ```
+  如果不想通过配置文件来处理异常信息，可以直接通过代码
+  ```java
+     throw new BusinessException("SYSTEM_ERROR","测试 {0} {1}",Argument.of("111","222"));
+  ```

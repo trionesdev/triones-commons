@@ -7,15 +7,17 @@ public class NotFoundException extends TrionesException {
         super("not found");
     }
 
-
-    public NotFoundException(String code, Object... params) {
+    public NotFoundException(String code, Argument... params) {
         super(code, params);
     }
 
-    public NotFoundException(Throwable cause, String code, Object... params) {
-        super(cause, code, params);
+    public NotFoundException(String code, String defaultMessage, Argument... params) {
+        super(code, defaultMessage, params);
     }
 
+    public NotFoundException(Throwable cause, String code, Argument... params) {
+        super(cause, code, params);
+    }
 
     public NotFoundException(TrionesError error) {
         super(error);

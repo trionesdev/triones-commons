@@ -32,6 +32,9 @@ public class ExceptionResourceProperties {
                 codeMap.put(locale, localeCodeMap);
             }
         }
+        if (Objects.isNull(localeCodeMap)) {
+            return null;
+        }
         String text = localeCodeMap.get(code);
         if (StringUtils.isBlank(text)) {
             return null;
