@@ -22,15 +22,15 @@ public class TrionesException extends RuntimeException {
         super("triones exception");
     }
 
-    public TrionesException(String code, Argument... params) {
+    public TrionesException(String code, ArgumentValue... params) {
         this( TrionesError.builder().code(code).arguments(params).build());
     }
 
-    public TrionesException(String code, String defaultMessage, Argument... params) {
+    public TrionesException(String code, String defaultMessage, ArgumentValue... params) {
         this(TrionesError.builder().code(code).arguments(params).message(defaultMessage).build());
     }
 
-    public TrionesException(Throwable cause, String code, Argument... params) {
+    public TrionesException(Throwable cause, String code, ArgumentValue... params) {
         this(TrionesError.builder().cause(cause).code(code).arguments(params).build());
     }
 
@@ -39,7 +39,7 @@ public class TrionesException extends RuntimeException {
         this.code = error.getCode();
         Object[] args = new Object[]{};
         if (ArrayUtils.isNotEmpty(error.getArguments())) {
-           args = Arrays.stream(error.getArguments()).map(Argument::getValue).toArray();
+           args = Arrays.stream(error.getArguments()).map(ArgumentValue::getValue).toArray();
         }
         this.message = ExceptionResourceProperties.text(code, args);
         if (StringUtils.isBlank(this.message) && StringUtils.isNotBlank(error.getMessage())) {

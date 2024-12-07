@@ -5,15 +5,15 @@ public class BusinessException extends TrionesException{
         super(TrionesError.builder().message("business exception").build());
     }
 
-    public BusinessException(String code, Argument... params) {
+    public BusinessException(String code, ArgumentValue... params) {
         super(code, params);
     }
 
-    public BusinessException(String code, String defaultMessage, Argument... params) {
+    public BusinessException(String code, String defaultMessage, ArgumentValue... params) {
         super(code, defaultMessage, params);
     }
 
-    public BusinessException(Throwable cause, String code, Argument... params) {
+    public BusinessException(Throwable cause, String code, ArgumentValue... params) {
         super(cause, code, params);
     }
 

@@ -7,15 +7,15 @@ public class InternalRequestException extends TrionesException {
         super(TrionesError.builder().message("internal request exception").build());
     }
 
-    public InternalRequestException(String code, Argument... params) {
+    public InternalRequestException(String code, ArgumentValue... params) {
         super(code, params);
     }
 
-    public InternalRequestException(String code, String defaultMessage, Argument... params) {
+    public InternalRequestException(String code, String defaultMessage, ArgumentValue... params) {
         super(code, defaultMessage, params);
     }
 
-    public InternalRequestException(Throwable cause, String code, Argument... params) {
+    public InternalRequestException(Throwable cause, String code, ArgumentValue... params) {
         super(cause, code, params);
     }
 

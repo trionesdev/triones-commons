@@ -52,12 +52,12 @@ public class ExTest {
 
     @Test
     public void err_test3(){
-        throw new BusinessException("SYSTEM_ERROR","测试 {0}",Argument.of("111"));
+        throw new BusinessException("SYSTEM_ERROR","测试 {0}", ArgumentValue.of("111"));
     }
 
     @Test
     public void err_test4(){
-        throw new BusinessException("SYSTEM_ERROR","测试 {0} {1}",Argument.of("111","222"));
+        throw new BusinessException("SYSTEM_ERROR","测试 {0} {1}", ArgumentValue.of("111","222"));
     }
 
 }

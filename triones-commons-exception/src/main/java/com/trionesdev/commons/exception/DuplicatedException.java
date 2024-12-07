@@ -5,15 +5,15 @@ public class DuplicatedException extends TrionesException {
         super("duplicated");
     }
 
-    public DuplicatedException(String code, Argument... params) {
+    public DuplicatedException(String code, ArgumentValue... params) {
         super(code, params);
     }
 
-    public DuplicatedException(String code, String defaultMessage, Argument... params) {
+    public DuplicatedException(String code, String defaultMessage, ArgumentValue... params) {
         super(code, defaultMessage, params);
     }
 
-    public DuplicatedException(Throwable cause, String code, Argument... params) {
+    public DuplicatedException(Throwable cause, String code, ArgumentValue... params) {
         super(cause, code, params);
     }
 

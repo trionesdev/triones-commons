@@ -5,15 +5,15 @@ public class ValidationException extends TrionesException{
         super(TrionesError.builder().message("validation fail").build());
     }
 
-    public ValidationException(String code, Argument... params) {
+    public ValidationException(String code, ArgumentValue... params) {
         super(code, params);
     }
 
-    public ValidationException(String code, String defaultMessage, Argument... params) {
+    public ValidationException(String code, String defaultMessage, ArgumentValue... params) {
         super(code, defaultMessage, params);
     }
 
-    public ValidationException(Throwable cause, String code, Argument... params) {
+    public ValidationException(Throwable cause, String code, ArgumentValue... params) {
         super(cause, code, params);
     }
 
