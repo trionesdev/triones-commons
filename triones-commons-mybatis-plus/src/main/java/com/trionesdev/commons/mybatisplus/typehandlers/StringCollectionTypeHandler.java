@@ -39,7 +39,8 @@ public class StringCollectionTypeHandler extends AbstractJsonTypeHandler<Collect
     @SneakyThrows
     @Override
     public List<String> parse(String json) {
-        return getObjectMapper().readValue(json, new TypeReference<List<String>>() {});
+        return getObjectMapper().readValue(json, new TypeReference<List<String>>() {
+        });
     }
 
     @SneakyThrows

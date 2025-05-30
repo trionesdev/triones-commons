@@ -11,7 +11,7 @@ public interface TenantLineMultiHandler extends TenantLineHandler {
      * 是否开启多租户查询 支持查询多个租户数据
      * 如果不开启，则与普通多租户一样
      *
-     * @return
+     * @return boolean
      */
     default boolean enableTenantMulti() {
         return false;

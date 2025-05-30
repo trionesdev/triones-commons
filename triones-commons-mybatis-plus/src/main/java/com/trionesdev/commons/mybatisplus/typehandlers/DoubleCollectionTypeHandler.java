@@ -39,7 +39,8 @@ public class DoubleCollectionTypeHandler extends AbstractJsonTypeHandler<Collect
     @SneakyThrows
     @Override
     public List<Double> parse(String json) {
-        return getObjectMapper().readValue(json, new TypeReference<List<Double>>() {});
+        return getObjectMapper().readValue(json, new TypeReference<List<Double>>() {
+        });
     }
 
     @SneakyThrows

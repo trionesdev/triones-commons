@@ -4,6 +4,7 @@ import com.trionesdev.commons.lock.TrionesLock;
 import com.trionesdev.commons.lock.TrionesLockTemplate;
 
 public class ThreadLockTemplate implements TrionesLockTemplate {
+    @Override
     public TrionesLock getLock(String lockName) {
         return new TrionesThreadLock(lockName);
     }

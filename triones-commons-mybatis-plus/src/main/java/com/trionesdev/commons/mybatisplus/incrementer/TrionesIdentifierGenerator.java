@@ -8,11 +8,14 @@ import java.net.InetAddress;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
+/**
+ * 自定义Id生成器
+ */
 public class TrionesIdentifierGenerator implements IdentifierGenerator {
     private final Sequence sequence;
 
     @SneakyThrows
-    public TrionesIdentifierGenerator(){
+    public TrionesIdentifierGenerator() {
         InetAddress inetAddress = InetAddress.getLocalHost();
         this.sequence = new Sequence(inetAddress);
     }

@@ -12,7 +12,9 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import net.sf.jsqlparser.expression.Expression;
-import net.sf.jsqlparser.expression.operators.relational.*;
+import net.sf.jsqlparser.expression.operators.relational.EqualsTo;
+import net.sf.jsqlparser.expression.operators.relational.ExpressionList;
+import net.sf.jsqlparser.expression.operators.relational.InExpression;
 import net.sf.jsqlparser.schema.Column;
 import net.sf.jsqlparser.schema.Table;
 import net.sf.jsqlparser.statement.select.Select;
@@ -20,6 +22,10 @@ import net.sf.jsqlparser.statement.select.WithItem;
 
 import java.util.List;
 import java.util.Properties;
+
+/**
+ * 多租户插件
+ */
 
 @Data
 @NoArgsConstructor
@@ -66,7 +72,7 @@ public class TenantLineMultiInnerInterceptor extends TenantLineInnerInterceptor 
         if (itemsList instanceof ExpressionList) {
             ExpressionList expressionList = (ExpressionList) itemsList;
             return CollectionUtils.isNotEmpty(expressionList) && expressionList.size() > 1;
-        }  else if (itemsList instanceof Select) {
+        } else if (itemsList instanceof Select) {
             List<WithItem> withItems = ((Select) itemsList).getWithItemsList();
             return CollectionUtils.isNotEmpty(withItems) && withItems.size() > 1;
         }

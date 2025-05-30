@@ -39,7 +39,8 @@ public class IntegerCollectionTypeHandler extends AbstractJsonTypeHandler<Collec
     @SneakyThrows
     @Override
     public List<Integer> parse(String json) {
-        return getObjectMapper().readValue(json, new TypeReference<List<Integer>>() {});
+        return getObjectMapper().readValue(json, new TypeReference<List<Integer>>() {
+        });
     }
 
     @SneakyThrows
