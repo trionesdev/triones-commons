@@ -4,7 +4,7 @@
     <parent>
         <groupId>com.trionesdev.commons</groupId>
         <artifactId>triones-commons</artifactId>
-        <version>1.0.1-SNAPSHOT</version>
+        <version>0.0.1-SNAPSHOT</version>
     </parent>
     <artifactId>triones-commons-lock</artifactId>
     <name>Triones:Commons:Lock</name>

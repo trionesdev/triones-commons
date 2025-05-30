@@ -11,6 +11,7 @@ import lombok.experimental.SuperBuilder;
 import java.io.Serializable;
 import java.time.Instant;
 
+@Deprecated
 @Data
 @Accessors(chain = true)
 @SuperBuilder

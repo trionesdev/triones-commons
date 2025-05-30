@@ -1,7 +1,5 @@
 package com.trionesdev.commons.lock.thread;
 
-import io.netty.util.concurrent.CompleteFuture;
-
 import java.time.Instant;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
