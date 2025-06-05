@@ -8,6 +8,10 @@ import com.trionesdev.commons.core.util.PageUtils;
 
 import java.util.List;
 
+/**
+ * 分页工具类
+ */
+
 public class MpPageUtils extends PageUtils {
     public static <T> PageInfo<T> of(IPage<T> pageInfo) {
         PageInfo<T> page = new PageInfo<>();

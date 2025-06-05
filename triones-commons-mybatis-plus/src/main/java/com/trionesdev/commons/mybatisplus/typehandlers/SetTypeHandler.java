@@ -9,7 +9,6 @@ import org.apache.ibatis.type.MappedTypes;
 
 import java.lang.reflect.Field;
 import java.util.Collection;
-import java.util.List;
 import java.util.Set;
 
 @Slf4j

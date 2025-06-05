@@ -39,7 +39,8 @@ public class LongCollectionTypeHandler extends AbstractJsonTypeHandler<Collectio
     @SneakyThrows
     @Override
     public List<Long> parse(String json) {
-        return getObjectMapper().readValue(json, new TypeReference<List<Long>>() {});
+        return getObjectMapper().readValue(json, new TypeReference<List<Long>>() {
+        });
     }
 
     @SneakyThrows

@@ -39,7 +39,8 @@ public class BooleanCollectionTypeHandler extends AbstractJsonTypeHandler<Collec
     @SneakyThrows
     @Override
     public List<Boolean> parse(String json) {
-        return getObjectMapper().readValue(json, new TypeReference<List<Boolean>>() {});
+        return getObjectMapper().readValue(json, new TypeReference<List<Boolean>>() {
+        });
     }
 
     @SneakyThrows

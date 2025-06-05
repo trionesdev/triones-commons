@@ -11,6 +11,7 @@ public class RedisLockTemplate implements TrionesLockTemplate {
         this.redissonClient = redissonClient;
     }
 
+    @Override
     public TrionesLock getLock(String lockName) {
         return new TrionesRedisLock(redissonClient.getLock(lockName));
     }

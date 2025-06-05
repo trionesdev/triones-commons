@@ -5,13 +5,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
-import org.apache.commons.lang3.StringUtils;
 
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.Map;
-import java.util.Objects;
 
+/**
+ * 代表系统中的参与者（Actor），如用户、系统等。
+ */
 @ToString
 @Data
 @SuperBuilder
@@ -26,6 +27,6 @@ public class Actor implements Serializable {
     private String tenantId;
     private String tenantMemberId;
     private Instant time;
-    private Map<String,Object> attributes;
+    private Map<String, Object> attributes;
 
 }

@@ -20,7 +20,7 @@ public abstract class SpecificTypeHandler<T> extends AbstractJsonTypeHandler<T> 
 
     private static ObjectMapper OBJECT_MAPPER;
 
-    public SpecificTypeHandler(){
+    public SpecificTypeHandler() {
         super(Object.class);
     }
 
@@ -44,7 +44,7 @@ public abstract class SpecificTypeHandler<T> extends AbstractJsonTypeHandler<T> 
     @SneakyThrows
     @Override
     public T parse(String json) {
-        return getObjectMapper().readValue(json,typeReference());
+        return getObjectMapper().readValue(json, typeReference());
     }
 
     @SneakyThrows

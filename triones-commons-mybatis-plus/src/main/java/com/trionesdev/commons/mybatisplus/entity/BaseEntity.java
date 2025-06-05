@@ -11,6 +11,9 @@ import lombok.experimental.SuperBuilder;
 import java.io.Serializable;
 import java.time.Instant;
 
+/**
+ * latest {@link com.trionesdev.commons.mybatisplus.po.BasePO}
+ */
 @Deprecated
 @Data
 @Accessors(chain = true)

@@ -39,7 +39,8 @@ public class FloatCollectionTypeHandler extends AbstractJsonTypeHandler<Collecti
     @SneakyThrows
     @Override
     public List<Float> parse(String json) {
-        return getObjectMapper().readValue(json, new TypeReference<List<Float>>() {});
+        return getObjectMapper().readValue(json, new TypeReference<List<Float>>() {
+        });
     }
 
     @SneakyThrows

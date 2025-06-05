@@ -11,6 +11,9 @@ import lombok.experimental.SuperBuilder;
 import java.io.Serializable;
 import java.time.Instant;
 
+/**
+ * 实体类基类
+ */
 @Data
 @Accessors(chain = true)
 @SuperBuilder
