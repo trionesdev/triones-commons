@@ -8,6 +8,9 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 
+/**
+ * 文件路径工具类
+ */
 public class FilePathUtils {
     private FilePathUtils() {
     }

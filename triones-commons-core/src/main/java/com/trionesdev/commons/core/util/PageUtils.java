@@ -4,6 +4,9 @@ import com.trionesdev.commons.core.page.PageInfo;
 
 import java.util.List;
 
+/**
+ * 分页工具类
+ */
 public class PageUtils {
 
     public static <T, E> PageInfo<E> of(PageInfo<T> pageInfo, List<E> data) {

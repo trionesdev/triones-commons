@@ -6,6 +6,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.Objects;
 
 /**
+ * ID工具类
  * @author bane.shi
  */
 public class IdentityUtils {
