@@ -17,6 +17,9 @@ import java.io.IOException;
 import java.time.Instant;
 import java.util.*;
 
+/**
+ * json 工具类
+ */
 @Slf4j
 public class JsonUtils {
     private static ObjectMapper OBJECT_MAPPER;
