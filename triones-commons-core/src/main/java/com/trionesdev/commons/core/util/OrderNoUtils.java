@@ -1,7 +1,5 @@
 package com.trionesdev.commons.core.util;
 
-import cn.hutool.core.lang.Snowflake;
-import cn.hutool.core.util.IdUtil;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
@@ -13,17 +11,14 @@ import java.util.UUID;
 
 /**
  * 订单序列号工具类
- * 集成 Apache Commons Lang3 和 Hutool Snowflake & 实现灵活长度配置
+ * 集成 Apache Commons Lang3
+ * 实现灵活长度配置
  */
 public class OrderNoUtils {
     /**
      * 默认随机位数
      */
     private static int defaultRandomDigits = 6;
-    /**
-     * Hutool 雪花算法实例 (datacenterId=1, workerId=1)
-     */
-    private static final Snowflake snowflake = IdUtil.getSnowflake(1, 1);
 
     /**
      * 设置默认随机位数
@@ -84,12 +79,13 @@ public class OrderNoUtils {
     }
 
     /**
-     * 生成 Hutool Snowflake 算法订单号，可指定输出长度
+     * 生成 Snowflake 算法订单号，可指定输出长度
      *
      * @param length 目标长度
      */
     public static String generateSnowflakeOrderNo(int length) {
-        String id = String.valueOf(snowflake.nextId());
+        SnowflakeUtil idWorker = new SnowflakeUtil(1, 1);
+        String id = String.valueOf(idWorker.nextId());
         return adjustLength(id, length);
     }
 

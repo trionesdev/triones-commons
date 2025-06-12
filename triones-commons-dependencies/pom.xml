@@ -152,11 +152,6 @@
                 <version>23.0.0</version>
                 <scope>compile</scope>
             </dependency>
-            <dependency>
-                <groupId>cn.hutool</groupId>
-                <artifactId>hutool-all</artifactId>
-                <version>5.8.31</version>
-            </dependency>
 
             <!--moensun commons-->
             <dependency>
