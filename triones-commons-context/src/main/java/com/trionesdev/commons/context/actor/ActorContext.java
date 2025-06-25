@@ -1,13 +1,11 @@
 package com.trionesdev.commons.context.actor;
 
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.time.Instant;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Supplier;
 
 public class ActorContext {
@@ -78,16 +76,52 @@ public class ActorContext {
         return Objects.nonNull(date) ? String.valueOf(date.toEpochMilli()) : null;
     }
 
-    public boolean oneself(Object userId) {
+    public boolean actorOneself(Object operatorId) {
         Object actorId = getActorId();
-        if (Objects.isNull(actorId) || Objects.isNull(userId)) {
+        if (Objects.isNull(actorId) || Objects.isNull(operatorId)) {
             return false;
         }
-        return Objects.equals(actorId, userId);
+        return Objects.equals(actorId, operatorId);
     }
 
-    public boolean hasPermission(Object operateId) {
-        return oneself(operateId) || Objects.equals(getRole(), ActorRoleEnum.BOSS_USER.name());
+    public boolean userOneself(Object operatorId) {
+        Object userId = getUserId();
+        if (Objects.isNull(userId) || Objects.isNull(operatorId)) {
+            return false;
+        }
+        return Objects.equals(userId, operatorId);
+    }
+
+    public boolean memberOneself(Object operatorId) {
+        Object memberId = getMemberId();
+        if (Objects.isNull(memberId) || Objects.isNull(operatorId)) {
+            return false;
+        }
+        return Objects.equals(memberId, operatorId);
+    }
+
+    public boolean hasActorPermission(Object operateId) {
+        return actorOneself(operateId) || Objects.equals(getRole(), ActorRoleEnum.BOSS_USER.name());
+    }
+
+    public boolean hasUserPermission(Object operateId) {
+        return userOneself(operateId) || Objects.equals(getRole(), ActorRoleEnum.BOSS_USER.name());
+    }
+
+    public boolean hasMemberPermission(Object operateId) {
+        return memberOneself(operateId) || Objects.equals(getRole(), ActorRoleEnum.BOSS_USER.name());
+    }
+
+    public boolean hasActorPermission(Collection<Object> operateIds) {
+        return CollectionUtils.containsAny(operateIds, getActorId()) || Objects.equals(getRole(), ActorRoleEnum.BOSS_USER.name());
+    }
+
+    public boolean hasUserPermission(Collection<Object> operateIds) {
+        return CollectionUtils.containsAny(operateIds, getUserId()) || Objects.equals(getRole(), ActorRoleEnum.BOSS_USER.name());
+    }
+
+    public boolean hasMemberPermission(Collection<Object> operateIds) {
+        return CollectionUtils.containsAny(operateIds, getMemberId()) || Objects.equals(getRole(), ActorRoleEnum.BOSS_USER.name());
     }
 
     public void resetActor() {

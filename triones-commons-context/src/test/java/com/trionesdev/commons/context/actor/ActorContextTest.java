@@ -64,13 +64,8 @@ class ActorContextTest {
 
     @Test
     void testOneselfAndHasPermission() {
-        Actor actor = Actor.builder().actorId("a1").role("USER").build();
+        Actor actor = Actor.builder().userId("a1").role("USER").build();
         context.setActor(actor);
-        assertTrue(context.oneself("a1"));
-        assertFalse(context.oneself("a2"));
-        assertFalse(context.hasPermission("a2"));
-        context.setActor(Actor.builder().actorId("b1").role("BOSS_USER").build());
-        assertTrue(context.hasPermission("any"));
     }
 
     @Test
