@@ -139,6 +139,7 @@ public class JacksonTest {
     @Builder
     @AllArgsConstructor
     @NoArgsConstructor
+    @JsonIgnoreProperties(ignoreUnknown = true)
     public static class Person {
         private String name;
         private Integer age;
