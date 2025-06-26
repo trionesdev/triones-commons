@@ -2,6 +2,7 @@ package com.trionesdev.commons.context.actor;
 
 
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.time.Instant;
@@ -100,29 +101,18 @@ public class ActorContext {
         return Objects.equals(memberId, operatorId);
     }
 
-    public boolean hasActorPermission(Object operateId) {
-        return actorOneself(operateId) || Objects.equals(getRole(), ActorRoleEnum.BOSS_USER.name());
+    public boolean hasActorPermission(Object... operateIds) {
+        return ArrayUtils.contains(operateIds, getActorId()) || Objects.equals(getRole(), ActorRoleEnum.BOSS_USER.name());
     }
 
-    public boolean hasUserPermission(Object operateId) {
-        return userOneself(operateId) || Objects.equals(getRole(), ActorRoleEnum.BOSS_USER.name());
+    public boolean hasUserPermission(Object... operateIds) {
+        return ArrayUtils.contains(operateIds, getUserId()) || Objects.equals(getRole(), ActorRoleEnum.BOSS_USER.name());
     }
 
-    public boolean hasMemberPermission(Object operateId) {
-        return memberOneself(operateId) || Objects.equals(getRole(), ActorRoleEnum.BOSS_USER.name());
+    public boolean hasMemberPermission(Object... operateIds) {
+        return ArrayUtils.contains(operateIds, getMemberId()) || Objects.equals(getRole(), ActorRoleEnum.BOSS_USER.name());
     }
 
-    public boolean hasActorPermission(Collection<Object> operateIds) {
-        return CollectionUtils.containsAny(operateIds, getActorId()) || Objects.equals(getRole(), ActorRoleEnum.BOSS_USER.name());
-    }
-
-    public boolean hasUserPermission(Collection<Object> operateIds) {
-        return CollectionUtils.containsAny(operateIds, getUserId()) || Objects.equals(getRole(), ActorRoleEnum.BOSS_USER.name());
-    }
-
-    public boolean hasMemberPermission(Collection<Object> operateIds) {
-        return CollectionUtils.containsAny(operateIds, getMemberId()) || Objects.equals(getRole(), ActorRoleEnum.BOSS_USER.name());
-    }
 
     public void resetActor() {
         ActorContextHolder.resetActor();
