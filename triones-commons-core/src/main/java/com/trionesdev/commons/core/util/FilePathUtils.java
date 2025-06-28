@@ -1,18 +1,26 @@
 package com.trionesdev.commons.core.util;
 
-import java.util.Arrays;
-import java.util.Calendar;
-
-import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
+
+import java.util.Arrays;
+import java.util.Calendar;
 
 /**
  * 文件路径工具类
  */
 public class FilePathUtils {
     private FilePathUtils() {
+    }
+
+    public static String extension(String filename, String contentType) {
+        String extension = extension(filename);
+        if (!StringUtils.isBlank(extension)) {
+            return extension;
+        }
+        String[] contentTypeStrings = contentType.split("/");
+        return contentTypeStrings[contentTypeStrings.length - 1];
     }
 
     public static String extension(String filename) {
@@ -33,6 +41,10 @@ public class FilePathUtils {
         }
     }
 
+    public static String randomFilename(String fileName, String contentType) {
+        return RandomStringUtils.randomAlphabetic(32) + extension(fileName, contentType);
+    }
+
     public static String randomFilename(String fileName) {
         return RandomStringUtils.randomAlphabetic(32) + extension(fileName);
     }
@@ -43,6 +55,10 @@ public class FilePathUtils {
 
     public static String randomNameDatePath(String fileName) {
         return datePath() + "/" + randomFilename(fileName);
+    }
+
+    public static String randomNameDatePath(String fileName, String contentType) {
+        return datePath() + "/" + randomFilename(fileName, contentType);
     }
 
     public static String datePath() {
@@ -67,20 +83,20 @@ public class FilePathUtils {
         return path;
     }
 
-    public static String joinPrefix(String path, String domain) {
+    public static String joinPrefix(String path, String prefix) {
         if (StringUtils.isEmpty(path)) {
             return "";
         }
-        if (StringUtils.isBlank(domain)) {
+        if (StringUtils.isBlank(prefix)) {
             return path;
         }
         if (!path.startsWith("http") && !path.startsWith("https")) {
-            if (domain.endsWith("://")) {
-                return domain + path;
-            } else if (!domain.endsWith("/") && !path.startsWith("/")) {
-                return domain + "/" + path;
+            if (prefix.endsWith("://")) {
+                return prefix + path;
+            } else if (!prefix.endsWith("/") && !path.startsWith("/")) {
+                return prefix + "/" + path;
             } else {
-                return domain + path;
+                return prefix + path;
             }
         }
         return path;
@@ -93,7 +109,7 @@ public class FilePathUtils {
         StringBuilder sb = new StringBuilder();
         Arrays.asList(paths).forEach(t -> {
             if (StringUtils.isNotBlank(t)) {
-                if(StringUtils.isNotBlank(sb.toString())){
+                if (StringUtils.isNotBlank(sb.toString())) {
                     boolean beforeEnd = StringUtils.endsWith(sb.toString(), "/");
                     boolean pathStart = StringUtils.startsWith(t, "/");
                     if (!beforeEnd && !pathStart) {
