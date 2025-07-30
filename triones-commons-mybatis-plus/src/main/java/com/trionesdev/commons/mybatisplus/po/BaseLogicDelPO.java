@@ -1,0 +1,23 @@
+package com.trionesdev.commons.mybatisplus.po;
+
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableLogic;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
+import lombok.experimental.SuperBuilder;
+
+@EqualsAndHashCode(callSuper = true)
+@Data
+@Accessors(chain = true)
+@SuperBuilder
+@AllArgsConstructor
+@NoArgsConstructor
+public class BaseLogicDelPO extends BasePO{
+    @TableLogic(value = "false", delval = "true")
+    @TableField(value = "is_deleted", fill = FieldFill.INSERT)
+    private Boolean deleted;
+}
