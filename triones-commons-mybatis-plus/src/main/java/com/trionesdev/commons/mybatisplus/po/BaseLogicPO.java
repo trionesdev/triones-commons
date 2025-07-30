@@ -23,4 +23,8 @@ public class BaseLogicPO extends BasePO {
     @TableLogic(value = "false", delval = "true")
     @TableField(value = "is_deleted", fill = FieldFill.INSERT)
     private Boolean deleted;
+    @TableField(fill = FieldFill.INSERT)
+    private String createdBy;
+    @TableField(fill = FieldFill.INSERT_UPDATE)
+    private String updatedBy;
 }

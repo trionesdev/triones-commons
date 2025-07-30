@@ -4,18 +4,15 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.Objects;
 
-public enum ActorRoleEnum {
+public enum UserSystem {
     USER,//个人用户
-    TENANT,
-    @Deprecated
-    TENANT_MEMBER, //租户
+    TENANT, //租户
     ADMIN,//管理人员
-    AGENT,//代理商
-    BOSS_USER;
+    AGENT;
 
-    public static ActorRoleEnum getByName(String val) {
+    public static UserSystem getByName(String val) {
         if (StringUtils.isNotBlank(val)) {
-            for (ActorRoleEnum item : ActorRoleEnum.values()) {
+            for (UserSystem item : UserSystem.values()) {
                 if (Objects.equals(val, item.name())) {
                     return item;
                 }

@@ -1,7 +1,6 @@
 package com.trionesdev.commons.context.actor;
 
 
-import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -77,6 +76,27 @@ public class ActorContext {
         return Objects.nonNull(date) ? String.valueOf(date.toEpochMilli()) : null;
     }
 
+    public boolean oneself(Object operatorId){
+        if (Objects.isNull(operatorId)){
+            return false;
+        }
+        ActorRoleEnum role = ActorRoleEnum.getByName(getRole());
+        switch (role){
+            case USER:
+                return Objects.equals(operatorId, getUserId());
+            case TENANT:
+            case TENANT_MEMBER:
+                return Objects.equals(operatorId, getMemberId());
+            case ADMIN:
+                return true;
+            case AGENT:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    @Deprecated
     public boolean actorOneself(Object operatorId) {
         Object actorId = getActorId();
         if (Objects.isNull(actorId) || Objects.isNull(operatorId)) {
@@ -85,6 +105,7 @@ public class ActorContext {
         return Objects.equals(actorId, operatorId);
     }
 
+    @Deprecated
     public boolean userOneself(Object operatorId) {
         Object userId = getUserId();
         if (Objects.isNull(userId) || Objects.isNull(operatorId)) {
@@ -93,6 +114,7 @@ public class ActorContext {
         return Objects.equals(userId, operatorId);
     }
 
+    @Deprecated
     public boolean memberOneself(Object operatorId) {
         Object memberId = getMemberId();
         if (Objects.isNull(memberId) || Objects.isNull(operatorId)) {
@@ -101,14 +123,17 @@ public class ActorContext {
         return Objects.equals(memberId, operatorId);
     }
 
+    @Deprecated
     public boolean hasActorPermission(Object... operateIds) {
         return ArrayUtils.contains(operateIds, getActorId()) || Objects.equals(getRole(), ActorRoleEnum.BOSS_USER.name());
     }
 
+    @Deprecated
     public boolean hasUserPermission(Object... operateIds) {
         return ArrayUtils.contains(operateIds, getUserId()) || Objects.equals(getRole(), ActorRoleEnum.BOSS_USER.name());
     }
 
+    @Deprecated
     public boolean hasMemberPermission(Object... operateIds) {
         return ArrayUtils.contains(operateIds, getMemberId()) || Objects.equals(getRole(), ActorRoleEnum.BOSS_USER.name());
     }

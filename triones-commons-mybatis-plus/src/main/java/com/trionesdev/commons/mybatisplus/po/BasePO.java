@@ -22,10 +22,6 @@ import java.time.Instant;
 public class BasePO implements Serializable {
     @TableField(fill = FieldFill.INSERT)
     private Instant createdAt;
-    @TableField(fill = FieldFill.INSERT)
-    private String createdBy;
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private Instant updatedAt;
-    @TableField(fill = FieldFill.INSERT_UPDATE)
-    private String updatedBy;
 }
