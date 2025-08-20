@@ -14,6 +14,8 @@ import java.util.Map;
 public class JwtClaims {
     private String role;
     private Object tenantId;
+    private Object userId;
+    private Object memberId;
     private Object tenantMemberId;
     private Map<String,Object> attributes;
 }

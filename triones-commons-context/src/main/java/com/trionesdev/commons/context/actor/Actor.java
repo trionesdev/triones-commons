@@ -26,6 +26,7 @@ public class Actor implements Serializable {
     private String userId;
     private String memberId;
     private String tenantId;
+    @Deprecated
     private String tenantMemberId;
     private Instant time;
     private Map<String, Object> attributes;
