@@ -82,14 +82,14 @@ public class ActorContext {
         }
         ActorRoleEnum role = ActorRoleEnum.getByName(getRole());
         switch (role){
-            case USER:
+            case PERSONAL_USER:
                 return Objects.equals(operatorId, getUserId());
-            case TENANT:
+            case TENANT_USER:
             case TENANT_MEMBER:
                 return Objects.equals(operatorId, getMemberId());
-            case ADMIN:
+            case ADMIN_USER:
                 return true;
-            case AGENT:
+            case AGENT_USER:
                 return true;
             default:
                 return false;
