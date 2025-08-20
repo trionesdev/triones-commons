@@ -5,12 +5,11 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.Objects;
 
 public enum ActorRoleEnum {
-    USER,//个人用户
-    TENANT,
-    @Deprecated
+    PERSONAL_USER,//个人用户
+    TENANT_USER,
     TENANT_MEMBER, //租户
-    ADMIN,//管理人员
-    AGENT,//代理商
+    ADMIN_USER,//管理人员
+    AGENT_USER,//代理商
     BOSS_USER;
 
     public static ActorRoleEnum getByName(String val) {
