@@ -5,6 +5,11 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.Objects;
 
 public enum ActorRoleEnum {
+    /**
+     * USER si deprecated ,use PERSONAL_USER inside.
+     */
+    @Deprecated
+    USER,
     PERSONAL_USER,//个人用户
     TENANT_USER,
     TENANT_MEMBER, //租户

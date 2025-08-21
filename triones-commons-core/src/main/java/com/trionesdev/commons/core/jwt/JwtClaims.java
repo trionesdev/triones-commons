@@ -16,6 +16,7 @@ public class JwtClaims {
     private Object tenantId;
     private Object userId;
     private Object memberId;
+    @Deprecated
     private Object tenantMemberId;
     private Map<String,Object> attributes;
 }

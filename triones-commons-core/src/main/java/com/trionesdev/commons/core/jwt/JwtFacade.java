@@ -24,6 +24,7 @@ public class JwtFacade {
         claims.put(ACTOR_USER_ID, userId);
         claims.put(ACTOR_ROLE, claim.getRole());
         claims.put(ACTOR_TENANT_ID, claim.getTenantId());
+        claims.put(ACTOR_MEMBER_ID, claim.getMemberId());
         claims.put(ACTOR_TENANT_MEMBER_ID, claim.getTenantMemberId());
         claims.put(ACTOR_ATTRIBUTES, claim.getAttributes());
         return JwtUtils.generateToken(jwtConfig, String.valueOf(userId), claims);
