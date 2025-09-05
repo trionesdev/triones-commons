@@ -6,12 +6,12 @@ import lombok.experimental.SuperBuilder;
 import java.util.Collections;
 import java.util.List;
 
+@Deprecated
 @EqualsAndHashCode(callSuper = true)
 @Data
 @SuperBuilder
 @AllArgsConstructor
 @NoArgsConstructor
-@Deprecated
 public class MSPageInfo<T> extends PageInfo<T> {
     private static final long serialVersionUID = 7156771088266349472L;
     private int pageNum;
