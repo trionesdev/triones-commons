@@ -49,7 +49,7 @@ public class ActorContext {
     }
 
     public String getMemberId() {
-        return Optional.ofNullable(getActor()).map(Actor::getTenantMemberId).orElse(null);
+        return Optional.ofNullable(getActor()).map(Actor::getMemberId).orElse(null);
     }
 
     public Map<String, Object> getAttributes() {
@@ -58,7 +58,7 @@ public class ActorContext {
 
     public Boolean isEmpty() {
         return Optional.ofNullable(getActor()).map(actor -> {
-            return Objects.isNull(actor.getActorId()) && Objects.isNull(actor.getTenantMemberId()) && Objects.isNull(actor.getUserId());
+            return Objects.isNull(actor.getActorId()) && Objects.isNull(actor.getMemberId()) && Objects.isNull(actor.getUserId());
         }).orElse(true);
     }
 
@@ -81,7 +81,7 @@ public class ActorContext {
             return false;
         }
         ActorRoleEnum role = ActorRoleEnum.getByName(getRole());
-        switch (role){
+        switch (Objects.requireNonNull(role)){
             case PERSONAL_USER:
                 return Objects.equals(operatorId, getUserId());
             case TENANT_USER:
