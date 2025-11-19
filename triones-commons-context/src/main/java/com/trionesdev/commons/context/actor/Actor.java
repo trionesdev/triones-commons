@@ -29,6 +29,9 @@ public class Actor implements Serializable {
     @Deprecated
     private String tenantMemberId;
     private Instant time;
+    private String ipAddress;
+    private String userAgent;
+    private String clientOs;
     private Map<String, Object> attributes;
 
 }
