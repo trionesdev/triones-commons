@@ -3,13 +3,13 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>triones-commons</artifactId>
         <groupId>com.trionesdev.commons</groupId>
-        <version>0.0.1-SNAPSHOT</version>
+        <artifactId>commons</artifactId>
+        <version>0.0.2-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <name>Triones:Commons:Feign</name>
-    <artifactId>triones-commons-feign</artifactId>
+    <artifactId>commons-feign</artifactId>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
@@ -31,7 +31,7 @@
         </dependency>
         <dependency>
             <groupId>com.trionesdev.commons</groupId>
-            <artifactId>triones-commons-exception</artifactId>
+            <artifactId>commons-exception</artifactId>
         </dependency>
         <dependency>
             <groupId>com.google.guava</groupId>

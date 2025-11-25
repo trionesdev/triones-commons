@@ -6,18 +6,18 @@
     <packaging>pom</packaging>
     <name>Triones:Commons</name>
     <modules>
-        <module>triones-commons-core</module>
-        <module>triones-commons-exception</module>
-        <module>triones-commons-mybatis-plus</module>
-        <module>triones-commons-context</module>
-        <module>triones-commons-i18n</module>
-        <module>triones-commons-feign</module>
-        <module>triones-commons-lock</module>
-        <module>triones-commons-dependencies</module>
+        <module>commons-core</module>
+        <module>commons-exception</module>
+        <module>commons-mybatis-plus</module>
+        <module>commons-context</module>
+        <module>commons-i18n</module>
+        <module>commons-feign</module>
+        <module>commons-lock</module>
+        <module>commons-dependencies</module>
     </modules>
     <groupId>com.trionesdev.commons</groupId>
-    <artifactId>triones-commons</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <artifactId>commons</artifactId>
+    <version>0.0.2-SNAPSHOT</version>
     <description>TrionesDev java commons</description>
     <scm>
         <url>https://github.com/trionesdev/triones-commons.git</url>
@@ -47,7 +47,7 @@
         <dependencies>
             <dependency>
                 <groupId>com.trionesdev.commons</groupId>
-                <artifactId>triones-commons-dependencies</artifactId>
+                <artifactId>commons-dependencies</artifactId>
                 <version>${project.version}</version>
                 <type>pom</type>
                 <scope>import</scope>

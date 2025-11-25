@@ -3,10 +3,10 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.trionesdev.commons</groupId>
-        <artifactId>triones-commons</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <artifactId>commons</artifactId>
+        <version>0.0.2-SNAPSHOT</version>
     </parent>
-    <artifactId>triones-commons-lock</artifactId>
+    <artifactId>commons-lock</artifactId>
     <name>Triones:Commons:Lock</name>
 
     <properties>

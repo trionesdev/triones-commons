@@ -3,13 +3,13 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>triones-commons</artifactId>
         <groupId>com.trionesdev.commons</groupId>
-        <version>0.0.1-SNAPSHOT</version>
+        <artifactId>commons</artifactId>
+        <version>0.0.2-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <name>Triones:Commons:Core</name>
-    <artifactId>triones-commons-core</artifactId>
+    <artifactId>commons-core</artifactId>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -58,7 +58,7 @@
         </dependency>
         <dependency>
             <groupId>com.trionesdev.commons</groupId>
-            <artifactId>triones-commons-i18n</artifactId>
+            <artifactId>commons-i18n</artifactId>
         </dependency>
         <dependency>
             <groupId>org.jsoup</groupId>

@@ -2,8 +2,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.trionesdev.commons</groupId>
-    <artifactId>triones-commons-dependencies</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <artifactId>commons-dependencies</artifactId>
+    <version>0.0.2-SNAPSHOT</version>
     <name>Triones:Commons:Dependencies</name>
     <packaging>pom</packaging>
 
@@ -156,37 +156,37 @@
             <!--moensun commons-->
             <dependency>
                 <groupId>com.trionesdev.commons</groupId>
-                <artifactId>triones-commons-core</artifactId>
+                <artifactId>commons-core</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.trionesdev.commons</groupId>
-                <artifactId>triones-commons-context</artifactId>
+                <artifactId>commons-context</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.trionesdev.commons</groupId>
-                <artifactId>triones-commons-i18n</artifactId>
+                <artifactId>commons-i18n</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.trionesdev.commons</groupId>
-                <artifactId>triones-commons-exception</artifactId>
+                <artifactId>commons-exception</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.trionesdev.commons</groupId>
-                <artifactId>triones-commons-lock</artifactId>
+                <artifactId>commons-lock</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.trionesdev.commons</groupId>
-                <artifactId>triones-commons-feign</artifactId>
+                <artifactId>commons-feign</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.trionesdev.commons</groupId>
-                <artifactId>triones-commons-mybatis-plus</artifactId>
+                <artifactId>commons-mybatis-plus</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <!--moensun commons-->
