@@ -6,17 +6,11 @@
     <packaging>pom</packaging>
     <name>Triones:Commons</name>
     <modules>
-        <module>commons-core</module>
-        <module>commons-exception</module>
-        <module>commons-mybatis-plus</module>
-        <module>commons-context</module>
-        <module>commons-i18n</module>
-        <module>commons-feign</module>
-        <module>commons-lock</module>
         <module>commons-dependencies</module>
+        <module>commons</module>
     </modules>
     <groupId>com.trionesdev.commons</groupId>
-    <artifactId>commons</artifactId>
+    <artifactId>triones-commons</artifactId>
     <version>0.0.2-SNAPSHOT</version>
     <description>TrionesDev java commons</description>
     <scm>
@@ -42,18 +36,6 @@
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
     </properties>
-
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>com.trionesdev.commons</groupId>
-                <artifactId>commons-dependencies</artifactId>
-                <version>${project.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
 
     <profiles>
         <profile>
