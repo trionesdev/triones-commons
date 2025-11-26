@@ -12,6 +12,7 @@ class ActorConstantsTest {
         assertEquals("X-Request-UserId", ActorConstants.X_USER_ID);
         assertEquals("X-Request-TenantId", ActorConstants.X_TENANT_ID);
         assertEquals("X-Request-Tenant-MemberId", ActorConstants.X_TENANT_MEMBER_ID);
+        assertEquals("X-Request-MemberId", ActorConstants.X_MEMBER_ID);
         assertEquals("X-Request-Role", ActorConstants.X_ROLE);
         assertEquals("X-Request-Time", ActorConstants.X_TIME);
         assertEquals("traceId", ActorConstants.MDC_TRACE_ID);

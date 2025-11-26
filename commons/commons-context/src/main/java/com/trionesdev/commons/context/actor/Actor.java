@@ -21,6 +21,7 @@ import java.util.Map;
 public class Actor implements Serializable {
 
     private static final long serialVersionUID = -2388323070328532598L;
+    private String traceId;
     private String role;
     private String actorId;
     private String userId;

@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 
+import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.concurrent.LinkedBlockingDeque;
@@ -91,16 +92,23 @@ public class ActorContextHolder {
 
     private static void putLocalMDCContext(Actor actor) {
         if (Objects.nonNull(actor)) {
+            MDC.put(ActorConstants.MDC_TRACE_ID, actor.getTraceId());
             MDC.put(ActorConstants.MDC_ACTOR_ID, actor.getActorId());
+            MDC.put(ActorConstants.MDC_USER_ID, actor.getUserId());
             MDC.put(ActorConstants.MDC_TENANT_ID, actor.getTenantId());
+            MDC.put(ActorConstants.MDC_MEMBER_ID, actor.getMemberId());
             MDC.put(ActorConstants.MDC_ROLE, actor.getRole());
         }
     }
 
     private static void cleanLocalMDCContext() {
-        MDC.put(ActorConstants.MDC_ACTOR_ID, null);
-        MDC.put(ActorConstants.MDC_TENANT_ID, null);
-        MDC.put(ActorConstants.MDC_ROLE, null);
+//        MDC.put(ActorConstants.MDC_TRACE_ID, null);
+//        MDC.put(ActorConstants.MDC_ACTOR_ID, null);
+//        MDC.put(ActorConstants.MDC_USER_ID, null);
+//        MDC.put(ActorConstants.MDC_TENANT_ID, null);
+//        MDC.put(ActorConstants.MDC_MEMBER_ID, null);
+//        MDC.put(ActorConstants.MDC_ROLE, null);
+        MDC.clear();
     }
 
 }

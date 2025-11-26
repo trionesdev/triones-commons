@@ -17,6 +17,10 @@ public class ActorContext {
         ActorContextHolder.setActor(operate);
     }
 
+    public String getTraceId() {
+        return Optional.ofNullable(getActor()).map(Actor::getTraceId).orElse(null);
+    }
+
     public String getRole() {
         return Optional.ofNullable(getActor()).map(Actor::getRole).orElse(null);
     }
