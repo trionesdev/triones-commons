@@ -1,13 +1,13 @@
 # TrionesDev Java 公共基础包
 
 ## 模块
-- [Core 核心](triones-commons-core)
-- [Context 上下文](triones-commons-context)
-- [Exception 异常](triones-commons-exception)
-- [Feign 扩展](triones-commons-feign)
-- [i18n 国际化](triones-commons-i18n)
-- [Lock 锁](triones-commons-lock)
-- [MybatisPlus 扩展](triones-commons-mybatis-plus)
+- [Core 核心](commons/commons-core)
+- [Context 上下文](commons/commons-context)
+- [Exception 异常](commons/commons-exception)
+- [Feign 扩展](commons/commons-feign)
+- [i18n 国际化](commons/commons-i18n)
+- [Lock 锁](commons/commons-lock)
+- [MybatisPlus 扩展](commons/commons-mybatis-plus)
 
 ---
 
