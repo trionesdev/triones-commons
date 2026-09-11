@@ -4,7 +4,11 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.TreeNode;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.*;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.datatype.jsr310.deser.InstantDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.InstantSerializer;
@@ -25,17 +29,28 @@ import java.util.Set;
  */
 @Slf4j
 public class JacksonUtils {
-    private static ObjectMapper OBJECT_MAPPER;
+
+    private static volatile ObjectMapper OBJECT_MAPPER = initMapper();
+
+    private JacksonUtils() {
+    }
 
     public static ObjectMapper getObjectMapper() {
-        if (null == OBJECT_MAPPER) {
-            OBJECT_MAPPER = initMapper();
+        ObjectMapper mapper = OBJECT_MAPPER;
+        if (mapper == null) {
+            synchronized (JacksonUtils.class) {
+                mapper = OBJECT_MAPPER;
+                if (mapper == null) {
+                    mapper = initMapper();
+                    OBJECT_MAPPER = mapper;
+                }
+            }
         }
-        return OBJECT_MAPPER;
+        return mapper;
     }
 
     public static void setObjectMapper(ObjectMapper objectMapper) {
-        JacksonUtils.OBJECT_MAPPER = objectMapper;
+        OBJECT_MAPPER = objectMapper;
     }
 
     public static ObjectMapper initMapper() {
@@ -66,154 +81,78 @@ public class JacksonUtils {
         return getObjectMapper().getTypeFactory().constructMapType(mapClass, keyClass, valueClass);
     }
 
-
     public static String toJsonString(Object object) {
-        try {
-            return getObjectMapper().writeValueAsString(object);
-        } catch (IOException ex) {
-            log.error(ex.getMessage(), ex);
-            throw new JsonException(ex.getMessage());
-        }
+        return execute(() -> getObjectMapper().writeValueAsString(object));
     }
 
     public static <T> T parse(String jsonString, Class<T> clazz) {
         if (StringUtils.isBlank(jsonString)) {
             return null;
         }
-        try {
-            return getObjectMapper().readValue(jsonString, clazz);
-        } catch (IOException ex) {
-            log.error(ex.getMessage(), ex);
-            throw new JsonException(ex.getMessage());
-        }
+        return execute(() -> getObjectMapper().readValue(jsonString, clazz));
     }
 
     public static <T> T parse(String jsonString, TypeReference<T> valueTypeRef) {
         if (StringUtils.isBlank(jsonString)) {
             return null;
         }
-        try {
-            return getObjectMapper().readValue(jsonString, valueTypeRef);
-        } catch (IOException ex) {
-            log.error(ex.getMessage(), ex);
-            throw new JsonException(ex.getMessage());
-        }
+        return execute(() -> getObjectMapper().readValue(jsonString, valueTypeRef));
     }
 
-    @SuppressWarnings(value = "unchecked")
     public static <T> T parse(String jsonString, JavaType javaType) {
         if (StringUtils.isBlank(jsonString)) {
             return null;
         }
-
-        try {
-            return (T) getObjectMapper().readValue(jsonString, javaType);
-        } catch (IOException ex) {
-            log.error(ex.getMessage(), ex);
-            throw new JsonException(ex.getMessage());
-        }
+        return execute(() -> getObjectMapper().readValue(jsonString, javaType));
     }
 
     public static <T> T parse(byte[] bytes, Class<T> clazz) {
         if (ArrayUtils.isEmpty(bytes)) {
             return null;
         }
-        try {
-            return getObjectMapper().readValue(bytes, clazz);
-        } catch (IOException ex) {
-            log.error(ex.getMessage(), ex);
-            throw new JsonException(ex.getMessage());
-        }
+        return execute(() -> getObjectMapper().readValue(bytes, clazz));
     }
 
     public static <T> T parse(byte[] bytes, TypeReference<T> valueTypeRef) {
         if (ArrayUtils.isEmpty(bytes)) {
             return null;
         }
-        try {
-            return getObjectMapper().readValue(bytes, valueTypeRef);
-        } catch (IOException ex) {
-            log.error(ex.getMessage(), ex);
-            throw new JsonException(ex.getMessage());
-        }
+        return execute(() -> getObjectMapper().readValue(bytes, valueTypeRef));
     }
 
-    @SuppressWarnings(value = "unchecked")
     public static <T> T parse(byte[] bytes, JavaType javaType) {
         if (ArrayUtils.isEmpty(bytes)) {
             return null;
         }
-
-        try {
-            return (T) getObjectMapper().readValue(bytes, javaType);
-        } catch (IOException ex) {
-            log.error(ex.getMessage(), ex);
-            throw new JsonException(ex.getMessage());
-        }
+        return execute(() -> getObjectMapper().readValue(bytes, javaType));
     }
 
     public static <T> Collection<T> parseCollection(String jsonString, Class<T> clazz) {
-        JavaType javaType = constructCollectionType(Collection.class, clazz);
-        try {
-            return getObjectMapper().readValue(jsonString, javaType);
-        } catch (IOException ex) {
-            log.error(ex.getMessage(), ex);
-            throw new JsonException(ex.getMessage());
-        }
+        return parse(jsonString, constructCollectionType(Collection.class, clazz));
     }
 
     public static <T> Collection<T> parseCollection(byte[] bytes, Class<T> clazz) {
-        JavaType javaType = constructCollectionType(Collection.class, clazz);
-        try {
-            return getObjectMapper().readValue(bytes, javaType);
-        } catch (IOException ex) {
-            log.error(ex.getMessage(), ex);
-            throw new JsonException(ex.getMessage());
-        }
+        return parse(bytes, constructCollectionType(Collection.class, clazz));
     }
 
     public static <T> List<T> parseList(String jsonString, Class<T> clazz) {
-        JavaType javaType = constructCollectionType(List.class, clazz);
-        try {
-            return getObjectMapper().readValue(jsonString, javaType);
-        } catch (IOException ex) {
-            log.error(ex.getMessage(), ex);
-            throw new JsonException(ex.getMessage());
-        }
+        return parse(jsonString, constructCollectionType(List.class, clazz));
     }
 
     public static <T> List<T> parseList(byte[] bytes, Class<T> clazz) {
-        JavaType javaType = constructCollectionType(List.class, clazz);
-        try {
-            return getObjectMapper().readValue(bytes, javaType);
-        } catch (IOException ex) {
-            log.error(ex.getMessage(), ex);
-            throw new JsonException(ex.getMessage());
-        }
+        return parse(bytes, constructCollectionType(List.class, clazz));
     }
 
     public static <T> Set<T> parseSet(String jsonString, Class<T> clazz) {
-        JavaType javaType = constructCollectionType(Set.class, clazz);
-        try {
-            return getObjectMapper().readValue(jsonString, javaType);
-        } catch (IOException ex) {
-            log.error(ex.getMessage(), ex);
-            throw new JsonException(ex.getMessage());
-        }
+        return parse(jsonString, constructCollectionType(Set.class, clazz));
     }
 
     public static <T> Set<T> parseSet(byte[] bytes, Class<T> clazz) {
-        JavaType javaType = constructCollectionType(Set.class, clazz);
-        try {
-            return getObjectMapper().readValue(bytes, javaType);
-        } catch (IOException ex) {
-            log.error(ex.getMessage(), ex);
-            throw new JsonException(ex.getMessage());
-        }
+        return parse(bytes, constructCollectionType(Set.class, clazz));
     }
 
     /**
-     * 当JSON里只含有Bean的部分屬性時，更新一個已存在Bean，只覆蓋該部分的屬性.
+     * 当 JSON 里只含有 Bean 的部分属性时，更新一个已存在 Bean，只覆盖该部分的属性.
      */
     public static void update(Object object, String jsonString) {
         try {
@@ -235,19 +174,29 @@ public class JacksonUtils {
         return getObjectMapper().valueToTree(fromValue);
     }
 
-
-    //region convertValue
-    public static <T> T convertValue(Object fromValue, Class<T> toValueType) throws IllegalArgumentException {
+    public static <T> T convertValue(Object fromValue, Class<T> toValueType) {
         return getObjectMapper().convertValue(fromValue, toValueType);
     }
 
-    public static <T> T convertValue(Object fromValue, TypeReference<T> toValueTypeRef) throws IllegalArgumentException {
+    public static <T> T convertValue(Object fromValue, TypeReference<T> toValueTypeRef) {
         return getObjectMapper().convertValue(fromValue, toValueTypeRef);
     }
 
-    public static <T> T convertValue(Object fromValue, JavaType toValueType) throws IllegalArgumentException {
+    public static <T> T convertValue(Object fromValue, JavaType toValueType) {
         return getObjectMapper().convertValue(fromValue, toValueType);
     }
-    //endregion
 
+    private static <T> T execute(IOCallable<T> callable) {
+        try {
+            return callable.call();
+        } catch (IOException ex) {
+            log.error(ex.getMessage(), ex);
+            throw new JsonException(ex.getMessage());
+        }
+    }
+
+    @FunctionalInterface
+    private interface IOCallable<T> {
+        T call() throws IOException;
+    }
 }
