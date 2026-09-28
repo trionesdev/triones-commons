@@ -13,7 +13,7 @@ public class BigDecimalUtils {
      * @return
      */
     public static BigDecimal add(BigDecimal a, BigDecimal b) {
-        return nz(a).add(nz(b));
+        return zeroIfNull(a).add(zeroIfNull(b));
     }
 
     /**
@@ -24,7 +24,7 @@ public class BigDecimalUtils {
      * @return
      */
     public static BigDecimal subtract(BigDecimal a, BigDecimal b) {
-        return nz(a).subtract(nz(b));
+        return zeroIfNull(a).subtract(zeroIfNull(b));
     }
 
     /**
@@ -35,7 +35,7 @@ public class BigDecimalUtils {
      * @return
      */
     public static BigDecimal multiply(BigDecimal a, BigDecimal b) {
-        return nz(a).multiply(nz(b));
+        return zeroIfNull(a).multiply(zeroIfNull(b));
     }
 
     /**
@@ -59,7 +59,7 @@ public class BigDecimalUtils {
      * @return
      */
     public static BigDecimal divide(BigDecimal a, BigDecimal b, int scale, RoundingMode roundingMode) {
-        return nz(a).divide(nz(b), scale, roundingMode);
+        return zeroIfNull(a).divide(zeroIfNull(b), scale, roundingMode);
     }
 
     /**
@@ -68,7 +68,17 @@ public class BigDecimalUtils {
      * @param value
      * @return
      */
-    public static BigDecimal nz(BigDecimal value) {
+    public static BigDecimal zeroIfNull(BigDecimal value) {
         return value == null ? BigDecimal.ZERO : value;
+    }
+
+    /**
+     * 是否为正数
+     *
+     * @param value
+     * @return
+     */
+    public static boolean isPositive(BigDecimal value) {
+        return value != null && value.compareTo(BigDecimal.ZERO) > 0;
     }
 }
