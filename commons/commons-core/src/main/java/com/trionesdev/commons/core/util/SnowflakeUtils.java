@@ -19,7 +19,7 @@ package com.trionesdev.commons.core.util;
  * | 1 | 41 bits (timestamp)                         | 5 bits| 5 bits| 12 bits      |
  * | s | (current_ms - epoch)                        | dc_id | w_id  | sequence     |
  */
-public class SnowflakeUtil {
+public class SnowflakeUtils {
 
     // 自定义纪元时间（2025-01-01T00:00:00Z）。初始定义，不可更改。
     // 这个时间戳是计算ID时的时间戳偏移量的起点。
@@ -62,7 +62,7 @@ public class SnowflakeUtil {
      * @param workerId     工作节点ID (0-31)
      * @param datacenterId 数据中心ID (0-31)
      */
-    public SnowflakeUtil(long workerId, long datacenterId) {
+    public SnowflakeUtils(long workerId, long datacenterId) {
         if (workerId > MAX_WORKER_ID || workerId < 0) {
             throw new IllegalArgumentException(String.format("Worker ID can't be greater than %d or less than 0", MAX_WORKER_ID));
         }

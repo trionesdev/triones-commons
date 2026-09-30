@@ -17,7 +17,7 @@ public class OrderNoUtils {
     private static final String TIMESTAMP_PATTERN = "yyyyMMddHHmmssSSS";
     private static final String DATE_PATTERN = "yyyyMMdd";
     private static final char[] HEX_DIGITS = "0123456789abcdef".toCharArray();
-    private static final SnowflakeUtil SNOWFLAKE = new SnowflakeUtil(1, 1);
+    private static final SnowflakeUtils SNOWFLAKE = new SnowflakeUtils(1, 1);
     private static final ThreadLocal<MessageDigest> MD5 = ThreadLocal.withInitial(OrderNoUtils::createMd5);
 
     /**

@@ -1,12 +1,12 @@
 package com.trionesdev.commons.core.test;
 
-import com.trionesdev.commons.core.util.SnowflakeUtil;
+import com.trionesdev.commons.core.util.SnowflakeUtils;
 import org.junit.jupiter.api.Test;
 
-public class SnowflakeUtilTest {
+public class SnowflakeUtilsTest {
     @Test
     public void test() {
-        SnowflakeUtil idWorker = new SnowflakeUtil(1, 1);
+        SnowflakeUtils idWorker = new SnowflakeUtils(1, 1);
         System.out.println("Generating 10 Snowflake IDs...");
         for (int i = 0; i < 10; i++) {
             long id = idWorker.nextId();
