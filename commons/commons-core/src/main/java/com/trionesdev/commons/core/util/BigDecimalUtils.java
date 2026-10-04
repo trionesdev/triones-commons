@@ -81,4 +81,66 @@ public class BigDecimalUtils {
     public static boolean isPositive(BigDecimal value) {
         return value != null && value.compareTo(BigDecimal.ZERO) > 0;
     }
+
+    /**
+     * 是否相等
+     *
+     * @param a
+     * @param b
+     * @return
+     */
+    public static boolean equals(BigDecimal a, BigDecimal b) {
+        return a != null && b != null && a.compareTo(b) == 0;
+    }
+
+    /**
+     * 是否大于
+     *
+     * @param a
+     * @param b
+     * @return
+     */
+    public static boolean gt(BigDecimal a, BigDecimal b) {
+        return a != null && b != null && a.compareTo(b) > 0;
+    }
+    /**
+     * 是否大于等于
+     *
+     * @param a
+     * @param b
+     * @return
+     */
+
+    public static boolean gte(BigDecimal a, BigDecimal b) {
+        return a != null && b != null && a.compareTo(b) >= 0;
+    }
+    /**
+     * 是否小于
+     *
+     * @param a
+     * @param b
+     * @return
+     */
+
+    public static boolean lt(BigDecimal a, BigDecimal b) {
+        return a != null && b != null && a.compareTo(b) < 0;
+    /**
+     * 是否小于等于
+     *
+     * @param a
+     * @param b
+     * @return
+     */
+    }
+    /**
+     * 是否小于等于
+     *
+     * @param a
+     * @param b
+     * @return
+     */
+
+    public static boolean lte(BigDecimal a, BigDecimal b) {
+        return a != null && b != null && a.compareTo(b) <= 0;
+    }
 }
