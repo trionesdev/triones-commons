@@ -2,6 +2,7 @@ package com.trionesdev.commons.core.util;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.Collection;
 
 public class BigDecimalUtils {
 
@@ -63,6 +64,30 @@ public class BigDecimalUtils {
     }
 
     /**
+     * 求和，null 按 0 处理
+     *
+     * @param values
+     * @return
+     */
+    public static BigDecimal sum(BigDecimal... values) {
+        if (values == null || values.length == 0) {
+            return BigDecimal.ZERO;
+        }
+        BigDecimal result = BigDecimal.ZERO;
+        for (BigDecimal value : values) {
+            result = result.add(zeroIfNull(value));
+        }
+        return result;
+    }
+
+    public static BigDecimal sum(Collection<BigDecimal> values) {
+        if (values == null || values.isEmpty()) {
+            return BigDecimal.ZERO;
+        }
+        return values.stream().map(BigDecimalUtils::zeroIfNull).reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    /**
      * null 转 0
      *
      * @param value
@@ -103,6 +128,7 @@ public class BigDecimalUtils {
     public static boolean gt(BigDecimal a, BigDecimal b) {
         return a != null && b != null && a.compareTo(b) > 0;
     }
+
     /**
      * 是否大于等于
      *
@@ -114,6 +140,7 @@ public class BigDecimalUtils {
     public static boolean gte(BigDecimal a, BigDecimal b) {
         return a != null && b != null && a.compareTo(b) >= 0;
     }
+
     /**
      * 是否小于
      *
@@ -124,14 +151,15 @@ public class BigDecimalUtils {
 
     public static boolean lt(BigDecimal a, BigDecimal b) {
         return a != null && b != null && a.compareTo(b) < 0;
-    /**
-     * 是否小于等于
-     *
-     * @param a
-     * @param b
-     * @return
-     */
+        /**
+         * 是否小于等于
+         *
+         * @param a
+         * @param b
+         * @return
+         */
     }
+
     /**
      * 是否小于等于
      *
