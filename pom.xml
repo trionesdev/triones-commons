@@ -11,7 +11,7 @@
     </modules>
     <groupId>com.trionesdev.commons</groupId>
     <artifactId>triones-commons</artifactId>
-    <version>0.0.2-SNAPSHOT</version>
+    <version>0.0.3-SNAPSHOT</version>
     <description>TrionesDev java commons</description>
     <scm>
         <url>https://github.com/trionesdev/triones-commons.git</url>
