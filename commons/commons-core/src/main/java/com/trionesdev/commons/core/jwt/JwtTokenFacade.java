@@ -12,6 +12,7 @@ import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.gen.RSAKeyGenerator;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
+import lombok.SneakyThrows;
 
 import java.security.interfaces.RSAPublicKey;
 import java.text.ParseException;
@@ -55,7 +56,7 @@ public class JwtTokenFacade {
         this.expiration = expiration;
     }
 
-    public String generate(Object userId, JwtClaims claim) throws JOSEException {
+    public String generate(Object userId, JwtClaims claim) {
         if (Objects.isNull(userId)) {
             return null;
         }
@@ -67,14 +68,14 @@ public class JwtTokenFacade {
         claims.put(ACTOR_MEMBER_ID, claim.getMemberId());
         claims.put(ACTOR_TENANT_MEMBER_ID, claim.getTenantMemberId());
         claims.put(ACTOR_ATTRIBUTES, claim.getAttributes());
-        return  generate(String.valueOf(userId),claims);
+        return generate(String.valueOf(userId), claims);
     }
 
-    public String generate(Map<String, Object> claims) throws JOSEException {
+    public String generate(Map<String, Object> claims) {
         return generate(null, claims);
     }
 
-    public String generate(String subject, Map<String, Object> claims) throws JOSEException {
+    public String generate(String subject, Map<String, Object> claims) {
         Objects.requireNonNull(claims, "claims");
         Instant now = Instant.now();
         JWTClaimsSet.Builder builder = new JWTClaimsSet.Builder();
@@ -85,10 +86,14 @@ public class JwtTokenFacade {
         return generate(claimsSet);
     }
 
-    public String generate(JWTClaimsSet claimsSet) throws JOSEException {
+    public String generate(JWTClaimsSet claimsSet) {
         SignedJWT jwt = new SignedJWT(new JWSHeader.Builder(JWSAlgorithm.RS256)
                 .type(JOSEObjectType.JWT).keyID(signingKey.getKeyID()).build(), claimsSet);
-        jwt.sign(new RSASSASigner(signingKey));
+        try {
+            jwt.sign(new RSASSASigner(signingKey));
+        } catch (JOSEException e) {
+            throw new RuntimeException(e);
+        }
         return jwt.serialize();
     }
 
@@ -98,9 +103,10 @@ public class JwtTokenFacade {
      * Expiration is required; expired tokens and tokens not yet valid are rejected.
      *
      * @throws ParseException if the token or its claims are malformed
-     * @throws JOSEException if signature or time validation fails
+     * @throws JOSEException  if signature or time validation fails
      */
-    public JWTClaimsSet parse(String token) throws ParseException, JOSEException {
+    @SneakyThrows
+    public JWTClaimsSet parse(String token) {
         Objects.requireNonNull(token, "token");
         SignedJWT jwt = SignedJWT.parse(token);
         if (!JWSAlgorithm.RS256.equals(jwt.getHeader().getAlgorithm())) {

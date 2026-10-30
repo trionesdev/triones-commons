@@ -90,6 +90,27 @@ public final class TreeUtils {
         return roots;
     }
 
-    private record IndexedNode<T, K>(T value, K parentId, List<T> children) {
+    private static final class IndexedNode<T, K> {
+        private final T value;
+        private final K parentId;
+        private final List<T> children;
+
+        private IndexedNode(T value, K parentId, List<T> children) {
+            this.value = value;
+            this.parentId = parentId;
+            this.children = children;
+        }
+
+        private T value() {
+            return value;
+        }
+
+        private K parentId() {
+            return parentId;
+        }
+
+        private List<T> children() {
+            return children;
+        }
     }
 }
