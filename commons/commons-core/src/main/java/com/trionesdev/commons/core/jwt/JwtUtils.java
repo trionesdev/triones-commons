@@ -1,50 +1,46 @@
 package com.trionesdev.commons.core.jwt;
 
-import com.google.common.base.Strings;
-import com.nimbusds.jose.JWSAlgorithm;
-import com.nimbusds.jose.JWSHeader;
-import com.nimbusds.jose.JWSVerifier;
-import com.nimbusds.jose.crypto.MACSigner;
-import com.nimbusds.jose.crypto.MACVerifier;
+import com.google.common.collect.Maps;
 import com.nimbusds.jwt.JWTClaimsSet;
-import com.nimbusds.jwt.SignedJWT;
-import lombok.SneakyThrows;
-import org.apache.commons.collections4.MapUtils;
 
-import java.util.Calendar;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
+
+import static com.trionesdev.commons.core.jwt.ClaimsKeyConstant.*;
 
 public final class JwtUtils {
 
-    @SneakyThrows
-    public static String generateToken(JwtConfig jwtConfig, String subject, Map<String, Object> claims) {
-        Date issueAt = new Date();
-
-        JWTClaimsSet.Builder jwtClaimsSetBuilder = new JWTClaimsSet.Builder()
-                .subject(subject)
-                .issueTime(issueAt);
-        if (MapUtils.isNotEmpty(claims)) {
-            claims.forEach(jwtClaimsSetBuilder::claim);
-        }
-        if (jwtConfig.getExpiration() > 0) {
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTime(issueAt);
-            calendar.add(Calendar.SECOND, jwtConfig.getExpiration());
-            jwtClaimsSetBuilder.expirationTime(calendar.getTime());
-        }
-        SignedJWT signedJWT = new SignedJWT(new JWSHeader(JWSAlgorithm.HS256), jwtClaimsSetBuilder.build());
-        signedJWT.sign(new MACSigner(Strings.padEnd(jwtConfig.getSecret(), 128, '0')));
-        return signedJWT.serialize();
+    public static Map<String, Object> genClaims(Object userId, JwtClaims claim) {
+        Map<String, Object> claims = Maps.newHashMap();
+        claims.put(ACTOR_ID, userId);
+        claims.put(ACTOR_USER_ID, userId);
+        claims.put(ACTOR_ROLE, claim.getRole());
+        claims.put(ACTOR_TENANT_ID, claim.getTenantId());
+        claims.put(ACTOR_MEMBER_ID, claim.getMemberId());
+        claims.put(ACTOR_ATTRIBUTES, claim.getAttributes());
+        return claims;
     }
 
-    @SneakyThrows
-    public static Map<String, Object> parseClaims(JwtConfig jwtConfig, String token) {
-        JWSVerifier verifier = new MACVerifier(Strings.padEnd(jwtConfig.getSecret(), 128, '0'));
-        SignedJWT signedJWT = SignedJWT.parse(token);
-        if (!signedJWT.verify(verifier)) {
-            return null;
-        }
-        return signedJWT.getJWTClaimsSet().getClaims();
+    public static Map<String, Object> genClaims(JwtClaims claim) {
+        return genClaims(claim.getUserId(), claim);
     }
+
+    public static JWTClaimsSet genJWTClaimsSet(String subject, JwtClaims claim, Duration expiration) {
+        Map<String, Object> claims = genClaims(claim);
+        return genJWTClaimsSet(subject, claims, expiration);
+    }
+
+    public static JWTClaimsSet genJWTClaimsSet(String subject, Map<String, Object> claims, Duration expiration) {
+        Objects.requireNonNull(claims, "claims");
+        Instant now = Instant.now();
+        JWTClaimsSet.Builder builder = new JWTClaimsSet.Builder();
+        builder.subject(subject);
+        claims.forEach(builder::claim);
+        return builder.issueTime(Date.from(now))
+                .expirationTime(Date.from(now.plus(expiration))).build();
+    }
+
 }

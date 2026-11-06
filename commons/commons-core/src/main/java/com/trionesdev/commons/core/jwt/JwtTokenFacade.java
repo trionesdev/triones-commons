@@ -1,6 +1,5 @@
 package com.trionesdev.commons.core.jwt;
 
-import com.google.common.collect.Maps;
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.JOSEObjectType;
 import com.nimbusds.jose.JWSAlgorithm;
@@ -17,13 +16,10 @@ import lombok.SneakyThrows;
 import java.security.interfaces.RSAPublicKey;
 import java.text.ParseException;
 import java.time.Duration;
-import java.time.Instant;
 import java.util.Date;
 import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
-
-import static com.trionesdev.commons.core.jwt.ClaimsKeyConstant.*;
 
 /**
  * Creates and verifies RS256 JWTs and exposes the public signing key.
@@ -32,6 +28,7 @@ import static com.trionesdev.commons.core.jwt.ClaimsKeyConstant.*;
 public class JwtTokenFacade {
     private final RSAKey signingKey;
     private final Duration expiration;
+    private final JWSAlgorithm algorithm = JWSAlgorithm.RS256;
 
 
     /**
@@ -56,19 +53,8 @@ public class JwtTokenFacade {
         this.expiration = expiration;
     }
 
-    public String generate(Object userId, JwtClaims claim) {
-        if (Objects.isNull(userId)) {
-            return null;
-        }
-        Map<String, Object> claims = Maps.newHashMap();
-        claims.put(ACTOR_ID, userId);
-        claims.put(ACTOR_USER_ID, userId);
-        claims.put(ACTOR_ROLE, claim.getRole());
-        claims.put(ACTOR_TENANT_ID, claim.getTenantId());
-        claims.put(ACTOR_MEMBER_ID, claim.getMemberId());
-        claims.put(ACTOR_TENANT_MEMBER_ID, claim.getTenantMemberId());
-        claims.put(ACTOR_ATTRIBUTES, claim.getAttributes());
-        return generate(String.valueOf(userId), claims);
+    public String generate(Object subject, JwtClaims claim) {
+        return generate(JwtUtils.genJWTClaimsSet(String.valueOf(subject), claim, expiration));
     }
 
     public String generate(Map<String, Object> claims) {
@@ -76,14 +62,7 @@ public class JwtTokenFacade {
     }
 
     public String generate(String subject, Map<String, Object> claims) {
-        Objects.requireNonNull(claims, "claims");
-        Instant now = Instant.now();
-        JWTClaimsSet.Builder builder = new JWTClaimsSet.Builder();
-        builder.subject(subject);
-        claims.forEach(builder::claim);
-        JWTClaimsSet claimsSet = builder.issueTime(Date.from(now))
-                .expirationTime(Date.from(now.plus(expiration))).build();
-        return generate(claimsSet);
+        return generate(JwtUtils.genJWTClaimsSet(subject, claims, expiration));
     }
 
     public String generate(JWTClaimsSet claimsSet) {
@@ -131,7 +110,7 @@ public class JwtTokenFacade {
     /**
      * Returns verified claims as a map, with the same validation as {@link #parse(String)}.
      */
-    public Map<String, Object> parseClaims(String token) throws ParseException, JOSEException {
+    public Map<String, Object> parseClaims(String token) {
         return parse(token).getClaims();
     }
 
