@@ -76,6 +76,13 @@ public class JwtFacade {
         throw new IllegalArgumentException("Unsupported JWT algorithm: " + algorithm);
     }
 
+    public String generate(String subject, JwtClaims claim) {
+        if (expiration.isNegative() || expiration.isZero()) {
+            throw new IllegalArgumentException("Expiration must be positive");
+        }
+        return generate(JwtUtils.genJWTClaimsSet(subject, claim, expiration));
+    }
+
     public String generate(String subject, Map<String, Object> claims) {
         if (expiration.isNegative() || expiration.isZero()) {
             throw new IllegalArgumentException("Expiration must be positive");
