@@ -130,6 +130,9 @@ public class JwtFacade {
 
 
     public Map<String, Object> getPublicJwkSet() {
+        if (signingKey instanceof OctetSequenceKey) {
+            throw new UnsupportedOperationException("HMAC keys have no public JWK");
+        }
         return signingKey.toPublicJWK().toJSONObject();
     }
 }

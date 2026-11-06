@@ -15,6 +15,34 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.*;
 
 class JwtFacadeTest {
+    @Test
+    void exportedPublicKeysVerifyTokensWithoutExposingSecrets() throws Exception {
+        for (JWSAlgorithm algorithm : new JWSAlgorithm[]{JWSAlgorithm.RS256, JWSAlgorithm.ES256}) {
+            JwtFacade facade = new JwtFacade(config(algorithm));
+            Map<String, Object> exported = facade.getPublicJwkSet();
+            com.nimbusds.jose.jwk.JWK publicKey = com.nimbusds.jose.jwk.JWK.parse(exported);
+            assertFalse(publicKey.isPrivate());
+            for (String field : new String[]{"d", "p", "q", "dp", "dq", "qi", "oth", "k"}) {
+                assertFalse(exported.containsKey(field), field);
+            }
+            com.nimbusds.jwt.SignedJWT jwt = com.nimbusds.jwt.SignedJWT.parse(
+                    facade.generate("user", Map.of()));
+            assertEquals(jwt.getHeader().getKeyID(), publicKey.getKeyID());
+            assertEquals(exported, facade.getPublicJwkSet());
+            java.security.Key key = publicKey instanceof com.nimbusds.jose.jwk.RSAKey
+                    ? ((com.nimbusds.jose.jwk.RSAKey) publicKey).toRSAPublicKey()
+                    : ((com.nimbusds.jose.jwk.ECKey) publicKey).toECPublicKey();
+            assertTrue(jwt.verify(new com.nimbusds.jose.crypto.factories.DefaultJWSVerifierFactory()
+                    .createJWSVerifier(jwt.getHeader(), key)));
+        }
+    }
+
+    @Test
+    void hmacCannotExportPublicKey() {
+        JwtFacade facade = new JwtFacade(config(JWSAlgorithm.HS256));
+        assertThrows(UnsupportedOperationException.class, facade::getPublicJwkSet);
+    }
+
     private JwtConfig config(JWSAlgorithm algorithm) {
         JWSAlgorithm.Family family = JWSAlgorithm.Family.RSA.contains(algorithm)
                 ? JWSAlgorithm.Family.RSA : JWSAlgorithm.Family.EC.contains(algorithm)
