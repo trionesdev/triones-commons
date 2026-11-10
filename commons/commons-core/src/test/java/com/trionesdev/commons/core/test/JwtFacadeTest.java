@@ -44,10 +44,7 @@ class JwtFacadeTest {
     }
 
     private JwtConfig config(JWSAlgorithm algorithm) {
-        JWSAlgorithm.Family family = JWSAlgorithm.Family.RSA.contains(algorithm)
-                ? JWSAlgorithm.Family.RSA : JWSAlgorithm.Family.EC.contains(algorithm)
-                ? JWSAlgorithm.Family.EC : JWSAlgorithm.Family.HMAC_SHA;
-        return JwtConfig.builder().family(family).algorithm(algorithm).expiration(3600).build();
+        return JwtConfig.builder().algorithm(algorithm).expiration(3600).build();
     }
 
     @Test
@@ -100,7 +97,6 @@ class JwtFacadeTest {
     @Test
     void validatesConfiguration() {
         JwtConfig mismatch = config(JWSAlgorithm.HS256);
-        mismatch.setFamily(JWSAlgorithm.Family.RSA);
         assertThrows(IllegalArgumentException.class, () -> new JwtFacade(mismatch));
         JwtConfig longSecret = config(JWSAlgorithm.HS512);
         longSecret.setSecret("x".repeat(65));

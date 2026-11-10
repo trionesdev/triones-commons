@@ -11,7 +11,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class JwtConfig {
-    private JWSAlgorithm.Family family; // 签名算法族
     private JWSAlgorithm algorithm; // 签名算法
     /**
      * 秘钥

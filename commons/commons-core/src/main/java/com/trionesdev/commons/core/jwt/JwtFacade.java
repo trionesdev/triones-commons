@@ -34,8 +34,10 @@ public class JwtFacade {
     public JwtFacade(JwtConfig config, JWK signingKey) {
         Objects.requireNonNull(config, "config");
         this.algorithm = Objects.requireNonNull(config.getAlgorithm(), "algorithm");
-        if (config.getFamily() == null || !config.getFamily().contains(algorithm)) {
-            throw new IllegalArgumentException("Algorithm " + algorithm + " must belong to family " + config.getFamily());
+        if (!JWSAlgorithm.Family.RSA.contains(algorithm)
+                && !JWSAlgorithm.Family.EC.contains(algorithm)
+                && !JWSAlgorithm.Family.HMAC_SHA.contains(algorithm)) {
+            throw new IllegalArgumentException("Unsupported JWT algorithm: " + algorithm);
         }
         this.expiration = Duration.ofSeconds(config.getExpiration());
         try {
