@@ -19,7 +19,10 @@ class JwtFacadeTest {
     void exportedPublicKeysVerifyTokensWithoutExposingSecrets() throws Exception {
         for (JWSAlgorithm algorithm : new JWSAlgorithm[]{JWSAlgorithm.RS256, JWSAlgorithm.ES256}) {
             JwtFacade facade = new JwtFacade(config(algorithm));
-            Map<String, Object> exported = facade.getPublicJwkSet();
+            com.nimbusds.jose.jwk.JWKSet jwkSet = com.nimbusds.jose.jwk.JWKSet.parse(facade.getPublicJwkSet());
+            assertEquals(1, jwkSet.getKeys().size());
+            Map<String, Object> exported = facade.getPublicJwk();
+            assertEquals(exported, jwkSet.getKeys().get(0).toJSONObject());
             com.nimbusds.jose.jwk.JWK publicKey = com.nimbusds.jose.jwk.JWK.parse(exported);
             assertFalse(publicKey.isPrivate());
             for (String field : new String[]{"d", "p", "q", "dp", "dq", "qi", "oth", "k"}) {
@@ -28,7 +31,7 @@ class JwtFacadeTest {
             com.nimbusds.jwt.SignedJWT jwt = com.nimbusds.jwt.SignedJWT.parse(
                     facade.generate("user", Map.of()));
             assertEquals(jwt.getHeader().getKeyID(), publicKey.getKeyID());
-            assertEquals(exported, facade.getPublicJwkSet());
+            assertEquals(exported, facade.getPublicJwk());
             java.security.Key key = publicKey instanceof com.nimbusds.jose.jwk.RSAKey
                     ? ((com.nimbusds.jose.jwk.RSAKey) publicKey).toRSAPublicKey()
                     : ((com.nimbusds.jose.jwk.ECKey) publicKey).toECPublicKey();
@@ -41,6 +44,7 @@ class JwtFacadeTest {
     void hmacCannotExportPublicKey() {
         JwtFacade facade = new JwtFacade(config(JWSAlgorithm.HS256));
         assertThrows(UnsupportedOperationException.class, facade::getPublicJwkSet);
+        assertThrows(UnsupportedOperationException.class, facade::getPublicJwk);
     }
 
     private JwtConfig config(JWSAlgorithm algorithm) {
@@ -95,9 +99,11 @@ class JwtFacadeTest {
     }
 
     @Test
-    void validatesConfiguration() {
-        JwtConfig mismatch = config(JWSAlgorithm.HS256);
-        assertThrows(IllegalArgumentException.class, () -> new JwtFacade(mismatch));
+    void validatesConfiguration() throws Exception {
+        com.nimbusds.jose.jwk.RSAKey rsaKey = new com.nimbusds.jose.jwk.gen.RSAKeyGenerator(2048).generate();
+        assertThrows(IllegalArgumentException.class, () -> new JwtFacade(config(JWSAlgorithm.HS256), rsaKey));
+        assertThrows(IllegalArgumentException.class,
+                () -> new JwtFacade(config(JWSAlgorithm.RS256), rsaKey.toPublicJWK()));
         JwtConfig longSecret = config(JWSAlgorithm.HS512);
         longSecret.setSecret("x".repeat(65));
         assertThrows(IllegalArgumentException.class, () -> new JwtFacade(longSecret));

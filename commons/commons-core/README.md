@@ -127,6 +127,6 @@ JwtFacade facade = new JwtFacade(
 - 当前未自动校验 issuer、audience，也未配置时钟容差；业务应按需要补充校验。
 - 解析、签名校验或时间校验失败时，抛出 `IllegalArgumentException`。
 - `generate(JWTClaimsSet)` 使用调用方提供的完整 claims，不自动补充有效期；调用方应自行设置 `exp`。
-- `getPublicJwkSet()` 当前返回单个公钥 JWK 对象，而非含 `keys` 数组的标准 JWK Set；HMAC 调用此方法会抛出 `UnsupportedOperationException`。
+- `getPublicJwkSet()` 返回标准 JWK Set（`{"keys":[...]}`），可直接作为 `/.well-known/jwks.json` 响应体；`getPublicJwk()` 返回单个公钥 JWK。两者均不含私钥字段，HMAC 调用会抛出 `UnsupportedOperationException`。
 
 JWT 只做签名，不会加密载荷，不应在 claims 中放入密码或密钥。

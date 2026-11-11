@@ -25,6 +25,7 @@ import java.util.UUID;
  * Creates and verifies RS256 JWTs and exposes the public signing key.
  * Reuse the instance so tokens share the same signing key.
  */
+@Deprecated
 public class JwtTokenFacade {
     private final RSAKey signingKey;
     private final Duration expiration;
