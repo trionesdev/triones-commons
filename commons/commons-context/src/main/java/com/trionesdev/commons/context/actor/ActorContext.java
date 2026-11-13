@@ -53,7 +53,10 @@ public class ActorContext {
     }
 
     public String getMemberId() {
-        return Optional.ofNullable(getActor()).map(Actor::getMemberId).orElse(null);
+        // 兼容仍在使用已废弃 tenantMemberId 的调用方。
+        return Optional.ofNullable(getActor())
+                .map(actor -> actor.getMemberId() != null ? actor.getMemberId() : actor.getTenantMemberId())
+                .orElse(null);
     }
 
     public Map<String, Object> getAttributes() {
@@ -162,9 +165,15 @@ public class ActorContext {
         return this;
     }
 
+    /**
+     * 配合 {@link #asTenant(String)} 使用，执行结束后（包括抛出异常时）恢复原 Actor。
+     */
     public void run(Runnable runnable) {
-        runnable.run();
-        ActorContextHolder.removeActorsFirst();
+        try {
+            runnable.run();
+        } finally {
+            ActorContextHolder.removeActorsFirst();
+        }
     }
 
 }

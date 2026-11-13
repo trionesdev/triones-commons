@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.Map;
@@ -20,6 +21,7 @@ import java.util.Map;
 @NoArgsConstructor
 public class Actor implements Serializable {
 
+    @Serial
     private static final long serialVersionUID = -2388323070328532598L;
     private String traceId;
     private String role;

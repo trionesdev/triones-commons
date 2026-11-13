@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 import lombok.experimental.SuperBuilder;
 
+@Deprecated
 @Data
 @Accessors(chain = true)
 @SuperBuilder

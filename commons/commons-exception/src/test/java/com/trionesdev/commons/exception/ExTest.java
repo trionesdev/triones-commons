@@ -1,63 +1,87 @@
 package com.trionesdev.commons.exception;
 
-import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-@Slf4j
-public class ExTest {
+import static org.junit.jupiter.api.Assertions.*;
 
-    public void notFoundEx(){
+class ExTest {
+    private Locale originalLocale;
 
+    @BeforeEach
+    void setUp() {
+        originalLocale = Locale.getDefault();
+        Locale.setDefault(Locale.SIMPLIFIED_CHINESE);
+    }
+
+    @AfterEach
+    void tearDown() {
+        ExceptionResourceProperties.codeMap.clear();
+        ExceptionResourceProperties.setResourcePaths();
+        Locale.setDefault(originalLocale);
     }
 
     @Test
-    public void triones_test(){
-        Map<String,String> tmap = new HashMap<>();
-        tmap.put("TEST","ce shi");
-        ExceptionResourceProperties.codeMap.put(Locale.getDefault(),tmap );
-        throw new TrionesException("TEST");
+    void codeRegisteredMessage() {
+        ExceptionResourceProperties.codeMap.put(Locale.getDefault(), Map.of("TEST", "ce shi"));
+        TrionesException ex = new TrionesException("TEST");
+        assertEquals("TEST", ex.getCode());
+        assertEquals("ce shi", ex.getMessage());
     }
 
     @Test
-    public void triones_test2(){
-        Map<String,String> tmap = new HashMap<>();
-        tmap.put("TEST","ce shi");
-        ExceptionResourceProperties.codeMap.put(Locale.getDefault(),tmap );
-        throw new TrionesException("TEST","test");
+    void codeRegisteredMessageWinsOverDefault() {
+        ExceptionResourceProperties.codeMap.put(Locale.getDefault(), Map.of("TEST", "ce shi"));
+        assertEquals("ce shi", new TrionesException("TEST", "test").getMessage());
     }
 
     @Test
-    public void triones_test3(){
-        try {
-            ExceptionResourceProperties.setResourcePaths("i18n/error");
-            throw new TrionesException("USER_NOT_FOUND");
-        }catch (Exception ex){
-            log.error(ex.getMessage(),ex);
-        }
-    }
-
-    public void err_test(){
-        TrionesError error = TrionesError.builder().code("USER_NOT_FOUND").message("用户不存在").build();
-        throw new BusinessException(error);
+    void resourceBundleMessage() {
+        ExceptionResourceProperties.setResourcePaths("classpath:i18n/error");
+        assertEquals("用户不存在", new NotFoundException("USER_NOT_FOUND").getMessage());
     }
 
     @Test
-    public void err_test2(){
-        throw new BusinessException("SYSTEM_ERROR","系统错误");
+    void defaultMessageWithArguments() {
+        BusinessException ex = new BusinessException("SYSTEM_ERROR", "测试 {0} {1}", ArgumentValue.of("111", "222"));
+        assertEquals("测试 111 222", ex.getMessage());
+        assertArrayEquals(new Object[]{"111", "222"}, ex.getArguments());
     }
 
     @Test
-    public void err_test3(){
-        throw new BusinessException("SYSTEM_ERROR","测试 {0}", ArgumentValue.of("111"));
+    void missingBundleDoesNotHideOriginalException() {
+        ExceptionResourceProperties.setResourcePaths("i18n/does-not-exist");
+        BusinessException ex = assertDoesNotThrow(() -> new BusinessException("SYSTEM_ERROR", "系统错误"));
+        assertEquals("系统错误", ex.getMessage());
     }
 
     @Test
-    public void err_test4(){
-        throw new BusinessException("SYSTEM_ERROR","测试 {0} {1}", ArgumentValue.of("111","222"));
+    void invalidPatternFallsBackToRawText() {
+        BusinessException ex = new BusinessException("SYSTEM_ERROR", "bad {x} pattern", ArgumentValue.of("1"));
+        assertEquals("bad {x} pattern", ex.getMessage());
     }
 
+    @Test
+    void resolveMessageForRequestLocale() {
+        ExceptionResourceProperties.setResourcePaths("i18n/error");
+        BusinessException ex = new BusinessException("USER_LOCKED", ArgumentValue.of("alice"));
+        assertEquals("用户 alice 已被锁定", ex.getMessage());
+        assertEquals("User alice is locked", ex.getMessage(Locale.ENGLISH));
+    }
+
+    @Test
+    void setResourcePathsRefreshesCache() {
+        assertNull(new NotFoundException("USER_NOT_FOUND").getMessage());
+        ExceptionResourceProperties.setResourcePaths("i18n/error");
+        assertEquals("用户不存在", new NotFoundException("USER_NOT_FOUND").getMessage());
+    }
+
+    @Test
+    void noArgConstructorKeepsMessage() {
+        assertEquals("triones exception", new TrionesException().getMessage());
+    }
 }

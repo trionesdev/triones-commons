@@ -1,5 +1,6 @@
 package com.trionesdev.commons.core.jwt;
 
+import com.nimbusds.jose.JWSAlgorithm;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,6 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class JwtConfig {
+    private JWSAlgorithm algorithm; // 签名算法
     /**
      * 秘钥
      */

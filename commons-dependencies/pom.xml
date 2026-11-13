@@ -4,7 +4,7 @@
     <parent>
         <groupId>com.trionesdev.commons</groupId>
         <artifactId>triones-commons</artifactId>
-        <version>0.0.2-SNAPSHOT</version>
+        <version>0.0.3-SNAPSHOT</version>
     </parent>
     <artifactId>commons-dependencies</artifactId>
     <name>Triones:Commons:Dependencies</name>
@@ -12,8 +12,8 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>8</maven.compiler.source>
-        <maven.compiler.target>8</maven.compiler.target>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
         <lombok.version>1.18.34</lombok.version>
         <mybatis-plus.version>3.5.6</mybatis-plus.version>
         <jackson.version>2.17.1</jackson.version>
@@ -44,12 +44,7 @@
             <dependency>
                 <groupId>com.nimbusds</groupId>
                 <artifactId>nimbus-jose-jwt</artifactId>
-                <version>9.39.3</version>
-            </dependency>
-            <dependency>
-                <groupId>ma.glasnost.orika</groupId>
-                <artifactId>orika-core</artifactId>
-                <version>1.5.4</version>
+                <version>10.10</version>
             </dependency>
             <dependency>
                 <groupId>com.alibaba</groupId>
@@ -59,7 +54,7 @@
             <dependency>
                 <groupId>org.jsoup</groupId>
                 <artifactId>jsoup</artifactId>
-                <version>1.17.2</version>
+                <version>1.23.2</version>
             </dependency>
             <dependency>
                 <groupId>com.baomidou</groupId>
@@ -69,12 +64,12 @@
             <dependency>
                 <groupId>io.github.openfeign</groupId>
                 <artifactId>feign-core</artifactId>
-                <version>13.2.1</version>
+                <version>13.17</version>
             </dependency>
             <dependency>
                 <groupId>io.projectreactor</groupId>
                 <artifactId>reactor-core</artifactId>
-                <version>3.6.6</version>
+                <version>3.6.11</version>
             </dependency>
             <dependency>
                 <groupId>org.projectlombok</groupId>
@@ -85,7 +80,7 @@
             <dependency>
                 <groupId>org.jetbrains</groupId>
                 <artifactId>annotations</artifactId>
-                <version>23.0.0</version>
+                <version>26.1.0</version>
                 <scope>compile</scope>
             </dependency>
 
