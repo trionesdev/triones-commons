@@ -2,17 +2,20 @@ package com.trionesdev.commons.lock.thread;
 
 import com.trionesdev.commons.lock.TrionesLock;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Condition;
 
+/**
+ * 进程内锁，同名共享同一把 {@link ThreadLock}。
+ */
 public class TrionesThreadLock implements TrionesLock {
-    private static final Map<String, ThreadLock> LOCK_MAP = new HashMap<String, ThreadLock>();
+    private static final ConcurrentMap<String, ThreadLock> LOCK_MAP = new ConcurrentHashMap<>();
     private final ThreadLock lock;
 
     public TrionesThreadLock(String lockName) {
-        lock = getLock(lockName);
+        this.lock = LOCK_MAP.computeIfAbsent(lockName, k -> new ThreadLock());
     }
 
     @Override
@@ -40,23 +43,16 @@ public class TrionesThreadLock implements TrionesLock {
         return lock.tryLock(time, unit);
     }
 
+    /**
+     * 锁空闲（含租约已到期）时不做任何操作；被其他线程持有时抛出 {@link IllegalMonitorStateException}。
+     */
     @Override
     public void unlock() {
-        if (lock.isLocked()){
-            lock.unlock();
-        }
+        lock.unlock();
     }
 
     @Override
     public Condition newCondition() {
         return lock.newCondition();
-    }
-
-    private ThreadLock getLock(String lockName) {
-        ThreadLock lock;
-        synchronized (LOCK_MAP) {
-             lock = LOCK_MAP.computeIfAbsent(lockName, k -> new ThreadLock());
-        }
-        return lock;
     }
 }

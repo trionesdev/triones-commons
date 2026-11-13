@@ -17,6 +17,10 @@ public interface TenantLineMultiHandler extends TenantLineHandler {
         return false;
     }
 
+    /**
+     * 多租户查询时的租户 ID 集合。返回 {@code ExpressionList}（例如 {@code new ExpressionList<>(new StringValue("t1"), ...)}，
+     * 无需自行加括号）或子查询 {@code Select}。
+     */
     Expression getTenantIds();
 
 }
