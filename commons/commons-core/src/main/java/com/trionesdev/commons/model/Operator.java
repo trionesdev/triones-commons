@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+import java.util.Map;
+
 @Data
 @SuperBuilder
 @AllArgsConstructor
@@ -15,4 +17,5 @@ public class Operator {
     private String name;
     private String avatar;
     private String gender;
+    private Map<String, Object> extra;
 }
